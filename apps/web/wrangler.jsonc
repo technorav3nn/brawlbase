@@ -1,0 +1,39 @@
+{
+	"$schema": "../../node_modules/wrangler/config-schema.json",
+	"observability": {
+		"logs": {
+			"enabled": true,
+			"head_sampling_rate": 1,
+			"persist": true,
+			"invocation_logs": true
+		},
+		"traces": {
+			"enabled": true,
+			"head_sampling_rate": 1,
+			"persist": true
+		}
+	},
+	"d1_databases": [
+		{
+			"binding": "brawl_base",
+			"database_name": "brawl-base",
+			"database_id": "87cd567c-0318-473f-933e-e2c0eb3159e0"
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "014f692921034fd0a8409f1b721d651f"
+		},
+		{
+			"binding": "CACHE",
+			"id": "a08f45b21d3a4a32a8a7697607020aa6"
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "BLOB",
+			"bucket_name": "brawlbase"
+		}
+	]
+}

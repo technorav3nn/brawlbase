@@ -1,0 +1,18 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"allowJs": true
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.vue",
+		"src/**/*.tsx",
+		"src/**/*.js",
+		"*.config.ts",
+		"*.config.js",
+		"*.config.cjs",
+		"nuxt.config.ts",
+		"eslint.config.js"
+	],
+	"exclude": ["node_modules", ".nuxt", "src/xata.ts"]
+}

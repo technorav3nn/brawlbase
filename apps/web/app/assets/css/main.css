@@ -1,0 +1,106 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme static {
+	--font-sans: "Public Sans", sans-serif;
+
+	--color-green-50: #effdf5;
+	--color-green-100: #d9fbe8;
+	--color-green-200: #b3f5d1;
+	--color-green-300: #75edae;
+	--color-green-400: #00dc82;
+	--color-green-500: #00c16a;
+	--color-green-600: #00a155;
+	--color-green-700: #007f45;
+	--color-green-800: #016538;
+	--color-green-900: #0a5331;
+	--color-green-950: #052e16;
+
+	--color-primary-50: #faf6fe;
+	--color-primary-100: #f3eafd;
+	--color-primary-200: #e8d8fc;
+	--color-primary-300: #cba6f7;
+	--color-primary-400: #bd8df3;
+	--color-primary-500: #a461eb;
+	--color-primary-600: #8e40dd;
+	--color-primary-700: #792ec2;
+	--color-primary-800: #672b9e;
+	--color-primary-900: #54247f;
+	--color-primary-950: #380e5d;
+
+	--font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+	--font-brawlstars: "Lilita One", "Inter", ui-sans-serif, system-ui, sans-serif;
+	--color-border: var(--color-border);
+
+	--animate-shimmer: shimmer 2s infinite;
+	@keyframes shimmer {
+		100% {
+			transform: translateX(100%);
+		}
+	}
+}
+:root {
+	--ui-primary: #8839ef;
+	--ui-secondary: #209fb5;
+	--ui-success: #40a02b;
+	--ui-info: #04a5e5;
+	--ui-warning: #df8e1d;
+	--ui-error: #e64553;
+	--ui-text: #4c4f69;
+	--ui-text-dimmed: #7c7d86;
+	--ui-text-muted: #6c6f85;
+	--ui-bg: #eff1f5;
+	--ui-bg-muted: #e6e9ef;
+	--ui-bg-elevated: #fff;
+	--ui-bg-accented: #ccd0da;
+	--ui-bg-inverted: #000;
+	--ui-border: #ccd0da;
+	--ui-border-muted: #bcc0cc;
+	--ui-border-accented: #b0b5c5;
+	--ui-ring: #8839ef;
+}
+
+.dark {
+	--ui-primary: var(--color-primary-300);
+	--ui-secondary: #89dceb;
+	--ui-success: #89e182;
+	--ui-info: #69b6d8;
+	--ui-warning: #f6cd73;
+	--ui-error: #f98aa9;
+	--ui-text: #cdd6f4;
+	--ui-text-dimmed: #eff1f5;
+	--ui-text-muted: #9ca3be;
+	--ui-text-toned: #a1a1a1;
+	--ui-text-highlighted: #ffffff;
+	--ui-text-inverted: #292c3c;
+	--ui-bg: #181825;
+	--ui-bg-muted: #181825;
+	--ui-bg-elevated: #1e1e2e;
+	--ui-bg-accented: #2f334c;
+	--ui-bg-inverted: #ffffff;
+	--ui-border: #303143;
+	--ui-border-muted: #1f2031;
+	--ui-border-accented: #38394b;
+}
+
+@utility no-scrollbar {
+	@apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-gray-200, currentColor);
+	}
+}

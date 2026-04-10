@@ -1,0 +1,20 @@
+{
+	"name": "brawlbase",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"lint": "eslint .",
+		"format": "prettier --write ."
+	},
+	"devDependencies": {
+		"@nuxt/eslint-config": "^1.15.2",
+		"eslint": "^10.1.0",
+		"eslint-plugin-n": "^17.24.0",
+		"typescript": "^6.0.2"
+	},
+	"packageManager": "yarn@4.9.3",
+	"workspaces": [
+		"packages/*",
+		"apps/*"
+	]
+}
