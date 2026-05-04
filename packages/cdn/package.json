@@ -1,6 +1,6 @@
 {
-	"name": "@brawlbase/brawl-stars-api",
-	"version": "1.3.4",
+	"name": "@brawlbase/cdn",
+	"version": "1.0.0",
 	"type": "module",
 	"private": true,
 	"scripts": {
@@ -13,10 +13,9 @@
 		"tsdown": "^0.21.7",
 		"typescript": "^6.0.2"
 	},
-	"dependencies": {
-		"@brawlbase/supercell-api-utils": "workspace:*",
-		"ofetch": "^1.4.1"
-	},
+	"files": [
+		"dist"
+	],
 	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.mts",
@@ -30,16 +29,12 @@
 			"default": "./dist/index.cjs"
 		}
 	},
-	"files": [
-		"dist/"
-	],
-	"sideEffects": false,
 	"keywords": [
-		"brawlstars",
+		"supercell",
+		"supercell-api",
 		"brawl-stars",
-		"bs",
-		"api",
-		"supercell"
+		"clash-royale",
+		"clash-of-clans"
 	],
 	"repository": {
 		"type": "git",

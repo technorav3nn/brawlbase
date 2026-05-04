@@ -1,0 +1,15 @@
+layer: "tool"
+
+tasks:
+    build:
+        command: "yarn build"
+        inputs:
+            - "src/**/*"
+            - "tsdown.config.ts"
+        outputs:
+            - "dist/**/*"
+
+    start:
+        command: "yarn start"
+        inputs:
+            - "dist/**/*"

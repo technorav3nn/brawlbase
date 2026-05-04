@@ -1,0 +1,12 @@
+layer: "library"
+
+tasks:
+    build:
+        deps:
+            - "supercell-api-utils:build"
+        command: "yarn build"
+        inputs:
+            - "src/**/*"
+            - "tsdown.config.ts"
+        outputs:
+            - "dist/**/*"

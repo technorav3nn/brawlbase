@@ -5,6 +5,7 @@
 .nitro
 .cache
 dist
+out
 
 # Node dependencies
 node_modules
@@ -24,3 +25,9 @@ logs
 !.env.example
 
 apps/web/.data
+# moon
+.moon/cache
+.moon/docker
+
+# Testing ground
+.testing-ground

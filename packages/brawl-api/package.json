@@ -1,22 +1,20 @@
 {
-	"name": "@brawlbase/brawl-stars-api",
-	"version": "1.3.4",
+	"name": "@brawlbase/brawl-api",
+	"version": "1.0.0",
 	"type": "module",
 	"private": true,
 	"scripts": {
 		"build": "tsc --noEmit && tsdown --config-loader unrun",
 		"test": "vitest run",
-		"test:watch": "vitest watch",
 		"lint": "eslint ."
 	},
 	"devDependencies": {
 		"tsdown": "^0.21.7",
 		"typescript": "^6.0.2"
 	},
-	"dependencies": {
-		"@brawlbase/supercell-api-utils": "workspace:*",
-		"ofetch": "^1.4.1"
-	},
+	"files": [
+		"dist"
+	],
 	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.mts",
@@ -30,21 +28,22 @@
 			"default": "./dist/index.cjs"
 		}
 	},
-	"files": [
-		"dist/"
-	],
-	"sideEffects": false,
+	"dependencies": {
+		"ofetch": "^1.4.1"
+	},
+	"license": "MIT",
 	"keywords": [
 		"brawlstars",
 		"brawl-stars",
 		"bs",
 		"api",
-		"supercell"
+		"supercell",
+		"brawl stars"
 	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/technorav3nn/brawl-tracker.git",
-		"directory": "packages/brawl-stars-api"
+		"directory": "packages/brawl-api"
 	},
 	"volta": {
 		"extends": "../../package.json"

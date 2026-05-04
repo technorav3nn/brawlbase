@@ -1,0 +1,78 @@
+layer: "application"
+dependsOn:
+    - "brawl-stars-api"
+
+workspace:
+    inheritedTasks:
+        exclude: ["typecheck"]
+
+fileGroups:
+    app:
+        - ".nuxtignore"
+        - "app.config.*"
+        - "nuxt.config.*"
+    sources:
+        - "app/assets/**/*"
+        - "app/components/**/*"
+        - "app/composables/**/*"
+        - "content/**/*"
+        - "app/layouts/**/*"
+        - "middleware/**/*"
+        - "app/pages/**/*"
+        - "plugins/**/*"
+        - "server/**/*"
+        - "app/app.vue"
+
+tasks:
+    nuxt:
+        command: "nuxt"
+        preset: "server"
+
+    build:
+        deps:
+            - "^:build"
+        command: "nuxt build"
+        inputs:
+            - "@group(app)"
+            - "@group(sources)"
+        outputs:
+            - ".nuxt"
+            - ".output"
+
+    dev:
+        command: "nuxt dev"
+        inputs:
+            - "@group(app)"
+            - "@group(sources)"
+        preset: "server"
+
+    preview:
+        command: "nuxt preview"
+        inputs:
+            - "@group(app)"
+            - "@group(sources)"
+        deps:
+            - "build"
+        preset: "server"
+
+    typecheck:
+        command:
+            - "vue-tsc"
+            - "--noEmit"
+            # - '--project'
+            # - 'tsconfig.vitest.json'
+            # - '--composite'
+            # - 'false'
+        inputs:
+            - "@group(app)"
+            - "@group(sources)"
+            - "tsconfig.json"
+            - "tsconfig.*.json"
+
+    # Extends the top-level lint
+    # lint:
+    #   args:
+    #     - '--ext'
+    #     - '.ts,.vue'
+    #   deps:
+    #     - 'build' # Requires built TS files

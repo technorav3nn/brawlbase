@@ -1,4 +1,4 @@
-import { formatTag } from "@brawltracker/supercell-api-utils";
+import { formatTag } from "@brawlbase/supercell-api-utils";
 import type { $Fetch } from "ofetch";
 import type { Club, ClubGetMembersResponse } from "../types/clubs";
 
