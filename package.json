@@ -4,7 +4,9 @@
 	"type": "module",
 	"scripts": {
 		"lint": "eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"build": "moon run :build",
+		"build-packages": "moon run :build --query \"projectLayer=library\""
 	},
 	"devDependencies": {
 		"@nuxt/eslint-config": "^1.15.2",

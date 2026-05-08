@@ -28,8 +28,9 @@
 	--color-primary-900: #54247f;
 	--color-primary-950: #380e5d;
 
-	--font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-	--font-brawlstars: "Lilita One", "Inter", ui-sans-serif, system-ui, sans-serif;
+	--font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
+	--font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+	--font-brawlstars: "Lilita One", "Instrument Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
 	--color-border: var(--color-border);
 
 	--animate-shimmer: shimmer 2s infinite;
@@ -68,9 +69,9 @@
 	--ui-warning: #f6cd73;
 	--ui-error: #f98aa9;
 	--ui-text: #cdd6f4;
-	--ui-text-dimmed: #eff1f5;
-	--ui-text-muted: #9ca3be;
-	--ui-text-toned: #a1a1a1;
+	--ui-text-dimmed: #bac2de;
+	--ui-text-muted: #a6adc8;
+	--ui-text-toned: #9399b2;
 	--ui-text-highlighted: #ffffff;
 	--ui-text-inverted: #292c3c;
 	--ui-bg: #181825;

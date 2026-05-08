@@ -1,8 +1,8 @@
 {
-	"name": "@brawltracker/fandom-scraper",
+	"name": "@brawlbase/fandom-scraper",
 	"type": "module",
 	"dependencies": {
-		"@brawltracker/brawl-api": "^1.2.2",
+		"@brawlbase/brawl-api": "workspace:*",
 		"@sapphire/async-queue": "^1.5.5",
 		"axios": "^1.8.1",
 		"cheerio": "^1.0.0",

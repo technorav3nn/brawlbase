@@ -1,29 +1,29 @@
-# @brawltracker/brawl-stars-api
+# @brawlbase/brawl-stars-api
 
 Brawl Stars official API wrapper
 
-- TypeScript support
-- Promise based
-- Easy to use
-- 100% coverage
-- Uses [ofetch](https://unjs.io/packages/ofetch) for requests
+-   TypeScript support
+-   Promise based
+-   Easy to use
+-   100% coverage
+-   Uses [ofetch](https://unjs.io/packages/ofetch) for requests
 
 ## Installation
 
 ```bash
-npm install @brawltracker/brawl-stars-api
+npm install @brawlbase/brawl-stars-api
 # or
-pnpm install @brawltracker/brawl-stars-api
+pnpm install @brawlbase/brawl-stars-api
 # or
-yarn add @brawltracker/brawl-stars-api
+yarn add @brawlbase/brawl-stars-api
 # or
-bun install @brawltracker/brawl-stars-api
+bun install @brawlbase/brawl-stars-api
 ```
 
 ## Usage
 
 ```ts
-import { BrawlStarsClient } from "@brawltracker/brawl-stars-api";
+import { BrawlStarsClient } from "@brawlbase/brawl-stars-api";
 
 const client = new BrawlStarsClient("!! PUT YOUR TOKEN HERE !!");
 

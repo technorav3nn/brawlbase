@@ -1,31 +1,88 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { ButtonProps } from "@nuxt/ui";
+
+function staggerMotion(index: number = 0) {
+	return {
+		initial: { opacity: 0 },
+		whileInView: { opacity: 1 },
+		inViewOptions: { once: true, amount: 1 },
+		transition: { duration: 0.6, delay: index * 0.08 },
+	};
+}
+
+const mainHeroLinks: ButtonProps[] = [
+	{
+		label: "Get Started",
+		to: "/brawlers",
+	},
+	{ label: "Sign Up", to: "/signup", variant: "subtle", color: "neutral", trailingIcon: "i-heroicons-arrow-right" },
+];
+</script>
 
 <template>
 	<div>
 		<UPageHero
-			title="Nuxt Starter Template"
-			description="A production-ready starter template powered by Nuxt UI. Build beautiful, accessible, and performant applications in minutes, not hours."
-			:links="[
-				{
-					label: 'Get started',
-					to: 'https://ui.nuxt.com/docs/getting-started/installation/nuxt',
-					target: '_blank',
-					trailingIcon: 'i-lucide-arrow-right',
-					size: 'xl',
-					variant: 'solid',
-					color: 'primary',
-				},
-				{
-					label: 'Use this template',
-					to: 'https://github.com/nuxt-ui-templates/starter',
-					target: '_blank',
-					icon: 'i-simple-icons-github',
-					size: 'xl',
-					color: 'neutral',
-					variant: 'subtle',
-				},
-			]"
-		/>
+			:ui="{
+				root: 'pb-24 sm:pb-32',
+				container: 'relative z-10 lg:py-32',
+				wrapper: 'flex flex-col items-center',
+				title: 'sm:text-6xl lg:text-7xl xl:text-[80px] tracking-tighter leading-[1.05]',
+				description: 'mt-5 max-w-xl mx-auto text-base sm:text-lg leading-relaxed text-default',
+				links: 'gap-3',
+			}"
+		>
+			<template #top>
+				<Motion v-bind="staggerMotion(0)">
+					<LandingHeroShaders class="absolute top-0 inset-x-0 opacity-30 h-full" />
+					<!-- bottom div to make the shaders fade into the bottom -->
+					<div
+						class="absolute bottom-0 inset-x-0 h-1/3 bg-linear-to-b from-background to-default/100 pointer-events-none"
+					/>
+				</Motion>
+			</template>
+			<template #title>
+				<Motion as-child :initial="{ opacity: 0, y: 20 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.6 }">
+					<div class="mx-auto max-w-4xl *:leading-11 sm:*:leading-19">
+						Explore Brawl Stars with
+						<div>
+							<template v-for="i in 'BrawlBase'.length" :key="i">
+								<Motion
+									as="span"
+									:initial="{ opacity: 0, y: 20 }"
+									:animate="{ opacity: 1, y: 0 }"
+									:transition="{ delay: i * 0.08 + 0.2, duration: 0.5 }"
+									class="inline-block text-primary"
+								>
+									{{ "BrawlBase"[i - 1] }}
+								</Motion>
+							</template>
+						</div>
+					</div>
+				</Motion>
+			</template>
+			<template #description>
+				<Motion
+					as-child
+					:initial="{ opacity: 0, y: 20 }"
+					:animate="{ opacity: 1, y: 0 }"
+					:transition="{ delay: 0.2, duration: 0.5 }"
+				>
+					<p>View players, brawlers, events and more with BrawlBase, your home for everything Brawl Stars.</p>
+				</Motion>
+			</template>
+			<template #links>
+				<Motion
+					v-for="(link, index) in mainHeroLinks"
+					:key="index"
+					as-child
+					:initial="{ opacity: 0, y: 20 }"
+					:animate="{ opacity: 1, y: 0 }"
+					:transition="{ delay: 0.4 + index * 0.25, duration: 0.5 }"
+				>
+					<UButton size="xl" v-bind="link" />
+				</Motion>
+			</template>
+		</UPageHero>
 
 		<UPageSection
 			id="features"

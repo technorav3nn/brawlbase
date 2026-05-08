@@ -1,4 +1,4 @@
-import { convertApiDate } from "@brawltracker/supercell-api-utils";
+import { convertApiDate } from "@brawlbase/supercell-api-utils";
 import type { $Fetch } from "ofetch";
 import type { RankingsPlayer } from "../../types/players";
 import type { CountryCodes, PowerLeagueSeason } from "../../types/rankings";

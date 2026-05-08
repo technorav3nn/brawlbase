@@ -1,15 +1,15 @@
-# @brawltracker/supercell-api-utils
+# @brawlbase/supercell-api-utils
 
 Contains utility functions that work with all Supercell APIs (Brawl Stars, Clash Royale, Clash of Clans)
 
 ## Installation
 
 ```bash
-npm install @brawltracker/supercell-api-utils
+npm install @brawlbase/supercell-api-utils
 # or
-pnpm install @brawltracker/supercell-api-utils
+pnpm install @brawlbase/supercell-api-utils
 # or
-yarn add @brawltracker/supercell-api-utils
+yarn add @brawlbase/supercell-api-utils
 # or
-bun install @brawltracker/supercell-api-utils
+bun install @brawlbase/supercell-api-utils
 ```

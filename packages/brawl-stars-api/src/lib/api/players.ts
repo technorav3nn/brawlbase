@@ -1,4 +1,4 @@
-import { convertApiDate, formatTag } from "@brawltracker/supercell-api-utils";
+import { convertApiDate, formatTag } from "@brawlbase/supercell-api-utils";
 import type { $Fetch } from "ofetch";
 import type { BattlelogsResponse } from "../types/battlelogs";
 import type { Player } from "../types/players";

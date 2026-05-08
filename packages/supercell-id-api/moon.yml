@@ -1,0 +1,11 @@
+layer: "library"
+
+tasks:
+    build:
+        command: "yarn build"
+        inputs:
+            - "src/**/*"
+            - "tsdown.config.ts"
+            - "package.json"
+        outputs:
+            - "dist/**/*"

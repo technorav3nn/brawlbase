@@ -1,4 +1,4 @@
-import type { BrawlApiStarPower } from "@brawltracker/brawl-api";
+import type { BrawlApiStarPower } from "@brawlbase/brawl-api";
 import { search } from "fast-fuzzy";
 import { findBestMatch } from "string-similarity";
 

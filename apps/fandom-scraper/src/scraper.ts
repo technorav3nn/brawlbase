@@ -4,7 +4,7 @@
 /* eslint-disable regexp/no-super-linear-backtracking */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-ignore
-import type { BrawlApiGadget, BrawlApiStarPower } from "@brawltracker/brawl-api";
+import type { BrawlApiGadget, BrawlApiStarPower } from "@brawlbase/brawl-api";
 import * as cheerio from "cheerio";
 // @ts-ignore
 import { parse, nodeToText } from "wikiparse";

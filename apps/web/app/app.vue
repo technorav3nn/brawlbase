@@ -1,71 +1,70 @@
-<script setup>
-useHead({
-	meta: [{ name: "viewport", content: "width=device-width, initial-scale=1" }],
-	link: [{ rel: "icon", href: "/favicon.ico" }],
-	htmlAttrs: {
-		lang: "en",
-	},
-});
-
-const title = "Nuxt Starter Template";
-const description =
-	"A production-ready starter template powered by Nuxt UI. Build beautiful, accessible, and performant applications in minutes, not hours.";
-
+<script setup lang="ts">
 useSeoMeta({
-	title,
-	description,
-	ogTitle: title,
-	ogDescription: description,
-	ogImage: "https://ui.nuxt.com/assets/templates/nuxt/starter-light.png",
-	twitterImage: "https://ui.nuxt.com/assets/templates/nuxt/starter-light.png",
-	twitterCard: "summary_large_image",
+	title: "Brawl Base",
+	titleTemplate: "%s | Brawl Base",
 });
 </script>
 
 <template>
+	<Teleport to="#teleports">
+		<NuxtLoadingIndicator color="red" class="bg-linear-to-r! from-primary! to-primary-500" :throttle="380" />
+	</Teleport>
 	<UApp>
-		<UHeader>
-			<template #left>
-				<NuxtLink to="/">
-					<AppLogo class="w-auto h-6 shrink-0" />
-				</NuxtLink>
-
-				<TemplateMenu />
-			</template>
-
-			<template #right>
-				<UColorModeButton />
-
-				<UButton
-					to="https://github.com/nuxt-ui-templates/starter"
-					target="_blank"
-					icon="i-simple-icons-github"
-					aria-label="GitHub"
-				/>
-			</template>
-		</UHeader>
-
-		<UMain>
-			<NuxtPage />
+		<AppHeader />
+		<UMain class="relative">
+			<NuxtLayout>
+				<NuxtPage />
+			</NuxtLayout>
 		</UMain>
-
-		<USeparator icon="i-simple-icons-nuxtdotjs" />
-
-		<UFooter>
-			<template #left>
-				<p class="text-sm text-muted">Built with Nuxt UI • © {{ new Date().getFullYear() }}</p>
-			</template>
-
-			<template #right>
-				<UButton
-					to="https://github.com/nuxt-ui-templates/starter"
-					target="_blank"
-					icon="i-simple-icons-github"
-					aria-label="GitHub"
-					color="neutral"
-					variant="ghost"
-				/>
-			</template>
-		</UFooter>
+		<AppFooter />
 	</UApp>
 </template>
+
+<style global>
+.spinner-icon {
+	width: 18px;
+	height: 18px;
+	box-sizing: border-box;
+
+	border: solid 2px transparent;
+	border-top-color: #29d;
+	border-left-color: #29d;
+	border-radius: 50%;
+
+	-webkit-animation: nprogress-spinner 400ms linear infinite;
+	animation: nprogress-spinner 400ms linear infinite;
+}
+
+:root {
+	--primary-lighter: color-mix(in srgb, rgb(var(--color-primary-DEFAULT)) 80%, white);
+	--primary-light: color-mix(in srgb, rgb(var(--color-primary-DEFAULT)) 60%, white);
+	--primary: var(--color-primary-DEFAULT);
+}
+.unovis-xy-container {
+	--vis-crosshair-line-stroke-color: var(--ui-color-primary-500);
+	--vis-crosshair-circle-stroke-color: #fff;
+
+	--vis-axis-grid-color: var(--ui-color-neutral-200);
+	--vis-axis-tick-color: var(--ui-color-neutral-200);
+	--vis-axis-tick-label-color: var(--ui-color-neutral-400);
+
+	--vis-tooltip-background-color: #fff;
+	--vis-tooltip-border-color: var(--ui-color-neutral-200);
+	--vis-tooltip-text-color: var(--ui-color-neutral-900);
+}
+
+.dark {
+	.unovis-xy-container {
+		--vis-crosshair-line-stroke-color: var(--ui-color-primary-400);
+		--vis-crosshair-circle-stroke-color: var(--ui-color-neutral-900);
+
+		--vis-axis-grid-color: var(--ui-color-neutral-800);
+		--vis-axis-tick-color: var(--ui-color-neutral-800);
+		--vis-axis-tick-label-color: var(--ui-color-neutral-500);
+
+		--vis-tooltip-background-color: var(--ui-color-neutral-900);
+		--vis-tooltip-border-color: var(--ui-color-neutral-800);
+		--vis-tooltip-text-color: #fff;
+	}
+}
+</style>

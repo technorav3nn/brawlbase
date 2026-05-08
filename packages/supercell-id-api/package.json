@@ -1,0 +1,60 @@
+{
+	"name": "@brawlbase/supercell-id-api",
+	"version": "1.0.0",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"build": "tsc --noEmit && tsdown --config-loader unrun",
+		"test": "vitest run",
+		"test:watch": "vitest watch",
+		"lint": "eslint ."
+	},
+	"dependencies": {
+		"ofetch": "^1.5.1"
+	},
+	"devDependencies": {
+		"tsdown": "^0.21.7",
+		"typescript": "^6.0.2"
+	},
+	"files": [
+		"dist"
+	],
+	"main": "./dist/index.mjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.mts",
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.mjs"
+			}
+		},
+		"./browser": {
+			"import": {
+				"types": "./dist/browser.d.ts",
+				"default": "./dist/browser.mjs"
+			}
+		},
+		"./crypto": {
+			"import": {
+				"types": "./dist/crypto.d.ts",
+				"default": "./dist/crypto.mjs"
+			}
+		}
+	},
+	"keywords": [
+		"supercell",
+		"supercell-api",
+		"brawl-stars",
+		"clash-royale",
+		"clash-of-clans"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/technorav3nn/brawl-tracker.git",
+		"directory": "packages/brawl-stars-api"
+	},
+	"volta": {
+		"extends": "../../package.json"
+	}
+}
