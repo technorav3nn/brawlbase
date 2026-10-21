@@ -1,0 +1,107 @@
+{
+  "capturedAt": "2026-10-21",
+  "environment": "macOS arm64; optimized Rust release; local HTTP server with 20 ms response latency",
+  "compatibility": {
+    "brawlers": 108,
+    "modes": 3,
+    "fuzzyCases": 485,
+    "imageGoldenCases": 9,
+    "fullPipelineFiles": 70,
+    "comparison": "identical output paths, JSON values, and WebP bytes"
+  },
+  "endToEnd": {
+    "files": 70,
+    "legacyMs": 14253,
+    "rustMs": 490,
+    "speedup": 29.09,
+    "legacyRequests": 80,
+    "rustRequests": 81,
+    "peakRequests": 12
+  },
+  "parsing": {
+    "results": [
+      {
+        "name": "shelly",
+        "rounds": 20,
+        "legacyMs": 1049,
+        "rustMs": 138,
+        "speedup": 7.59
+      },
+      {
+        "name": "kaze",
+        "rounds": 20,
+        "legacyMs": 1151,
+        "rustMs": 130,
+        "speedup": 8.82
+      },
+      {
+        "name": "larry_lawrie",
+        "rounds": 20,
+        "legacyMs": 864,
+        "rustMs": 124,
+        "speedup": 6.95
+      },
+      {
+        "name": "meg",
+        "rounds": 20,
+        "legacyMs": 973,
+        "rustMs": 131,
+        "speedup": 7.4
+      },
+      {
+        "name": "nita",
+        "rounds": 20,
+        "legacyMs": 1515,
+        "rustMs": 170,
+        "speedup": 8.92
+      }
+    ],
+    "aggregateSpeedup": 8.01
+  },
+  "limitations": [
+    "Original parser snapshots use explicit accessory catalogs; the new BrawlAPI catalog is tested separately with real IDs.",
+    "End-to-end download benchmark uses one generated image.",
+    "Full live production runtime is not verified."
+  ],
+  "apiEndpoints": {
+    "checkedAt": "2026-10-21",
+    "catalog": {
+      "url": "https://api.brawlapi.com/v1/brawlers",
+      "status": 200,
+      "brawlers": 109,
+      "accessories": 436
+    },
+    "v2CatalogStatus": 404,
+    "liveSmoke": {
+      "brawler": "Vince",
+      "brawlerId": 16000110,
+      "strict": true,
+      "gears": true,
+      "gearImages": 19,
+      "files": 47,
+      "exitCode": 0,
+      "csvBaseUrl": "https://api.brawlapi.com/game"
+    },
+    "endToEnd": {
+      "files": 70,
+      "legacyMs": 14243,
+      "rustMs": 507,
+      "speedup": 28.09,
+      "legacyRequests": 80,
+      "rustRequests": 81,
+      "peakRequests": 12
+    },
+    "game": {
+      "baseUrl": "https://api.brawlapi.com/game",
+      "status": 200,
+      "paths": [
+        "csv_logic/gear_boosts",
+        "localization/texts",
+        "csv_logic/characters"
+      ],
+      "response": "Bare objects keyed by row name",
+      "gearRows": 19,
+      "matchesPreviousCsvData": true
+    }
+  }
+}

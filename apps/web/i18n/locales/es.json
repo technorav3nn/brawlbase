@@ -1,7 +1,63 @@
 {
 	"page": {
-		"login": {
-			"hero.title": "Welcome to the future of work"
+		"home": {
+			"title": "Explora Brawl Stars con",
+			"description": "Descubre jugadores, brawlers, eventos y mucho más con BrawlBase, tu hogar para todo lo relacionado con Brawl Stars.",
+			"get_started": "Comenzar"
+		},
+		"brawlers": {
+			"description": "Descubre todos los brawlers del juego, incluidas sus estadísticas, gadgets, habilidades estelares y mucho más.",
+			"search": "Buscar...",
+			"group_by": "Agrupar por",
+			"group_none": "Ninguno",
+			"group_class": "Clase",
+			"group_rarity": "Rareza"
+		},
+		"auth": {
+			"error_fields": "Completa todos los campos.",
+			"error_captcha": "Completa el captcha.",
+			"error_unknown": "Se ha producido un error desconocido.",
+			"forgot_password": "¿Has olvidado tu contraseña?",
+			"form": {
+				"email_label": "Correo electrónico",
+				"email_placeholder": "Introduce tu correo electrónico",
+				"password_label": "Contraseña",
+				"password_placeholder": "Introduce tu contraseña",
+				"username_label": "Nombre de usuario",
+				"username_placeholder": "Introduce tu nombre de usuario"
+			},
+			"login": {
+				"cta": "¿No tienes una cuenta?",
+				"form_title": "Iniciar sesión",
+				"hero_title": "¡Inicia sesión en tu cuenta de BrawlBase!",
+				"hero_description": "¡Inicia sesión en tu cuenta de BrawlBase para ver a tus amigos, consultar tu información y personalizar tu perfil!"
+			},
+			"signup": {
+				"cta": "¿Ya tienes una cuenta?",
+				"form_title": "Registrarse",
+				"hero_title": "¡Crea una cuenta de BrawlBase!",
+				"hero_description": "¡Regístrate en BrawlBase para ver a tus amigos, consultar tu información y personalizar tu perfil!"
+			}
 		}
+	},
+	"action": {
+		"login": "Iniciar sesión",
+		"signup": "Registrarse",
+		"create_account": "Crear una cuenta"
+	},
+	"language": "Idioma",
+	"nav": {
+		"brawlers": "Brawlers",
+		"events": "Eventos",
+		"players": "Jugadores",
+		"leaderboards": "Clasificaciones",
+		"clubs": "Clubes",
+		"more": "Más",
+		"inbox": "Bandeja de entrada de Brawl Stars",
+		"players_description": "¡Descubre a los mejores jugadores!",
+		"clubs_description": "¡Consulta la clasificación de clubes!",
+		"brawlers_description": "¡Consulta las clasificaciones de brawlers!",
+		"club_search_description": "¡Busca y descubre tu club u otros clubes!",
+		"inbox_description": "¡Lee las últimas noticias de Brawl Stars!"
 	}
 }

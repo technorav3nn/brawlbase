@@ -1,8 +1,22 @@
 {
 	"page": {
+		"home": {
+			"title": "Explore Brawl Stars with",
+			"description": "View players, brawlers, events and more with BrawlBase, your home for everything Brawl Stars.",
+			"get_started": "Get Started"
+		},
+		"brawlers": {
+			"description": "View all brawlers in the game, including their stats, gadgets, star powers, and more.",
+			"search": "Search...",
+			"group_by": "Group by",
+			"group_none": "None",
+			"group_class": "Class",
+			"group_rarity": "Rarity"
+		},
 		"auth": {
 			"error_fields": "Please fill in all the fields.",
 			"error_captcha": "Please complete the captcha.",
+			"error_unknown": "An unknown error occurred.",
 			"forgot_password": "Forgot your password?",
 			"form": {
 				"email_label": "Email",
@@ -28,6 +42,22 @@
 	},
 	"action": {
 		"login": "Log In",
-		"signup": "Sign Up"
+		"signup": "Sign Up",
+		"create_account": "Create an Account"
+	},
+	"language": "Language",
+	"nav": {
+		"brawlers": "Brawlers",
+		"events": "Events",
+		"players": "Players",
+		"leaderboards": "Leaderboards",
+		"clubs": "Clubs",
+		"more": "More",
+		"inbox": "Brawl Stars Inbox",
+		"players_description": "View the best players!",
+		"clubs_description": "View the clubs leaderboard!",
+		"brawlers_description": "View the leaderboards of brawlers!",
+		"club_search_description": "Search and view your club or other clubs!",
+		"inbox_description": "Read the latest news about Brawl Stars!"
 	}
 }

@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import { useBrawlerListStore } from "~/components/features/brawler-list/brawler-list-store";
+const { t } = useI18n();
+const groupingOptions = computed(() => [
+	{ label: t("page.brawlers.group_none"), value: "None" },
+	{ label: t("page.brawlers.group_class"), value: "Class" },
+	{ label: t("page.brawlers.group_rarity"), value: "Rarity" },
+]);
 const { data: brawlers, status, refresh } = useBrawlifyBrawlers();
 
 await refresh();
@@ -33,11 +39,11 @@ const rarityColorClasses = {
 				container: 'py-10 sm:py-20 lg:py-20 px-0! pb-0! lg:block',
 				title: 'sm:text-5xl',
 			}"
-			title="Brawlers"
+			:title="t('nav.brawlers')"
 			orientation="horizontal"
 		>
 			<template #description>
-				View all brawlers in the game, including their stats, gadgets, star powers, and more.
+				{{ t("page.brawlers.description") }}
 			</template>
 		</UPageHero>
 		<UPage>
@@ -48,13 +54,13 @@ const rarityColorClasses = {
 						icon="i-heroicons-magnifying-glass-20-solid"
 						size="md"
 						:trailing="false"
-						placeholder="Search..."
+						:placeholder="t('page.brawlers.search')"
 					/>
 					<USelect
 						v-model="brawlerList.groupingMode"
-						:items="['None', 'Class', 'Rarity']"
+						:items="groupingOptions"
 						icon="i-heroicons-adjustments-horizontal"
-						placeholder="Group by"
+						:placeholder="t('page.brawlers.group_by')"
 						class="w-36"
 					/>
 				</div>

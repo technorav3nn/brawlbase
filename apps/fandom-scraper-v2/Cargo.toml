@@ -1,0 +1,28 @@
+[package]
+name = "fandom-scraper-v2"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+anyhow = "1.0"
+chrono = "0.4"
+futures = "0.3"
+libc = "0.2"
+regex = "1.12"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "gzip", "brotli"] }
+scraper = "0.24"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "fs", "time", "sync", "net", "io-util"] }
+ts-rs = "12.0"
+urlencoding = "2"
+unicode-normalization = "0.1"
+unicode-segmentation = "1"
+
+[dev-dependencies]
+flate2 = "1"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

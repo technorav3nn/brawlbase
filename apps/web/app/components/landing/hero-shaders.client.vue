@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Shader, Pixelate, Plasma, SineWave } from "shaders/vue";
-import { resolveCssVariable } from "#shared/utils/css";
 
 const primary = resolveCssVariable("--color-primary-300");
 const neutral = resolveCssVariable("--ui-bg-muted");

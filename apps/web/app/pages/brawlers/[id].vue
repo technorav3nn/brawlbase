@@ -2,9 +2,9 @@
 import type { CdnBrawler } from "@brawlbase/cdn";
 import type { NavigationMenuItem } from "@nuxt/ui";
 import { breakpointsTailwind } from "@vueuse/core";
-import { useBrawlerStore } from "~/components/features/brawlers/brawler-store";
 import { RARITY_COLOR_CLASSES } from "#shared/utils/brawl-stars/colors";
 import { normalCaseToKebabCase } from "#shared/utils/common";
+import { useBrawlerStore } from "~/components/features/brawlers/brawler-store";
 
 definePageMeta({
 	middleware: (to) => {

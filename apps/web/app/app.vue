@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { en, es } from "@nuxt/ui/locale";
+
+const { locale } = useI18n();
+const uiLocale = computed(() => (locale.value === "es" ? es : en));
+useHead({ htmlAttrs: { lang: () => locale.value } });
+
 useSeoMeta({
 	title: "Brawl Base",
 	titleTemplate: "%s | Brawl Base",
@@ -9,7 +15,7 @@ useSeoMeta({
 	<Teleport to="#teleports">
 		<NuxtLoadingIndicator color="red" class="bg-linear-to-r! from-primary! to-primary-500" :throttle="380" />
 	</Teleport>
-	<UApp>
+	<UApp :locale="uiLocale">
 		<AppHeader />
 		<UMain class="relative">
 			<NuxtLayout>

@@ -1,0 +1,29 @@
+layer: "tool"
+language: "rust"
+
+tasks:
+    generate-types:
+        command: "cargo run --locked -- generate-types"
+        options:
+            cache: false
+            runInCI: false
+    build:
+        command: "cargo build --release --locked"
+        inputs:
+            - "src/**/*"
+            - "Cargo.toml"
+            - "Cargo.lock"
+        outputs:
+            - "target/release/fandom-scraper-v2"
+    start:
+        command: "cargo run --release --locked --"
+        options:
+            cache: false
+            runInCI: false
+    test:
+        command: "cargo test --locked"
+        inputs:
+            - "src/**/*"
+            - "tests/**/*"
+            - "Cargo.toml"
+            - "Cargo.lock"

@@ -1,5 +1,16 @@
 <script setup lang="ts">
 import { LazyAppProfileSlideover } from "#components";
+import { en, es } from "@nuxt/ui/locale";
+
+const { t, locale, setLocale } = useI18n();
+const localeOptions = [
+	{ label: "English", value: "en" as const },
+	{ label: "Español", value: "es" as const },
+];
+
+function onLocaleChange(value: string) {
+	if (value === "en" || value === "es") setLocale(value);
+}
 
 const { data: session } = await authClient.useSession(useFetch);
 
@@ -11,61 +22,61 @@ function onProfileClick() {
 
 const links = computed<any[]>(() => [
 	{
-		label: "Brawlers",
+		label: t("nav.brawlers"),
 		icon: "i-lucide-star",
 		to: "/brawlers",
 	},
 	{
-		label: "Events",
+		label: t("nav.events"),
 		icon: "i-lucide-calendar-days",
 		to: "/events",
 	},
 	{
-		label: "Players",
+		label: t("nav.players"),
 		icon: "i-lucide-users",
 		to: "/players",
 	},
 	{
-		label: "Leaderboards",
+		label: t("nav.leaderboards"),
 		icon: "i-lucide-chart-column-decreasing",
 		to: "/leaderboards",
 		children: [
 			{
-				label: "Players",
+				label: t("nav.players"),
 				to: "/leaderboards/players",
-				description: "View the best players!",
+				description: t("nav.players_description"),
 				icon: "i-lucide-users",
 			},
 			{
-				label: "Clubs",
+				label: t("nav.clubs"),
 				to: "/leaderboards/clubs",
-				description: "View the clubs leaderboard!",
+				description: t("nav.clubs_description"),
 				icon: "i-lucide-shield-user",
 			},
 			{
-				label: "Brawlers",
+				label: t("nav.brawlers"),
 				to: "/leaderboards/brawlers",
-				description: "View the leaderboards of brawlers!",
+				description: t("nav.brawlers_description"),
 				class: "w-full",
 				icon: "i-lucide-star",
 			},
 		],
 	},
 	{
-		label: "More",
+		label: t("nav.more"),
 		icon: "i-lucide-circle-ellipsis",
 		children: [
 			{
-				label: "Clubs",
+				label: t("nav.clubs"),
 				icon: "i-lucide-shield-user",
 				to: "/clubs",
-				description: "Search and view your club or other clubs!",
+				description: t("nav.club_search_description"),
 			},
 			{
-				label: "Brawl Stars Inbox",
+				label: t("nav.inbox"),
 				icon: "i-lucide-inbox",
 				to: "/inbox",
-				description: "Read the latest news about Brawl Stars!",
+				description: t("nav.inbox_description"),
 			},
 		],
 	},
@@ -91,8 +102,12 @@ const linksWithoutIcons = computed(() => links.value.map((link) => ({ ...link, i
 		</template>
 
 		<template #right>
-			<UButton v-if="!session" color="neutral" variant="ghost" class="hidden sm:block" to="/login">Log In</UButton>
-			<UButton v-if="!session" class="hidden sm:block" to="/signup">Sign Up</UButton>
+			<ULocaleSelect :model-value="locale" :locales="[en, es]" @update:model-value="onLocaleChange" />
+
+			<UButton v-if="!session" color="neutral" variant="ghost" class="hidden sm:block" to="/login">{{
+				t("action.login")
+			}}</UButton>
+			<UButton v-if="!session" class="hidden sm:block" to="/signup">{{ t("action.signup") }}</UButton>
 			<UButton v-if="!session" class="sm:hidden" color="primary" to="/login" icon="i-lucide-log-out" square />
 			<UButton
 				v-if="session"

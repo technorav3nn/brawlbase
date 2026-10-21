@@ -29,11 +29,14 @@ npm create nuxt@latest -- -t ui
 
 ## Setup
 
-Make sure to install the dependencies:
+Install [proto](https://moonrepo.dev/docs/proto/install), then install the repository's pinned Node, Yarn, Moon, and Rust/Cargo toolchains and dependencies:
 
 ```bash
-pnpm install
+proto install
+yarn install
 ```
+
+Rust tasks use Moon's managed toolchain; no separate manual Cargo installation is needed. Run `moon run fandom-scraper-v2:build` from the repository root to build the scraper, or `yarn workspace @brawlbase/cdn types:generate` to regenerate CDN types.
 
 ## Development Server
 

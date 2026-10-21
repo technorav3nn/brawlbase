@@ -9,10 +9,10 @@
 		"build-packages": "moon run :build --query \"projectLayer=library\""
 	},
 	"devDependencies": {
-		"@nuxt/eslint-config": "^1.15.2",
-		"eslint": "^10.1.0",
-		"eslint-plugin-n": "^17.24.0",
-		"typescript": "^6.0.2"
+		"@nuxt/eslint-config": "^1.17.0",
+		"eslint": "^10.10.0",
+		"eslint-plugin-n": "^18.3.0",
+		"typescript": "~6.0.3"
 	},
 	"packageManager": "yarn@4.9.3",
 	"workspaces": [

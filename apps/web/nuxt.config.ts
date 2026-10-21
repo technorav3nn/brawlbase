@@ -5,6 +5,7 @@ export default defineNuxtConfig({
 		"@nuxthub/core",
 		"@nuxt/eslint",
 		"@nuxt/ui",
+		"@nuxtjs/i18n",
 		"@nuxt/image",
 		"@nuxt/fonts",
 		"@nuxtjs/turnstile",
@@ -12,15 +13,11 @@ export default defineNuxtConfig({
 		"@vueuse/nuxt",
 		"@pinia/nuxt",
 		"@pinia/colada-nuxt",
-		"@nuxtjs/i18n",
 	],
 	devtools: {
 		enabled: true,
 	},
 	css: ["~/assets/css/main.css", "~/assets/css/global.css"],
-	routeRules: {
-		"/": { prerender: true },
-	},
 	hub: {
 		db: "sqlite",
 		kv: true,
@@ -33,9 +30,14 @@ export default defineNuxtConfig({
 		strategy: "no_prefix",
 		defaultLocale: "en",
 		locales: [
-			{ code: "en", name: "English", file: "en.json" },
-			{ code: "es", name: "Spanish", file: "es.json" },
+			{ code: "en", language: "en-US", name: "English", file: "en.json" },
+			{ code: "es", language: "es-ES", name: "Español", file: "es.json" },
 		],
+		detectBrowserLanguage: {
+			useCookie: true,
+			cookieKey: "i18n_redirected",
+			fallbackLocale: "en",
+		},
 	},
 	turnstile: {
 		siteKey: "0x4AAAAAADLmDteGhhNegcV0",
@@ -43,7 +45,12 @@ export default defineNuxtConfig({
 	nitro: {
 		preset: "cloudflare_module",
 	},
+	future: {
+		compatibilityVersion: 5,
+	},
 	experimental: {
+		// Existing handlers use Nitro/H3 auto-imports, disabled by Nuxt 5 compatibility defaults.
+		nitroAutoImports: true,
 		typedPages: true,
 		asyncContext: true,
 		inlineRouteRules: true,

@@ -7,12 +7,14 @@
 		"build": "tsc --noEmit && tsdown --config-loader unrun",
 		"test": "vitest run",
 		"test:watch": "vitest watch",
-		"lint": "eslint ."
+		"lint": "eslint .",
+		"types:generate": "cd ../.. && moon run fandom-scraper-v2:generate-types",
+		"types:check": "cd ../.. && moon run fandom-scraper-v2:generate-types -- --check"
 	},
 	"devDependencies": {
-		"tsdown": "^0.21.7",
+		"tsdown": "^0.21.10",
 		"typescript": "^6.0.2",
-		"unrun": "^0.3.0"
+		"unrun": "^0.3.1"
 	},
 	"files": [
 		"dist"

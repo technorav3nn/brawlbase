@@ -11,10 +11,12 @@ fileGroups:
         - ".nuxtignore"
         - "app.config.*"
         - "nuxt.config.*"
+        - "i18n/**/*"
     sources:
         - "app/assets/**/*"
         - "app/components/**/*"
         - "app/composables/**/*"
+        - "app/utils/**/*"
         - "content/**/*"
         - "app/layouts/**/*"
         - "middleware/**/*"

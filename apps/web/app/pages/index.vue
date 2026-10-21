@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ButtonProps } from "@nuxt/ui";
 
+const { t } = useI18n();
+
 function staggerMotion(index: number = 0) {
 	return {
 		initial: { opacity: 0 },
@@ -10,13 +12,13 @@ function staggerMotion(index: number = 0) {
 	};
 }
 
-const mainHeroLinks: ButtonProps[] = [
+const mainHeroLinks = computed<ButtonProps[]>(() => [
 	{
-		label: "Get Started",
+		label: t("page.home.get_started"),
 		to: "/brawlers",
 	},
-	{ label: "Sign Up", to: "/signup", variant: "subtle", color: "neutral", trailingIcon: "i-heroicons-arrow-right" },
-];
+	{ label: t("action.signup"), to: "/signup", variant: "subtle", color: "neutral", trailingIcon: "i-heroicons-arrow-right" },
+]);
 </script>
 
 <template>
@@ -32,18 +34,20 @@ const mainHeroLinks: ButtonProps[] = [
 			}"
 		>
 			<template #top>
-				<Motion v-bind="staggerMotion(0)">
-					<LandingHeroShaders class="absolute top-0 inset-x-0 opacity-30 h-full" />
-					<!-- bottom div to make the shaders fade into the bottom -->
-					<div
-						class="absolute bottom-0 inset-x-0 h-1/3 bg-linear-to-b from-background to-default pointer-events-none"
-					/>
-				</Motion>
+				<ClientOnly>
+					<Motion v-bind="staggerMotion(0)">
+						<LandingHeroShaders class="absolute top-0 inset-x-0 opacity-30 h-full" />
+						<!-- bottom div to make the shaders fade into the bottom -->
+						<div
+							class="absolute bottom-0 inset-x-0 h-1/3 bg-linear-to-b from-background to-default pointer-events-none"
+						/>
+					</Motion>
+				</ClientOnly>
 			</template>
 			<template #title>
 				<Motion as-child :initial="{ opacity: 0, y: 20 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.6 }">
 					<div class="mx-auto max-w-4xl *:leading-11 sm:*:leading-19">
-						Explore Brawl Stars with
+						{{ t("page.home.title") }}
 						<div>
 							<template v-for="i in 'BrawlBase'.length" :key="i">
 								<Motion
@@ -67,7 +71,7 @@ const mainHeroLinks: ButtonProps[] = [
 					:animate="{ opacity: 1, y: 0 }"
 					:transition="{ delay: 0.2, duration: 0.5 }"
 				>
-					<p>View players, brawlers, events and more with BrawlBase, your home for everything Brawl Stars.</p>
+					<p>{{ t("page.home.description") }}</p>
 				</Motion>
 			</template>
 			<template #links>

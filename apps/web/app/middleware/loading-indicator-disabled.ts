@@ -1,4 +1,4 @@
 export default defineNuxtRouteMiddleware(() => {
 	// disable the loading indicator only for this page
-	useLoadingIndicatorState().value = false;
+	useLoadingIndicator().finish({ force: true });
 });

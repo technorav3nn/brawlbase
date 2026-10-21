@@ -4,3 +4,6 @@ javascript:
 node: {}
 
 yarn: {}
+
+rust:
+    components: ["clippy", "rustfmt"]

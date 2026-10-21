@@ -1,22 +1,25 @@
 <script setup lang="ts">
 import type { AuthFormField, ButtonProps } from "@nuxt/ui";
 import { Shader, Aurora } from "shaders/vue";
-import { resolveCssVariable } from "#shared/utils/css";
 
 const props = defineProps<{
 	type: "login" | "signup";
 }>();
+
+const { t } = useI18n();
+const primary = resolveCssVariable("--ui-primary");
+const background = resolveCssVariable("--ui-bg");
+const accented = resolveCssVariable("--ui-bg-accented");
+const muted = resolveCssVariable("--ui-bg-muted");
 
 const validationError = ref<string | null>(null);
 const loading = ref(false);
 
 const token = ref<string>();
 
-const { t } = useI18n();
-
 async function onSubmit({ password, email, username }: { password: string; email: string; username?: string }) {
-	if (!password || !email) return (validationError.value = t("page.auth.error.fields"));
-	if (!token.value) return (validationError.value = t("page.auth.error.captcha"));
+	if (!password || !email) return (validationError.value = t("page.auth.error_fields"));
+	if (!token.value) return (validationError.value = t("page.auth.error_captcha"));
 
 	loading.value = true;
 	let result: ReturnType<typeof authClient.signIn.email | typeof authClient.signUp.email> | null = null;
@@ -31,7 +34,7 @@ async function onSubmit({ password, email, username }: { password: string; email
 			},
 		});
 	} else {
-		if (!username) return (validationError.value = t("page.auth.error.fields"));
+		if (!username) return (validationError.value = t("page.auth.error_fields"));
 		console.log(token.value);
 		result = await authClient.signUp.email({
 			name: username,
@@ -47,30 +50,30 @@ async function onSubmit({ password, email, username }: { password: string; email
 
 	loading.value = false;
 	if (result.error) {
-		validationError.value = result.error.message ?? "An unknown error occurred.";
+		validationError.value = result.error.message ?? t("page.auth.error_unknown");
 		return;
 	}
 
 	await navigateTo("/");
 }
 
-const links: ButtonProps[] = [
+const links = computed<ButtonProps[]>(() => [
 	{
-		label: t(`page.auth.${props.type}.cta`),
+		label: t(props.type === "login" ? "action.create_account" : "action.login"),
 		to: props.type === "login" ? "/signup" : "/login",
 		trailingIcon: "i-lucide-arrow-right",
 		class: "hidden sm:flex",
 	},
 	{
-		label: t("page.auth.forgot_password"),
+		label: t(props.type === "login" ? "page.auth.forgot_password" : "page.auth.signup.cta"),
 		to: "/forgot-password",
 		variant: "subtle",
 		color: "neutral",
 		icon: "i-lucide-circle-question-mark",
 	},
-];
+]);
 
-const loginFields: AuthFormField[] = [
+const loginFields = computed<AuthFormField[]>(() => [
 	{
 		name: "email",
 		type: "text",
@@ -85,7 +88,7 @@ const loginFields: AuthFormField[] = [
 		placeholder: t("page.auth.form.password_placeholder"),
 		required: true,
 	},
-];
+]);
 
 const fields = computed<AuthFormField[]>(() => {
 	if (props.type === "signup") {
@@ -97,10 +100,10 @@ const fields = computed<AuthFormField[]>(() => {
 				placeholder: t("page.auth.form.username_placeholder"),
 				required: true,
 			},
-			...loginFields,
+			...loginFields.value,
 		];
 	}
-	return loginFields;
+	return loginFields.value;
 });
 
 const colorMode = useColorMode();
@@ -119,10 +122,10 @@ const motionProps = {
 			<ClientOnly>
 				<Shader class="absolute top-0 inset-x-0 opacity-30 h-full -z-10" :ui="{ root: 'pointer-events-none' }">
 					<Aurora
-						:color-a="resolveCssVariable('--ui-primary')!.value!"
-						:color-b="resolveCssVariable('--ui-bg')!.value!"
-						:color-c="resolveCssVariable('--ui-bg-accented')!.value!"
-						:color-d="resolveCssVariable('--ui-bg-muted')!.value!"
+						:color-a="primary!"
+						:color-b="background!"
+						:color-c="accented!"
+						:color-d="muted!"
 						:speed="10"
 						:height="350"
 						:center="{ x: 0.5, y: 0 }"
@@ -132,8 +135,8 @@ const motionProps = {
 			<div class="absolute bottom-0 inset-x-0 h-1/3 bg-linear-to-b from-background to-default pointer-events-none" />
 		</Motion>
 		<UPageCTA
-			:title="$t(`page.auth.${props.type}.hero_title`)"
-			:description="$t(`page.auth.${props.type}.hero_description`)"
+			:title="t(`page.auth.${props.type}.hero_title`)"
+			:description="t(`page.auth.${props.type}.hero_description`)"
 			orientation="horizontal"
 			variant="naked"
 			:ui="{
@@ -147,7 +150,7 @@ const motionProps = {
 					<UAuthForm
 						:ui="{ title: 'text-start' }"
 						:submit="{
-							label: $t(`action.${props.type}`),
+							label: t(`action.${props.type}`),
 							loading,
 							icon: 'i-heroicons-arrow-right-end-on-rectangle-20-solid',
 						}"
@@ -160,7 +163,7 @@ const motionProps = {
 								<UIcon name="i-heroicons-user-circle" class="size-8" />
 
 								<h1 class="text-xl font-bold">
-									{{ $t(`page.auth.${props.type}.form_title`) }}
+									{{ t(`page.auth.${props.type}.form_title`) }}
 								</h1>
 							</div>
 						</template>
