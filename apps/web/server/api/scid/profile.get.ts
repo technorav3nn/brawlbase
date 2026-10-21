@@ -1,6 +1,6 @@
 import { listProfiles } from "@brawlbase/supercell-id-api";
 import { z } from "zod";
-import { getCachedScidSessionToken } from "#server/utils/session-token";
+import { getCachedScidSessionToken } from "~~/server/utils/session-token";
 
 const schema = z.object({
 	input: z.string(),

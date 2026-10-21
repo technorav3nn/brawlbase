@@ -1,0 +1,1 @@
+<template>info.vue</template>

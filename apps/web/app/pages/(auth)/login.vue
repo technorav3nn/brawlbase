@@ -5,5 +5,5 @@ definePageMeta({
 </script>
 
 <template>
-	<div>{{ $t("login.hero.title") }}</div>
+	<AuthPage type="login" />
 </template>

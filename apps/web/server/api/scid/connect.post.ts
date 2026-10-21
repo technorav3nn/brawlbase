@@ -4,7 +4,7 @@ import { getCdnUrlForAvatarId, idToHighLow, tagToId } from "@brawlbase/supercell
 import { db } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { getCachedScidSessionToken } from "#server/utils/session-token";
+import { getCachedScidSessionToken } from "~~/server/utils/session-token";
 
 const schema = z.object({
 	tag: z.string(),

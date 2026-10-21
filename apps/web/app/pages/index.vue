@@ -36,7 +36,7 @@ const mainHeroLinks: ButtonProps[] = [
 					<LandingHeroShaders class="absolute top-0 inset-x-0 opacity-30 h-full" />
 					<!-- bottom div to make the shaders fade into the bottom -->
 					<div
-						class="absolute bottom-0 inset-x-0 h-1/3 bg-linear-to-b from-background to-default/100 pointer-events-none"
+						class="absolute bottom-0 inset-x-0 h-1/3 bg-linear-to-b from-background to-default pointer-events-none"
 					/>
 				</Motion>
 			</template>

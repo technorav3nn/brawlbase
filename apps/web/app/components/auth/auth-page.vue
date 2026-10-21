@@ -12,9 +12,11 @@ const loading = ref(false);
 
 const token = ref<string>();
 
+const { t } = useI18n();
+
 async function onSubmit({ password, email, username }: { password: string; email: string; username?: string }) {
-	if (!password || !email) return (validationError.value = "Please fill in all the fields.");
-	if (!token.value) return (validationError.value = "Please complete the captcha.");
+	if (!password || !email) return (validationError.value = t("page.auth.error.fields"));
+	if (!token.value) return (validationError.value = t("page.auth.error.captcha"));
 
 	loading.value = true;
 	let result: ReturnType<typeof authClient.signIn.email | typeof authClient.signUp.email> | null = null;
@@ -29,7 +31,8 @@ async function onSubmit({ password, email, username }: { password: string; email
 			},
 		});
 	} else {
-		if (!username) return (validationError.value = "Please fill in all the fields.");
+		if (!username) return (validationError.value = t("page.auth.error.fields"));
+		console.log(token.value);
 		result = await authClient.signUp.email({
 			name: username,
 			email,
@@ -53,19 +56,13 @@ async function onSubmit({ password, email, username }: { password: string; email
 
 const links: ButtonProps[] = [
 	{
-		label: "Don't have an account?",
-		to: "/signup",
+		label: t(`page.auth.${props.type}.cta`),
+		to: props.type === "login" ? "/signup" : "/login",
 		trailingIcon: "i-lucide-arrow-right",
 		class: "hidden sm:flex",
 	},
 	{
-		label: "Sign Up",
-		to: "/signup",
-		trailingIcon: "i-lucide-arrow-right",
-		class: "sm:hidden",
-	},
-	{
-		label: "Forgot password?",
+		label: t("page.auth.forgot_password"),
 		to: "/forgot-password",
 		variant: "subtle",
 		color: "neutral",
@@ -77,15 +74,15 @@ const loginFields: AuthFormField[] = [
 	{
 		name: "email",
 		type: "text",
-		label: "Email",
-		placeholder: "Enter your email",
+		label: t("page.auth.form.email_label"),
+		placeholder: t("page.auth.form.email_placeholder"),
 		required: true,
 	},
 	{
 		name: "password",
 		type: "password",
-		label: "Password",
-		placeholder: "Enter your password",
+		label: t("page.auth.form.password_label"),
+		placeholder: t("page.auth.form.password_placeholder"),
 		required: true,
 	},
 ];
@@ -96,8 +93,8 @@ const fields = computed<AuthFormField[]>(() => {
 			{
 				name: "username",
 				type: "text",
-				label: "Username",
-				placeholder: "Enter your username",
+				label: t("page.auth.form.username_label"),
+				placeholder: t("page.auth.form.username_placeholder"),
 				required: true,
 			},
 			...loginFields,
@@ -112,7 +109,7 @@ const mode = computed(() => colorMode.value);
 const motionProps = {
 	initial: { opacity: 0 },
 	animate: { opacity: 1 },
-	transition: { duration: 0.4, delay: 0 },
+	transition: { duration: 0.2, delay: 0 },
 };
 </script>
 
@@ -127,7 +124,7 @@ const motionProps = {
 						:color-c="resolveCssVariable('--ui-bg-accented')!.value!"
 						:color-d="resolveCssVariable('--ui-bg-muted')!.value!"
 						:speed="10"
-						:height="300"
+						:height="350"
 						:center="{ x: 0.5, y: 0 }"
 					/>
 				</Shader>
@@ -135,8 +132,8 @@ const motionProps = {
 			<div class="absolute bottom-0 inset-x-0 h-1/3 bg-linear-to-b from-background to-default pointer-events-none" />
 		</Motion>
 		<UPageCTA
-			title="Log In to your BrawlBase account!"
-			description="Log in to your BrawlBase account to view your friends and your info, and customize your profile!"
+			:title="$t(`page.auth.${props.type}.hero_title`)"
+			:description="$t(`page.auth.${props.type}.hero_description`)"
 			orientation="horizontal"
 			variant="naked"
 			:ui="{
@@ -149,16 +146,22 @@ const motionProps = {
 				<UCard class="w-full bg-default/70 backdrop-blur-lg" variant="outline">
 					<UAuthForm
 						:ui="{ title: 'text-start' }"
-						:submit="{ label: 'Log In', loading, icon: 'i-heroicons-arrow-right-end-on-rectangle-20-solid' }"
+						:submit="{
+							label: $t(`action.${props.type}`),
+							loading,
+							icon: 'i-heroicons-arrow-right-end-on-rectangle-20-solid',
+						}"
 						:fields
 						:loading="loading"
-						@submit="onSubmit($event.data as any)"
+						@submit="void onSubmit($event.data as any)"
 					>
 						<template #title>
 							<div class="flex items-center gap-2">
 								<UIcon name="i-heroicons-user-circle" class="size-8" />
 
-								<h1 class="text-xl font-bold">Log In</h1>
+								<h1 class="text-xl font-bold">
+									{{ $t(`page.auth.${props.type}.form_title`) }}
+								</h1>
 							</div>
 						</template>
 						<template #validation>

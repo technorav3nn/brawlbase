@@ -17,7 +17,7 @@ export default defineNuxtConfig({
 	devtools: {
 		enabled: true,
 	},
-	css: ["~/assets/css/main.css"],
+	css: ["~/assets/css/main.css", "~/assets/css/global.css"],
 	routeRules: {
 		"/": { prerender: true },
 	},
@@ -36,6 +36,9 @@ export default defineNuxtConfig({
 			{ code: "en", name: "English", file: "en.json" },
 			{ code: "es", name: "Spanish", file: "es.json" },
 		],
+	},
+	turnstile: {
+		siteKey: "0x4AAAAAADLmDteGhhNegcV0",
 	},
 	nitro: {
 		preset: "cloudflare_module",
@@ -90,10 +93,15 @@ export default defineNuxtConfig({
 				width: 24,
 			},
 		],
-		// serverBundle: "remote",
 	},
 	imports: {
-		dirs: ["queries"],
+		presets: [
+			{
+				from: "@pinia/colada",
+				imports: ["defineQuery", "defineMutation", "defineQueryOptions", "defineMutationOptions"],
+			},
+		],
+		dirs: ["queries", "routers"],
 	},
 	runtimeConfig: {
 		betterAuthSecret: "",

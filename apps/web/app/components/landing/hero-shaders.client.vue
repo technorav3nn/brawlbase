@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Shader, Pixelate, Plasma, Swirl } from "shaders/vue";
+import { Shader, Pixelate, Plasma, SineWave } from "shaders/vue";
 import { resolveCssVariable } from "#shared/utils/css";
 
 const primary = resolveCssVariable("--color-primary-300");
-const neutral = resolveCssVariable("--ui-bg-elevated");
+const neutral = resolveCssVariable("--ui-bg-muted");
 </script>
 
 <template>
@@ -19,21 +19,21 @@ const neutral = resolveCssVariable("--ui-bg-elevated");
 				outputMax: 1,
 				outputMin: 0.16,
 			}"
-			:roundness="0.2"
+			:roundness="0.3"
 			:scale="68"
 			:transform="{ rotation: 180 }"
 		>
 			<Plasma
 				:balance="57"
-				:color-a="primary"
-				:color-b="neutral"
+				:color-a="primary!"
+				:color-b="neutral!"
 				:contrast="1.6"
 				:density="3.3"
 				:intensity="1.8"
 				:visible="true"
 			/>
 		</Pixelate>
-		<Swirl
+		<SineWave
 			id="idmmbhthud5inxgebqc"
 			:amplitude="0.1"
 			:position="{
@@ -41,7 +41,7 @@ const neutral = resolveCssVariable("--ui-bg-elevated");
 				y: 1,
 			}"
 			:softness="0.8"
-			:thickness="0.7"
+			:thickness="2"
 			:visible="false"
 		/>
 	</Shader>

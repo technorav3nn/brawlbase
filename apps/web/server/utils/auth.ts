@@ -16,7 +16,7 @@ function createAuth() {
 		],
 		database: drizzleAdapter(db, { provider: "sqlite", schema }),
 		emailAndPassword: { enabled: true },
-		debug: import.meta.dev,
+		debug: true,
 		user: {
 			deleteUser: {
 				enabled: true,

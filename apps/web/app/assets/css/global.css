@@ -124,3 +124,63 @@ ul[data-type="taskList"] {
 	background-size: 300% 100%;
 	animation: gradient 10s linear infinite var(--__ul__direction);
 }
+
+.ultra-legendary-card-gradient-bg-dark {
+	--__ul__direction: normal;
+	--__ul__start: 135deg;
+
+	background: linear-gradient(
+		var(--__ul__start),
+		#fba82b,
+		#e64372,
+		#64ff78,
+		#520f81,
+		#fba82b,
+		#e64372,
+		#520f81,
+		#64ff78,
+		#fba82b
+	);
+	&:where(.dark, .dark *) {
+		background: linear-gradient(
+			var(--__ul__start),
+			color-mix(in srgb, #9cfcc5 25%, transparent),
+			color-mix(in srgb, #fff11e 25%, transparent),
+			color-mix(in srgb, #fba82b 25%, transparent),
+			color-mix(in srgb, #e64372 25%, transparent),
+			color-mix(in srgb, #520f81 25%, transparent),
+			color-mix(in srgb, #9cfcc5 25%, transparent),
+			color-mix(in srgb, #fff11e 25%, transparent),
+			color-mix(in srgb, #fba82b 25%, transparent),
+			color-mix(in srgb, #e64372 25%, transparent),
+			color-mix(in srgb, #520f81 25%, transparent),
+			color-mix(in srgb, #9cfcc5 25%, transparent)
+		);
+	}
+
+	background-size: 300% 200%;
+	animation: gradient 10s linear infinite var(--__ul__direction);
+}
+
+.ultra-legendary-card-gradient-bg-light {
+	--__ul__direction: normal;
+	--__ul__start: 135deg;
+
+	background: linear-gradient(
+		var(--__ul__start),
+		color-mix(in srgb, #9cfcc5 20%, transparent),
+		color-mix(in srgb, #fff11e 20%, transparent),
+		color-mix(in srgb, #fba82b 20%, transparent),
+		color-mix(in srgb, #e64372 20%, transparent),
+		color-mix(in srgb, #520f81 20%, transparent),
+		color-mix(in srgb, #9cfcc5 20%, transparent),
+		color-mix(in srgb, #fff11e 20%, transparent),
+		color-mix(in srgb, #fba82b 20%, transparent),
+		color-mix(in srgb, #e64372 20%, transparent),
+		color-mix(in srgb, #520f81 20%, transparent),
+		color-mix(in srgb, #9cfcc5 20%, transparent)
+	);
+
+	background-size: 300% 200%;
+	animation: gradient 10s linear infinite var(--__ul__direction);
+}

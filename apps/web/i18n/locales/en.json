@@ -1,3 +1,33 @@
 {
-	"login.hero.title": "Log in"
+	"page": {
+		"auth": {
+			"error_fields": "Please fill in all the fields.",
+			"error_captcha": "Please complete the captcha.",
+			"forgot_password": "Forgot your password?",
+			"form": {
+				"email_label": "Email",
+				"email_placeholder": "Enter your email",
+				"password_label": "Password",
+				"password_placeholder": "Enter your password",
+				"username_label": "Username",
+				"username_placeholder": "Enter your username"
+			},
+			"login": {
+				"cta": "Don't have an account?",
+				"form_title": "Log In",
+				"hero_title": "Log In to your BrawlBase account!",
+				"hero_description": "Log in to your BrawlBase account to view your friends and your info, and customize your profile!"
+			},
+			"signup": {
+				"cta": "Already have an account?",
+				"form_title": "Sign Up",
+				"hero_title": "Create a BrawlBase account!",
+				"hero_description": "Sign up for a BrawlBase account to view your friends and your info, and customize your profile!"
+			}
+		}
+	},
+	"action": {
+		"login": "Log In",
+		"signup": "Sign Up"
+	}
 }
