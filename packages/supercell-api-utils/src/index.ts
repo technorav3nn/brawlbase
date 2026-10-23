@@ -29,7 +29,6 @@ export function convertApiDate(date: string) {
  * @returns string
  */
 export function formatTag(tag: string) {
-	 
 	return `#${tag.toUpperCase().replace(/O/g, "0").replace(/^#/g, "").replace(/\s/g, "")}`;
 }
 
@@ -41,6 +40,5 @@ export function formatTag(tag: string) {
  * @returns boolean
  */
 export function verifyTag(tag: string) {
-	 
 	return /^#?[0289PYLQGRJCUV]{3,}$/.test(tag);
 }

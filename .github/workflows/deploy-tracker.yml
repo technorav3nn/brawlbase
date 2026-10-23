@@ -1,0 +1,59 @@
+name: Deploy tracker worker
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - "apps/tracker/**"
+            - "packages/brawl-stars-api/**"
+            - "packages/supercell-api-utils/**"
+            - ".moon/**"
+            - ".prototools"
+            - "package.json"
+            - "yarn.lock"
+            - "moon.yml"
+            - ".github/actions/**"
+            - ".github/workflows/deploy-tracker.yml"
+            - ".yarnrc.yml"
+            - ".yarn/plugins/**"
+            - "eslint.config.mjs"
+            - "prettier.config.cjs"
+            - ".prettierignore"
+    workflow_dispatch:
+        inputs:
+            dry_run:
+                description: Build and validate deployment without publishing
+                type: boolean
+                default: false
+
+permissions:
+    contents: read
+
+concurrency:
+    group: deploy-tracker
+    cancel-in-progress: false
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: ./.github/actions/setup
+            - name: Lint TypeScript and JavaScript
+              run: yarn lint
+            - name: Check TypeScript, JavaScript, JSON, YAML, and Markdown formatting
+              run: yarn format:check
+            - name: Build tracker and workspace dependencies
+              run: moon run tracker:build
+            - name: Deploy tracker worker
+              working-directory: apps/tracker
+              run: |
+                  args=()
+                  if [[ "${ACT:-false}" == "true" || "$DEPLOY_DRY_RUN" == "true" ]]; then
+                    args+=(--dry-run)
+                  fi
+                  yarn deploy "${args[@]}"
+              env:
+                  DEPLOY_DRY_RUN: ${{ inputs.dry_run || false }}
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

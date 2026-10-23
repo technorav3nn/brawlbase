@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import type { BrawlApiBrawler } from "@brawlbase/brawl-api";
 import { routes } from "@brawlbase/cdn";
+import type { BrawlerPerformance } from "@brawlbase/tracker";
 
-const props = defineProps<{ brawler: BrawlApiBrawler; showRarity?: boolean }>();
+const props = defineProps<{ brawler: BrawlApiBrawler; showRarity?: boolean; performance?: BrawlerPerformance }>();
 
+const { t, locale } = useI18n();
+const percentage = computed(() => new Intl.NumberFormat(locale.value, { style: "percent", maximumFractionDigits: 1 }));
+const formatRate = (value: number | null | undefined) => (value == null ? "—" : percentage.value.format(value));
 const rarityToColor = /* ui */ {
 	"Ultra Legendary":
 		"ring-1 ring-inset dark:ring-[#9dffd5]/40! ring-[#9dffd5]/70! bg-[#9dffd5]/10 text-[#9dffd5]! transition-all duration-200",
@@ -109,6 +113,16 @@ const ringColor = computed(() => {
 								</span>
 							</span>
 						</div>
+					</div>
+				</div>
+				<div class="mt-2 space-y-1 border-t border-default pt-2 tabular-nums" data-testid="directory-brawler-stats">
+					<div class="flex items-center justify-between gap-1">
+						<p class="min-w-0 text-[9px] leading-tight text-muted">{{ t("page.brawler_stats.win_rate") }}</p>
+						<p class="shrink-0 font-brawlstars text-sm text-primary">{{ formatRate(performance?.winRate) }}</p>
+					</div>
+					<div class="flex items-center justify-between gap-1">
+						<p class="min-w-0 text-[9px] leading-tight text-muted">{{ t("page.performance.use_rate") }}</p>
+						<p class="shrink-0 font-brawlstars text-sm text-highlighted">{{ formatRate(performance?.pickRate) }}</p>
 					</div>
 				</div>
 			</div>

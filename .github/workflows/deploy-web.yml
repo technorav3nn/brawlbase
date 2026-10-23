@@ -1,0 +1,47 @@
+name: Deploy web worker
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+        inputs:
+            dry_run:
+                description: Build and validate deployment without publishing
+                type: boolean
+                default: false
+
+permissions:
+    contents: read
+
+concurrency:
+    group: deploy-web
+    cancel-in-progress: false
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: ./.github/actions/setup
+            - name: Lint TypeScript and JavaScript
+              run: yarn lint
+            - name: Check TypeScript, JavaScript, JSON, YAML, and Markdown formatting
+              run: yarn format:check
+            - name: Build web app and workspace dependencies
+              run: |
+                  ulimit -c 0
+                  moon run web:build
+              env:
+                  NODE_OPTIONS: --max-old-space-size=4096
+            - name: Deploy web worker
+              working-directory: apps/web
+              run: |
+                  args=(--config .output/server/wrangler.json)
+                  if [[ "${ACT:-false}" == "true" || "$DEPLOY_DRY_RUN" == "true" ]]; then
+                    args+=(--dry-run)
+                  fi
+                  yarn wrangler deploy "${args[@]}"
+              env:
+                  DEPLOY_DRY_RUN: ${{ inputs.dry_run || false }}
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

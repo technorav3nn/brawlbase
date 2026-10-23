@@ -1,4 +1,3 @@
- 
 const AVATAR_CDN_BASE_URL = "https://cdn.id.supercell.com/assets/web/portraits";
 
 export function getCdnUrlForAvatarId(avatarId: string) {
@@ -24,7 +23,6 @@ export function tagToId(tag: string) {
 	}
 
 	if (tag.startsWith("#")) {
-		 
 		tag = tag.slice(1);
 	}
 

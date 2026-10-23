@@ -5,6 +5,7 @@
 	"scripts": {
 		"lint": "eslint .",
 		"format": "prettier --write .",
+		"format:check": "prettier --check .",
 		"build": "moon run :build",
 		"build-packages": "moon run :build --query \"projectLayer=library\""
 	},
@@ -12,6 +13,7 @@
 		"@nuxt/eslint-config": "^1.17.0",
 		"eslint": "^10.10.0",
 		"eslint-plugin-n": "^18.3.0",
+		"prettier": "3.6.2",
 		"typescript": "~6.0.3"
 	},
 	"packageManager": "yarn@4.9.3",

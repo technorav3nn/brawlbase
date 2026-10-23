@@ -12,6 +12,12 @@ type FetchContextError = FetchContext<any> & {
 	response: FetchResponse<ResponseType>;
 };
 
+export interface BrawlStarsClientOptions {
+	baseURL?: string;
+	timeout?: number;
+	retry?: number;
+}
+
 export class BrawlStarsClient {
 	private readonly $fetch: $Fetch;
 
@@ -21,9 +27,10 @@ export class BrawlStarsClient {
 	public clubs: ClubsApi;
 	public rankings: RankingsApi;
 
-	public constructor(token: string) {
+	public constructor(token: string, options: BrawlStarsClientOptions = {}) {
 		this.$fetch = ofetch.create({
-			baseURL: API_BASE_URL,
+			...options,
+			baseURL: options.baseURL ?? API_BASE_URL,
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
@@ -57,14 +64,13 @@ export class BrawlStarsClient {
 		}
 
 		if (response.status < 200 || statusCode >= 300) {
-			const json: ApiJsonError = response._data;
-			if (json.reason) {
-				throw new SupercellAPIClientError(
-					json?.message ?? `${response.status} ${json.reason}`,
-					json.reason,
-					statusCode
-				);
-			}
+			const payload: unknown = response._data;
+			const json: Partial<ApiJsonError> = payload && typeof payload === "object" ? payload : {};
+			throw new SupercellAPIClientError(
+				typeof json.message === "string" ? json.message : `API request failed (${statusCode})`,
+				typeof json.reason === "string" ? json.reason : "unknown",
+				statusCode
+			);
 		}
 	}
 }

@@ -27,6 +27,19 @@ tasks:
             - "tests/**/*"
             - "Cargo.toml"
             - "Cargo.lock"
+    format:
+        command: "cargo fmt --check"
+        inputs:
+            - "src/**/*"
+            - "tests/**/*"
+            - "Cargo.toml"
+    lint:
+        command: "cargo clippy --locked --all-targets -- -D warnings"
+        inputs:
+            - "src/**/*"
+            - "tests/**/*"
+            - "Cargo.toml"
+            - "Cargo.lock"
     deploy-local:
         command: "yarn wrangler deploy"
         deps:

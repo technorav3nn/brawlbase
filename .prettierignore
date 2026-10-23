@@ -1,0 +1,13 @@
+# Installed skills and package-manager code are maintained by their providers.
+.agents/
+.yarn/cache/
+.yarn/releases/
+.yarn/unplugged/
+**/skills-lock.json
+# Generated contracts and database metadata must retain generator output.
+packages/cdn/src/generated/
+apps/web/server/db/migrations/**/meta/
+apps/fandom-scraper-v2/tests/fixtures/
+apps/fandom-scraper-v2/verification.json
+# Google expects the verification document's exact contents.
+apps/web/public/google*.html

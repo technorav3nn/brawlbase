@@ -58,7 +58,13 @@ watch(
 			<div class="min-w-0">
 				<header class="flex items-center gap-3">
 					<div class="grid size-14 shrink-0 place-items-center text-primary" aria-hidden="true">
-						<BrawlerUpgradeIcon v-if="hypercharge" v-model:failed="imageFailed" :src="routes.hyperchargeIcon(brawlerId)" :upgraded="buffied && Boolean(buffie)" :size="56">
+						<BrawlerUpgradeIcon
+							v-if="hypercharge"
+							v-model:failed="imageFailed"
+							:src="routes.hyperchargeIcon(brawlerId)"
+							:upgraded="buffied && Boolean(buffie)"
+							:size="56"
+						>
 							<UIcon name="i-lucide-zap" class="size-8" />
 						</BrawlerUpgradeIcon>
 						<UIcon v-else name="i-lucide-zap" class="size-8" />
@@ -102,7 +108,7 @@ watch(
 				<dt
 					class="flex min-h-14 flex-col items-start justify-between gap-2 text-xs text-muted @lg:min-h-8 @lg:flex-row @lg:items-center @lg:justify-start"
 				>
-					<img :src="boost.icon" alt="" width="32" height="32" class="size-8 object-contain" >
+					<img :src="boost.icon" alt="" width="32" height="32" class="size-8 object-contain" />
 					{{ t(boost.translation) }}
 				</dt>
 				<dd class="mt-2 font-brawlstars text-2xl tabular-nums text-highlighted">{{ boost.value }}</dd>

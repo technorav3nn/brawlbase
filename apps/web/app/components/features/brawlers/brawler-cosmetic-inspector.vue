@@ -24,10 +24,10 @@ const returnFocus = shallowRef<HTMLElement>();
 const related = computed(() => props.cosmetics.filter((cosmetic) => cosmetic.family === props.cosmetic?.family));
 const preview = computed(() => related.value.find((cosmetic) => cosmetic.id === previewId.value) ?? props.cosmetic);
 const skin = computed(() => preview.value?.skin);
-const detailName = computed(() => skin.value ? brawlerSkinName(skin.value, props.brawlerName) : preview.value?.name ?? "");
+const detailName = computed(() => (skin.value ? brawlerSkinName(skin.value, props.brawlerName) : (preview.value?.name ?? "")));
 const rarity = computed(() => brawlerSkinRarity(skin.value?.rarity));
-const collections = computed(() => skin.value ? brawlerSkinCollections(skin.value) : []);
-const originalUrl = computed(() => preview.value ? brawlerCosmeticSource(preview.value.asset) : undefined);
+const collections = computed(() => (skin.value ? brawlerSkinCollections(skin.value) : []));
+const originalUrl = computed(() => (preview.value ? brawlerCosmeticSource(preview.value.asset) : undefined));
 const currentIndex = computed(() => props.collection.findIndex((cosmetic) => cosmetic.id === props.cosmetic?.id));
 
 function selectAdjacent(direction: -1 | 1) {
@@ -52,7 +52,9 @@ watch(
 		zoomed.value = false;
 	}
 );
-watch(previewId, () => { zoomed.value = false; });
+watch(previewId, () => {
+	zoomed.value = false;
+});
 </script>
 
 <template>
@@ -80,8 +82,14 @@ watch(previewId, () => { zoomed.value = false; });
 			/>
 		</template>
 		<template #body>
-			<div v-if="cosmetic && preview" class="grid min-w-0 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]" data-testid="cosmetic-inspector">
-				<div class="min-w-0 border-b border-default bg-linear-to-b from-primary/5 to-transparent lg:border-r lg:border-b-0">
+			<div
+				v-if="cosmetic && preview"
+				class="grid min-w-0 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]"
+				data-testid="cosmetic-inspector"
+			>
+				<div
+					class="min-w-0 border-b border-default bg-linear-to-b from-primary/5 to-transparent lg:border-r lg:border-b-0"
+				>
 					<div class="h-80 overflow-auto sm:h-112 lg:h-128" data-testid="cosmetic-preview">
 						<BrawlerCosmeticImage
 							:src="preview.imageUrl"
@@ -119,32 +127,81 @@ watch(previewId, () => { zoomed.value = false; });
 
 				<div class="min-w-0 space-y-6 p-5 sm:p-6">
 					<div>
-						<p class="text-xs font-medium text-muted">{{ t(skin ? "page.brawler_cosmetics.skin_details" : "page.brawler_cosmetics.cosmetic_details") }}</p>
+						<p class="text-xs font-medium text-muted">
+							{{ t(skin ? "page.brawler_cosmetics.skin_details" : "page.brawler_cosmetics.cosmetic_details") }}
+						</p>
 						<h3 class="mt-2 font-brawlstars text-2xl wrap-anywhere text-highlighted">{{ detailName }}</h3>
 						<div class="mt-3 flex flex-wrap items-center gap-2">
 							<UBadge v-if="rarity" :color="rarity.color" variant="subtle" size="lg">
-								<template #leading><img :src="rarity.icon" alt="" width="24" height="24" class="size-6 object-contain"></template>
+								<template #leading
+									><img :src="rarity.icon" alt="" width="24" height="24" class="size-6 object-contain"
+								/></template>
 								{{ skin?.rarity }}
-								</UBadge>
+							</UBadge>
 							<UBadge v-if="!skin && preview.rarity" :label="preview.rarity" color="neutral" variant="subtle" />
-							<UBadge v-if="skin?.name === 'Default'" :label="t('page.brawler_cosmetics.default_skin')" color="neutral" variant="subtle" />
-							<UBadge v-if="skin?.exclusive" :label="t('page.brawler_cosmetics.exclusive')" color="warning" variant="subtle" />
-							<UBadge v-if="skin?.seasonal" :label="t('page.brawler_cosmetics.seasonal')" color="secondary" variant="subtle" />
+							<UBadge
+								v-if="skin?.name === 'Default'"
+								:label="t('page.brawler_cosmetics.default_skin')"
+								color="neutral"
+								variant="subtle"
+							/>
+							<UBadge
+								v-if="skin?.exclusive"
+								:label="t('page.brawler_cosmetics.exclusive')"
+								color="warning"
+								variant="subtle"
+							/>
+							<UBadge
+								v-if="skin?.seasonal"
+								:label="t('page.brawler_cosmetics.seasonal')"
+								color="secondary"
+								variant="subtle"
+							/>
 						</div>
 					</div>
 					<section v-if="collections.length" :aria-label="t('page.brawler_cosmetics.collections')">
 						<h4 class="mb-2 text-xs text-muted">{{ t("page.brawler_cosmetics.collections") }}</h4>
 						<div class="flex flex-wrap gap-2">
-							<UBadge v-for="collectionName in collections" :key="collectionName" :label="collectionName" color="neutral" variant="subtle" :ui="{ label: 'whitespace-normal wrap-anywhere' }" />
+							<UBadge
+								v-for="collectionName in collections"
+								:key="collectionName"
+								:label="collectionName"
+								color="neutral"
+								variant="subtle"
+								:ui="{ label: 'whitespace-normal wrap-anywhere' }"
+							/>
 						</div>
 					</section>
 					<dl v-if="skin" class="space-y-4 border-y border-default py-5">
 						<div>
 							<dt class="text-xs text-muted">{{ t("page.brawler_cosmetics.cost") }}</dt>
-							<dd class="mt-1.5 flex items-start gap-2 text-sm font-semibold leading-6 wrap-anywhere text-highlighted">
-								<img v-if="skin?.cost?.includes('Gems')" src="/icons/cosmetics/gems-icon.png" alt="" width="24" height="24" class="size-6 shrink-0 object-contain">
-								<img v-else-if="skin?.cost?.includes('Coins')" src="/icons/coins.webp" alt="" width="24" height="24" class="size-6 shrink-0 object-contain">
-								{{ skin?.cost || t(skin?.name === "Default" ? "page.brawler_cosmetics.included" : "page.brawler_cosmetics.not_listed") }}
+							<dd
+								class="mt-1.5 flex items-start gap-2 text-sm font-semibold leading-6 wrap-anywhere text-highlighted"
+							>
+								<img
+									v-if="skin?.cost?.includes('Gems')"
+									src="/icons/cosmetics/gems-icon.png"
+									alt=""
+									width="24"
+									height="24"
+									class="size-6 shrink-0 object-contain"
+								/>
+								<img
+									v-else-if="skin?.cost?.includes('Coins')"
+									src="/icons/coins.webp"
+									alt=""
+									width="24"
+									height="24"
+									class="size-6 shrink-0 object-contain"
+								/>
+								{{
+									skin?.cost ||
+									t(
+										skin?.name === "Default"
+											? "page.brawler_cosmetics.included"
+											: "page.brawler_cosmetics.not_listed"
+									)
+								}}
 							</dd>
 						</div>
 					</dl>
@@ -162,7 +219,12 @@ watch(previewId, () => { zoomed.value = false; });
 									data-testid="related-cosmetic"
 									@click="previewId = item.id"
 								>
-									<BrawlerCosmeticImage :src="item.imageUrl" :fallback-src="item.fallbackUrl" :alt="item.name" class="size-full" />
+									<BrawlerCosmeticImage
+										:src="item.imageUrl"
+										:fallback-src="item.fallbackUrl"
+										:alt="item.name"
+										class="size-full"
+									/>
 								</UButton>
 							</UTooltip>
 						</div>
@@ -180,7 +242,9 @@ watch(previewId, () => { zoomed.value = false; });
 				data-testid="previous-cosmetic"
 				@click="selectAdjacent(-1)"
 			/>
-			<span class="text-xs tabular-nums text-muted" role="status" aria-live="polite">{{ currentIndex + 1 }} / {{ collection.length }}</span>
+			<span class="text-xs tabular-nums text-muted" role="status" aria-live="polite"
+				>{{ currentIndex + 1 }} / {{ collection.length }}</span
+			>
 			<UButton
 				:label="t('page.brawler_cosmetics.next')"
 				trailing-icon="i-lucide-chevron-right"

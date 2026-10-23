@@ -10,30 +10,30 @@ This file applies throughout the repository. Follow more specific `AGENTS.md` fi
 
 ## Repository structure
 
-| Location | Responsibility |
-| --- | --- |
-| `apps/web` | Nuxt application, Nitro API routes, authentication, database, and UI. |
-| `apps/web/app/pages` | File-based routes; nested brawler pages render through their parent route. |
-| `apps/web/app/components/app` | Shared application chrome, such as the header and profile controls. |
-| `apps/web/app/components/features` | Feature components and their closely related stores. Keep brawler-specific UI in `features/brawlers`. |
-| `apps/web/app/composables` | Reusable reactive application behavior. |
-| `apps/web/app/queries` | Pinia Colada query and mutation definitions. |
-| `apps/web/app/utils` | Client-facing, usually pure presentation and data helpers. |
-| `apps/web/app/app.config.ts` | Nuxt UI component defaults and shared component styling. |
-| `apps/web/app/assets/css` | Existing Tailwind theme tokens and shared Brawl Stars geometry. |
-| `apps/web/public` | Static game artwork, icons, backgrounds, and other assets served from `/`. |
-| `apps/web/server/api` | Nitro/H3 API handlers. Method suffixes such as `.get.ts` and `.post.ts` define HTTP methods. |
-| `apps/web/server/utils` | Server-only API clients, authentication, session, and request helpers. |
-| `apps/web/server/db` | Drizzle SQLite schema and migrations, integrated through NuxtHub. |
-| `apps/web/shared` | Types, constants, and pure utilities usable by both application and server code. |
-| `apps/web/i18n` | Translation configuration and English/Spanish locale files. |
-| `packages/brawl-api` | Typed BrawlAPI catalog, game CSV, and fan-kit helpers. |
-| `packages/brawl-stars-api` | Client and types for the official Brawl Stars API. |
-| `packages/supercell-id-api` | Supercell ID integration, with separate browser and crypto entry points. |
-| `packages/supercell-api-utils` | Shared Supercell tag, date, and API utilities. |
-| `packages/cdn` | CDN URL builders and generated scraper output types. |
-| `apps/fandom-scraper-v2` | Rust scraper, image processing, output contracts, fixtures, and regression checks. |
-| `.moon` and project `moon.yml` files | Workspace task graph and project build dependencies. |
+| Location                             | Responsibility                                                                                        |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `apps/web`                           | Nuxt application, Nitro API routes, authentication, database, and UI.                                 |
+| `apps/web/app/pages`                 | File-based routes; nested brawler pages render through their parent route.                            |
+| `apps/web/app/components/app`        | Shared application chrome, such as the header and profile controls.                                   |
+| `apps/web/app/components/features`   | Feature components and their closely related stores. Keep brawler-specific UI in `features/brawlers`. |
+| `apps/web/app/composables`           | Reusable reactive application behavior.                                                               |
+| `apps/web/app/queries`               | Pinia Colada query and mutation definitions.                                                          |
+| `apps/web/app/utils`                 | Client-facing, usually pure presentation and data helpers.                                            |
+| `apps/web/app/app.config.ts`         | Nuxt UI component defaults and shared component styling.                                              |
+| `apps/web/app/assets/css`            | Existing Tailwind theme tokens and shared Brawl Stars geometry.                                       |
+| `apps/web/public`                    | Static game artwork, icons, backgrounds, and other assets served from `/`.                            |
+| `apps/web/server/api`                | Nitro/H3 API handlers. Method suffixes such as `.get.ts` and `.post.ts` define HTTP methods.          |
+| `apps/web/server/utils`              | Server-only API clients, authentication, session, and request helpers.                                |
+| `apps/web/server/db`                 | Drizzle SQLite schema and migrations, integrated through NuxtHub.                                     |
+| `apps/web/shared`                    | Types, constants, and pure utilities usable by both application and server code.                      |
+| `apps/web/i18n`                      | Translation configuration and English/Spanish locale files.                                           |
+| `packages/brawl-api`                 | Typed BrawlAPI catalog, game CSV, and fan-kit helpers.                                                |
+| `packages/brawl-stars-api`           | Client and types for the official Brawl Stars API.                                                    |
+| `packages/supercell-id-api`          | Supercell ID integration, with separate browser and crypto entry points.                              |
+| `packages/supercell-api-utils`       | Shared Supercell tag, date, and API utilities.                                                        |
+| `packages/cdn`                       | CDN URL builders and generated scraper output types.                                                  |
+| `apps/fandom-scraper-v2`             | Rust scraper, image processing, output contracts, fixtures, and regression checks.                    |
+| `.moon` and project `moon.yml` files | Workspace task graph and project build dependencies.                                                  |
 
 Keep framework-specific application code in the web app. Shared packages should remain usable without Nuxt auto-imports or application stores. Import workspace packages through their public `@brawlbase/*` exports rather than reaching into another package's `src` directory.
 
@@ -43,22 +43,22 @@ Use Yarn workspaces and Moon. The root `packageManager`, `.prototools`, `rust-to
 
 Run these from the repository root:
 
-| Task | Command |
-| --- | --- |
-| Install pinned tools | `proto install` |
-| Install dependencies | `yarn install` |
-| Start the web app | `yarn workspace @brawlbase/web dev` |
-| Check the web app's types | `yarn workspace @brawlbase/web typecheck` |
-| Lint the workspace | `yarn lint` |
-| Lint selected files | `yarn exec eslint <paths>` |
-| Build shared packages | `yarn build-packages` |
-| Build the web app | `yarn workspace @brawlbase/web build` |
-| Build the full task graph | `yarn build` |
-| Build one package | `yarn workspace @brawlbase/<package> build` |
-| Build the Rust scraper | `moon run fandom-scraper-v2:build` |
-| Run scraper regression tests | `moon run fandom-scraper-v2:test` |
-| Regenerate CDN declarations | `yarn workspace @brawlbase/cdn types:generate` |
-| Check generated CDN declarations | `yarn workspace @brawlbase/cdn types:check` |
+| Task                             | Command                                        |
+| -------------------------------- | ---------------------------------------------- |
+| Install pinned tools             | `proto install`                                |
+| Install dependencies             | `yarn install`                                 |
+| Start the web app                | `yarn workspace @brawlbase/web dev`            |
+| Check the web app's types        | `yarn workspace @brawlbase/web typecheck`      |
+| Lint the workspace               | `yarn lint`                                    |
+| Lint selected files              | `yarn exec eslint <paths>`                     |
+| Build shared packages            | `yarn build-packages`                          |
+| Build the web app                | `yarn workspace @brawlbase/web build`          |
+| Build the full task graph        | `yarn build`                                   |
+| Build one package                | `yarn workspace @brawlbase/<package> build`    |
+| Build the Rust scraper           | `moon run fandom-scraper-v2:build`             |
+| Run scraper regression tests     | `moon run fandom-scraper-v2:test`              |
+| Regenerate CDN declarations      | `yarn workspace @brawlbase/cdn types:generate` |
+| Check generated CDN declarations | `yarn workspace @brawlbase/cdn types:check`    |
 
 Reuse an existing development server where possible. Shared packages export built `dist` files, so rebuild an affected package before checking a consumer that imports it. Do not hand-edit build output to make a consumer work.
 

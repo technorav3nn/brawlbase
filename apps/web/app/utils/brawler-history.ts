@@ -16,20 +16,22 @@ export interface BrawlerChange {
 const dateFormat = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 
 export function normalizeBrawlerHistory(history: History[]): BrawlerChange[] {
-	return history.map((entry, index): BrawlerChange => {
-		const timestamp = Date.parse(entry.date);
-		const date = Number.isFinite(timestamp) ? new Date(timestamp) : null;
-		const kind = entry.kind.toLowerCase();
-		return {
-			id: `${entry.date}-${index}`,
-			kind: kind === "buff" ? "Buff" : kind === "nerf" ? "Nerf" : "Neutral",
-			description: brawlerStatText(entry.description ?? "") || "No further details listed.",
-			timestamp: date ? timestamp : Number.NEGATIVE_INFINITY,
-			dateKey: date?.toISOString().slice(0, 10) ?? "undated",
-			dateLabel: date ? dateFormat.format(date) : "Date not listed",
-			year: date ? String(date.getUTCFullYear()) : "undated"
-		};
-	}).sort((a, b) => b.timestamp - a.timestamp);
+	return history
+		.map((entry, index): BrawlerChange => {
+			const timestamp = Date.parse(entry.date);
+			const date = Number.isFinite(timestamp) ? new Date(timestamp) : null;
+			const kind = entry.kind.toLowerCase();
+			return {
+				id: `${entry.date}-${index}`,
+				kind: kind === "buff" ? "Buff" : kind === "nerf" ? "Nerf" : "Neutral",
+				description: brawlerStatText(entry.description ?? "") || "No further details listed.",
+				timestamp: date ? timestamp : Number.NEGATIVE_INFINITY,
+				dateKey: date?.toISOString().slice(0, 10) ?? "undated",
+				dateLabel: date ? dateFormat.format(date) : "Date not listed",
+				year: date ? String(date.getUTCFullYear()) : "undated",
+			};
+		})
+		.sort((a, b) => b.timestamp - a.timestamp);
 }
 
 export function groupBrawlerHistory(changes: BrawlerChange[]) {

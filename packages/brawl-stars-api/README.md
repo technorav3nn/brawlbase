@@ -2,11 +2,11 @@
 
 Brawl Stars official API wrapper
 
--   TypeScript support
--   Promise based
--   Easy to use
--   100% coverage
--   Uses [ofetch](https://unjs.io/packages/ofetch) for requests
+- TypeScript support
+- Promise based
+- Easy to use
+- 100% coverage
+- Uses [ofetch](https://unjs.io/packages/ofetch) for requests
 
 ## Installation
 

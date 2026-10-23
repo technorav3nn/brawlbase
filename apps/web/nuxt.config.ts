@@ -113,6 +113,10 @@ export default defineNuxtConfig({
 		dirs: ["queries", "routers"],
 	},
 	runtimeConfig: {
+		clickhouseUrl: "",
+		clickhouseUsername: "",
+		clickhousePassword: "",
+		clickhouseDatabase: "brawlbase_stats",
 		betterAuthSecret: "",
 		// eslint-disable-next-line n/prefer-global/process
 		betterAuthUrl: process.env.NODE_ENV === "production" ? "https://brawlbase.deathblows.dev" : "http://localhost:3000",

@@ -35,7 +35,10 @@
 	white-space: nowrap;
 	flex-shrink: 0;
 	--brawl-shadow: 0 4px 0 var(--brawl-outline), inset 0 2px 0 var(--brawl-highlight);
-	transition: translate 100ms ease, box-shadow 100ms ease, background-color 150ms ease;
+	transition:
+		translate 100ms ease,
+		box-shadow 100ms ease,
+		background-color 150ms ease;
 }
 
 .brawl-button:not(:disabled, [aria-disabled="true"]):hover {
@@ -133,7 +136,9 @@
 	border-width: 3px;
 	border-radius: 6px 10px 6px 10px;
 	--brawl-shadow: 0 5px 0 var(--brawl-outline);
-	transition: translate 120ms ease, box-shadow 120ms ease;
+	transition:
+		translate 120ms ease,
+		box-shadow 120ms ease;
 }
 
 .brawl-roster-card:hover {

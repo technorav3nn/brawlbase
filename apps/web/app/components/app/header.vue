@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { en, es } from "@nuxt/ui/locale";
 import { LazyAppProfileSlideover } from "#components";
 
-const { t, locale, setLocale } = useI18n();
-function onLocaleChange(value: string) {
-	if (value === "en" || value === "es") setLocale(value);
-}
+const { t } = useI18n();
 
 const { data: session } = await authClient.useSession(useFetch);
 

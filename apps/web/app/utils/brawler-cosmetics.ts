@@ -20,7 +20,14 @@ export function brawlerSkinName(skin: Skin, brawlerName: string): string {
 }
 
 export function brawlerSkinCollections(skin: Skin): string[] {
-	return [...new Set((skin.campaign ?? "").split(",").map((name) => name.trim()).filter(Boolean))];
+	return [
+		...new Set(
+			(skin.campaign ?? "")
+				.split(",")
+				.map((name) => name.trim())
+				.filter(Boolean)
+		),
+	];
 }
 
 export function brawlerCosmeticSource(asset: Asset): string | undefined {
@@ -62,12 +69,24 @@ export function brawlerCosmetics(
 		const id = `${kind}:${asset.filename}`;
 		if (entries.has(id)) return entries.get(id);
 		const source = brawlerCosmeticSource(asset);
-		const imageUrl = kind === "skin" && skin ? urls.skins(skin.name).model
-			: kind === "pin" && pins.has(asset.filename) ? urls.pin(asset.filename)
-				: kind === "spray" && sprays.has(asset.filename) ? urls.spray(asset.filename)
-					: kind === "buffieSkin" ? urls.buffieSkin(asset.filename) : source;
+		const imageUrl =
+			kind === "skin" && skin
+				? urls.skins(skin.name).model
+				: kind === "pin" && pins.has(asset.filename)
+					? urls.pin(asset.filename)
+					: kind === "spray" && sprays.has(asset.filename)
+						? urls.spray(asset.filename)
+						: kind === "buffieSkin"
+							? urls.buffieSkin(asset.filename)
+							: source;
 		const entry: BrawlerCosmetic = {
-			id, kind, name, asset, skin, rarity, imageUrl,
+			id,
+			kind,
+			name,
+			asset,
+			skin,
+			rarity,
+			imageUrl,
 			family: skin ? `skin:${skin.name}` : kind,
 			fallbackUrl: imageUrl !== source ? source : undefined,
 		};
@@ -88,14 +107,15 @@ export function brawlerCosmetics(
 	return [...entries.values()];
 }
 
-const SKIN_RARITIES: Record<string, { icon: string; color: "success" | "info" | "primary" | "error" | "warning" | "secondary" }> = {
-	Rare: { icon: "/icons/cosmetics/rare-skin-icon.png", color: "success" },
-	"Super Rare": { icon: "/icons/cosmetics/super-rare-skin-icon.png", color: "info" },
-	Epic: { icon: "/icons/cosmetics/epic-skin-icon.png", color: "primary" },
-	Mythic: { icon: "/icons/cosmetics/mythic-skin-icon.png", color: "error" },
-	Legendary: { icon: "/icons/cosmetics/legendary-skin-icon.png", color: "warning" },
-	Hypercharge: { icon: "/icons/cosmetics/hypercharge-skin-icon.png", color: "secondary" },
-};
+const SKIN_RARITIES: Record<string, { icon: string; color: "success" | "info" | "primary" | "error" | "warning" | "secondary" }> =
+	{
+		Rare: { icon: "/icons/cosmetics/rare-skin-icon.png", color: "success" },
+		"Super Rare": { icon: "/icons/cosmetics/super-rare-skin-icon.png", color: "info" },
+		Epic: { icon: "/icons/cosmetics/epic-skin-icon.png", color: "primary" },
+		Mythic: { icon: "/icons/cosmetics/mythic-skin-icon.png", color: "error" },
+		Legendary: { icon: "/icons/cosmetics/legendary-skin-icon.png", color: "warning" },
+		Hypercharge: { icon: "/icons/cosmetics/hypercharge-skin-icon.png", color: "secondary" },
+	};
 
 export function brawlerSkinRarity(rarity?: string) {
 	return rarity ? SKIN_RARITIES[rarity] : undefined;
