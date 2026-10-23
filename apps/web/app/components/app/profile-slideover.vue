@@ -64,7 +64,7 @@ async function logout() {
 </script>
 
 <template>
-	<USlideover v-if="user" :ui="{ body: 'overflow-auto! p-0!', content: 'max-w-sm', header: 'min-h-[4rem]! p-0 px-4!' }">
+	<USlideover portal v-if="user" :ui="{ body: 'overflow-auto! p-0!', content: 'max-w-sm', header: 'min-h-[4rem]! p-0 px-4!' }">
 		<template #title>
 			<div class="flex items-center">
 				<NuxtImg

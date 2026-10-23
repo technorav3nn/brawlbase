@@ -18,5 +18,8 @@
 	"workspaces": [
 		"packages/*",
 		"apps/*"
-	]
+	],
+	"dependencies": {
+		"wrangler": "^4.151.3"
+	}
 }

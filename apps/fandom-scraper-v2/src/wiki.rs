@@ -151,7 +151,7 @@ pub fn templates(source: &str, name: &str) -> Vec<String> {
     results
 }
 
-fn template_at(source: &str, start: usize) -> Option<(String, usize)> {
+pub(crate) fn template_at(source: &str, start: usize) -> Option<(String, usize)> {
     let bytes = source.as_bytes();
     let mut depth = 0;
     let mut position = start;

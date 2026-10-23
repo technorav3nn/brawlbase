@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+@import "./brawl.css";
 
 @theme static {
 	--font-sans: "Public Sans", sans-serif;
@@ -34,6 +35,12 @@
 	--color-border: var(--color-border);
 
 	--animate-shimmer: shimmer 2s infinite;
+	--animate-buffie: buffie 5s ease-in-out infinite alternate;
+	@keyframes buffie {
+		to {
+			background-position: 100% center;
+		}
+	}
 	@keyframes shimmer {
 		100% {
 			transform: translateX(100%);
@@ -85,7 +92,7 @@
 }
 
 @utility no-scrollbar {
-	@apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+	@apply scrollbar-none [&::-webkit-scrollbar]:hidden;
 }
 
 /*

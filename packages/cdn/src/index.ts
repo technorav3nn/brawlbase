@@ -1,5 +1,10 @@
-const BASE_URL = "https://6f1ace09.brawlbase-cdn.pages.dev";
+const BASE_URL = "https://brawlbase-cdn.deathblows.workers.dev";
 const BRAWLIFY_URL = `${BASE_URL}/ext`;
+
+function brawlerImageAsset(id: number, directory: string, filename: string): string {
+	const stem = filename.replace(/\.[^.]+$/, "");
+	return `${BASE_URL}/brawlers/${id}/${directory}/${encodeURIComponent(stem)}.webp`;
+}
 
 type PrestigeRank = (0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13) & number;
 type RankedRank = ("Bronze" | "Silver" | "Gold" | "Diamond" | "Mythic" | "Legendary" | "Masters" | "Pro") & string;
@@ -7,10 +12,16 @@ type RankedRank = ("Bronze" | "Silver" | "Gold" | "Diamond" | "Mythic" | "Legend
 export const routes = {
 	brawlers: (id: number) => ({
 		data: `${BASE_URL}/brawlers/${id}/data.json`,
-		model: `${BASE_URL}/brawler/${id}/model.webp`,
-		portrait: `${BASE_URL}/brawler/${id}/portrait.webp`,
+		model: `${BASE_URL}/brawlers/${id}/model.webp`,
+		portrait: `${BASE_URL}/brawlers/${id}/portrait.webp`,
+		icon: `${BASE_URL}/brawlers/${id}/icon.webp`,
+		pin: (filename: string) => brawlerImageAsset(id, "pins", filename),
+		spray: (filename: string) => brawlerImageAsset(id, "sprays", filename),
+		buffie: (filename: string) => brawlerImageAsset(id, "buffies", filename),
+		buffieSkin: (filename: string) => brawlerImageAsset(id, "buffie-skins", filename),
+		voiceline: (filename: string) => `${BASE_URL}/brawlers/${id}/voicelines/${encodeURIComponent(filename)}`,
 		skins: (name: string) => ({
-			model: `${BASE_URL}/brawler/${id}/skin/${encodeURIComponent(name)}/model.webp`,
+			model: `${BASE_URL}/brawlers/${id}/skins/${encodeURIComponent(name)}/model.webp`,
 		}),
 	}),
 	gadgetIcon: (id: number) => `${BASE_URL}/gadgets/${id}.webp`,
@@ -54,6 +65,8 @@ export type {
 	Attack,
 	Avatar,
 	BrawlerTip,
+	Buffie,
+	BuffieSkin,
 	CdnBrawler,
 	CdnMode,
 	FandomBrawlerData,

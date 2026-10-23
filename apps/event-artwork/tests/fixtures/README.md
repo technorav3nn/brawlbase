@@ -1,0 +1,1 @@
+`minimal.sc` is a synthetic SC v5 regression fixture with a single full-viewport quad and a solid red 4 × 4 ASTC texture. Its string table deliberately includes an empty entry and a decoy export name before the real export to catch incorrect string-reference indexing. It contains no downloaded game artwork.

@@ -6,6 +6,7 @@ export default defineCachedEventHandler(
 		return $fetch<CdnBrawler>(routes.brawlers(id).data);
 	},
 	{
+		name: "brawler-cdn-v2",
 		maxAge: 60 * 60 * 24, // 24 hours
 	}
 );

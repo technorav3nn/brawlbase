@@ -87,6 +87,9 @@ pub struct Spray {
 #[derive(Debug, Serialize, Deserialize, TS)]
 #[serde(deny_unknown_fields)]
 pub struct Voiceline {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub variant: Option<String>,
     pub trigger: String,
     pub description: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -189,6 +192,24 @@ pub struct Gear {
 pub struct GearCollection(pub BTreeMap<String, Gear>);
 
 #[derive(Debug, Serialize, Deserialize, TS)]
+#[serde(deny_unknown_fields)]
+pub struct Buffie {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub asset: Option<Asset>,
+    pub name: String,
+    pub kind: String,
+    pub description: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, TS)]
+#[serde(deny_unknown_fields)]
+pub struct BuffieSkin {
+    pub name: String,
+    pub asset: Asset,
+}
+
+#[derive(Debug, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CdnBrawler {
     pub attribution: String,
@@ -222,6 +243,16 @@ pub struct CdnBrawler {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ts(optional)]
     pub avatar: Option<Asset>,
+    #[serde(default)]
+    pub pins: Vec<Pin>,
+    #[serde(default)]
+    pub sprays: Vec<Spray>,
+    #[serde(default)]
+    pub voicelines: Vec<Voiceline>,
+    #[serde(default)]
+    pub buffies: Vec<Buffie>,
+    #[serde(default)]
+    pub buffie_skins: Vec<BuffieSkin>,
     pub skins: Vec<Skin>,
     pub history: Vec<History>,
     pub gadgets: Vec<Accessory>,
@@ -288,6 +319,8 @@ pub fn typescript() -> String {
         GearModifierValue,
         Gear,
         GearCollection,
+        Buffie,
+        BuffieSkin,
         CdnBrawler,
         BrawlerTip,
         HistoryEntry,

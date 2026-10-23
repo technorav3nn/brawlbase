@@ -20,6 +20,10 @@ Requires libvips. On this checkout, the executable automatically finds the libvi
 # Optional controls; omitting these processes the full catalog and gears.
 ./target/release/fandom-scraper-v2 --out ./out --concurrency 4 --asset-concurrency 12
 ./target/release/fandom-scraper-v2 --brawler Shelly --skip-gears
+
+# Repair existing output: refresh profileIcons and download icons without redownloading models.
+# Existing stats, skins, and gear enrichment are preserved.
+./target/release/fandom-scraper-v2 --profile-icons-only --strict
 ```
 
 Paths are relative to the working directory, as in the old command. Moon discovers the project through the existing `apps/*` glob; build, start, and test tasks are included in `moon.yml`.
@@ -32,6 +36,7 @@ out/
     data.json
     model.webp
     portrait.webp
+    icon.webp
     skins/<skin-name>/model.webp
     skins/<skin-name>/profile-icon.webp
   gadgets/<numeric-id>.webp
@@ -45,7 +50,9 @@ out/
 
 The implementation preserves optional-field omission, array ordering, accessory IDs as strings, attribution URLs, UTC history dates, and the existing `brawlersAvaliableTo` spelling. It includes the Larry & Lawrie ordering, Buzz Lightyear exclusion, Jae-Yong and Mr. P image names, Kaze forms, Lumi's `23000907` download override, pet skins, skin attachment matching, and the existing fuzzy-match threshold and tie breakers.
 
-Compatibility also preserves quirks that affect output: Kaze's missing scalar health becomes eleven null values; ordinary skin-template secondary keys are handled as the old parser handles them; voice-line arrays remain empty; the last profile icon overwrites earlier icons at the same path; and each applicable gear resets the brawler's gear array, so the final applicable gear wins. Image conversion uses the same libvips engine as Sharp, including the initial trim, quality-85 encoding, color tolerance, second decode/trim/quality-80 encoding, and the three-channel fallback that leaves the initial WebP intact. Gear icons resize to **width** 80 while preserving aspect ratio.
+Compatibility also preserves quirks that affect output: Kaze's missing scalar health becomes eleven null values; ordinary skin-template secondary keys are handled as the old parser handles them; each applicable gear resets the brawler's gear array, so the final applicable gear wins. Image conversion uses the same libvips engine as Sharp, including the initial trim, quality-85 encoding, color tolerance, second decode/trim/quality-80 encoding, and the three-channel fallback that leaves the initial WebP intact. Gear icons resize to **width** 80 while preserving aspect ratio.
+
+Profile icons intentionally correct the old scraper's empty arrays. Extraction ignores MediaWiki edit controls and supports wrapped headings. Base, rank, Hypercharge, and Prestige icons are associated with the Default skin; cosmetic icons are associated with their matching skin. `brawlers/<id>/icon.webp` always uses `<Brawler>1-pfp.png`, regardless of table order. The Default skin's `profile-icon.webp` uses that same base icon. Profile URLs discard CDN transformations and request `format=original`, retaining the cache buster. Profile images use a threshold-50 libvips trim and **lossless WebP** encoding to remove the noisy near-black frame while preserving the original pixels inside the crop. They retain their source resolution and aspect ratio. Missing base icons report an error rather than silently substituting a variant.
 
 Timing and failure handling improve: independent work runs concurrently, the per-asset 200 ms sleep is removed, and transient HTTP/network/MediaWiki failures retry up to four attempts with backoff and `Retry-After` handling. Requests have connection and overall timeouts. JSON and images use temporary files followed by atomic rename. Repeated writes to one path remain ordered. Asset failures are logged and other assets finish, retaining the old command’s exit behavior. Add `--strict` to return a failing exit status if assets remain missing. API/data failures return contextual errors. Existing files are never treated as a cache.
 
@@ -61,7 +68,7 @@ cargo fmt --check
 cargo clippy --locked --all-targets -- -D warnings
 ```
 
-The committed corpus contains **108 brawlers**, **three game modes**, **485 fuzzy matching cases**, and image inputs/outputs from the old Sharp downloader. Brawler fixtures contain captured raw wikitext, HTML, explicit accessory catalogs, and complete expected objects produced by the unchanged TypeScript parser. Each object's attribution identifies its source wiki page. The corpus includes every non-Buzz-Lightyear page in the wiki's Brawlers category at capture time. These are regression snapshots, not a substitute for testing future wiki changes.
+The committed corpus contains **108 brawlers**, **three game modes**, **485 fuzzy matching cases**, and image inputs/outputs from the old Sharp downloader. Brawler fixtures contain captured raw wikitext, HTML, explicit accessory catalogs, and complete expected objects produced by the unchanged TypeScript parser. Legacy fields remain compared against those snapshots; expanded `profileIcons`, pins, sprays, and voice lines have separate assertions. Separate tests require a base icon and the correct download path for all 108 brawlers, check skin associations and heading variants, and compare real Shelly, Crow, and 8-Bit crops against Sharp reference WebPs. Each object's attribution identifies its source wiki page. These are regression snapshots, not a substitute for testing future wiki changes.
 
 Production uses `api.brawlapi.com` for the brawler catalog and game CSV data. The checked endpoints are:
 
@@ -117,3 +124,9 @@ The output path is resolved relative to the Rust project, independent of the wor
 `src/index.rs` orchestrates the run; `scraper.rs` parses brawlers and modes; `wiki.rs` handles the wiki syntax consumed by that parser; `fuzzy_dict.rs` matches accessory catalogs; `downloader.rs` manages downloads and atomic writes; `images.rs` calls libvips directly; `scrape_gears.rs` builds gear outputs; and `http.rs` manages connections, request limits, and retries. This is a scraper-specific wiki parser, not a complete replacement for every feature of `wtf_wikipedia`.
 
 The combined page request uses the documented [MediaWiki parse API](https://www.mediawiki.org/wiki/API:Parsing_wikitext). Native trimming uses [libvips find_trim](https://www.libvips.org/API/current/method.Image.find_trim.html), with the extra alpha-bound calculation used by Sharp.
+
+## Expanded collectibles and audio
+
+Brawler `data.json` now includes complete `pins`, `sprays`, `voicelines`, `buffies`, and `buffieSkins` arrays. These remain empty when the page has no entries. Skin-level pins and sprays retain their existing shape and association. The brawler-level collections retain entries even when there is no matching skin model. Buffies include the affected ability name, kind, quoted effect, and available artwork. Buffie skins include their gallery name and asset. Voice lines include their table trigger, description (including rendered translations), original audio asset, and an optional variant label such as Normal or Cyber. Default skin voice lines include only unlabeled/Normal entries; variant audio remains available in the complete brawler collection without guessing a cosmetic association.
+
+Downloads are written beneath `brawlers/<id>/{pins,sprays,buffies,buffie-skins}/<source-stem>.webp` and `brawlers/<id>/voicelines/<original-filename>`. Audio bytes and extensions are preserved. Image sources discard wiki thumbnail transformations. Duplicate pin/spray filenames are emitted once. These local output changes do not upload or publish anything.

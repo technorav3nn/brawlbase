@@ -1,4 +1,4 @@
-// Regenerate expectations from the old source and compare every field against Rust.
+// Compare legacy fields; corrected profileIcons are covered by Rust regression tests.
 import { spawnSync } from 'node:child_process';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import process from "node:process";
@@ -25,7 +25,9 @@ for (const filename of (await readdir(`${root}tests/fixtures`)).filter(f => f.en
 	if (!isDeepStrictEqual(expected, fixture.expected))
 		throw new Error(`Stale expected output: ${filename}`);
 	const run = spawnSync(binary, ['parse-brawler', input], { encoding: 'utf8', maxBuffer: 20000000 });
-	const diff = run.status === 0 ? differences(JSON.parse(run.stdout), expected) : [{ error: run.stderr }];
+	const actual = run.status === 0 ? JSON.parse(run.stdout) : null;
+	if (actual) for (const skin of actual.skins) skin.profileIcons = [];
+	const diff = actual ? differences(actual, expected) : [{ error: run.stderr }];
 	console.log(fixture.name, diff.length ? `${diff.length} differences` : 'identical');
 	if (diff.length) {
 		failures++;

@@ -1,13 +1,8 @@
 <script setup lang="ts">
-import { LazyAppProfileSlideover } from "#components";
 import { en, es } from "@nuxt/ui/locale";
+import { LazyAppProfileSlideover } from "#components";
 
 const { t, locale, setLocale } = useI18n();
-const localeOptions = [
-	{ label: "English", value: "en" as const },
-	{ label: "Español", value: "es" as const },
-];
-
 function onLocaleChange(value: string) {
 	if (value === "en" || value === "es") setLocale(value);
 }
@@ -93,17 +88,15 @@ const linksWithoutIcons = computed(() => links.value.map((link) => ({ ...link, i
 </script>
 
 <template>
-	<UHeader>
+	<UHeader mode="drawer" :menu="{ direction: 'bottom' }">
 		<template #left>
 			<NuxtLink to="/" class="flex items-center">
-				<NuxtImg src="/favicon.png" width="25" height="25" />
+				<NuxtImg src="/favicon.png" width="25" height="25" class="max-[360px]:hidden" />
 				<p class="ml-1 text-xl font-bold dark:text-primary-200 text-primary-500">BrawlBase</p>
 			</NuxtLink>
 		</template>
 
 		<template #right>
-			<ULocaleSelect :model-value="locale" :locales="[en, es]" @update:model-value="onLocaleChange" />
-
 			<UButton v-if="!session" color="neutral" variant="ghost" class="hidden sm:block" to="/login">{{
 				t("action.login")
 			}}</UButton>

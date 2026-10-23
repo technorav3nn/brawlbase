@@ -20,7 +20,7 @@ watchEffect(() => {
 });
 
 const gridClasses =
-	"mt-3 grid grid-cols-3 justify-items-center gap-3 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-9";
+	"mt-3 grid grid-cols-3 justify-items-center gap-3 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9";
 const rarityColorClasses = {
 	"Ultra Legendary": "text-[#9dffd5]",
 	Legendary: "text-yellow-400",
@@ -56,9 +56,12 @@ const rarityColorClasses = {
 						:trailing="false"
 						:placeholder="t('page.brawlers.search')"
 					/>
-					<USelect
+					<USelectMenu
 						v-model="brawlerList.groupingMode"
+						value-key="value"
+						label-key="label"
 						:items="groupingOptions"
+						:search-input="false"
 						icon="i-heroicons-adjustments-horizontal"
 						:placeholder="t('page.brawlers.group_by')"
 						class="w-36"

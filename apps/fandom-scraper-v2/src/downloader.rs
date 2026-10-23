@@ -34,11 +34,19 @@ pub async fn write_data(data: &Value, path: &Path) -> Result<()> {
     atomic_write(path, serde_json::to_string_pretty(data)?.as_bytes()).await
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum AssetTransform {
+    Standard,
+    RemoveWhite,
+    ProfileIcon,
+    Raw,
+}
+
 #[derive(Debug, Clone)]
 pub struct AssetJob {
     pub url: String,
     pub path: PathBuf,
-    pub remove_white: bool,
+    pub transform: AssetTransform,
 }
 
 #[derive(Clone)]
@@ -57,10 +65,20 @@ impl Downloader {
     pub async fn download_asset(&self, job: &AssetJob) -> Result<()> {
         eprintln!("[image] Downloading {} -> {}", job.url, job.path.display());
         let bytes = self.http.bytes(&job.url).await?;
-        let remove_white = job.remove_white;
-        let encoded =
-            tokio::task::spawn_blocking(move || Vips::global()?.asset(&bytes, remove_white))
-                .await??;
+        if job.transform == AssetTransform::Raw {
+            return atomic_write(&job.path, &bytes).await;
+        }
+        let transform = job.transform;
+        let encoded = tokio::task::spawn_blocking(move || {
+            let vips = Vips::global()?;
+            match transform {
+                AssetTransform::Standard => vips.asset(&bytes, false),
+                AssetTransform::RemoveWhite => vips.asset(&bytes, true),
+                AssetTransform::ProfileIcon => vips.profile_icon(&bytes),
+                AssetTransform::Raw => Ok(bytes),
+            }
+        })
+        .await??;
         atomic_write(&job.path, &encoded).await
     }
 

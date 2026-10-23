@@ -162,12 +162,22 @@ try {
 	}
 	const oldRoot = `${directory}legacy/out`, rustRoot = `${directory}rust/out`;
 	const oldFiles = await files(oldRoot), rustFiles = await files(rustRoot);
-	if (!isDeepStrictEqual(oldFiles, rustFiles))
+	const profileFiles = rustFiles.filter(path => /^brawlers\/\d+\/(?:icon\.webp|skins\/.*\/profile-icon\.webp)$/.test(path));
+	if (profileFiles.filter(path => /^brawlers\/\d+\/icon\.webp$/.test(path)).length !== fixtures.length)
+		throw new Error('Every brawler must have a base icon.webp');
+	const referenceProfile = await sharp(image).trim({ threshold: 50 }).webp({ lossless: true, quality: 100 }).toBuffer();
+	for (const path of profileFiles) {
+		if (!(await readFile(`${rustRoot}/${path}`)).equals(referenceProfile))
+			throw new Error(`Borderless profile icon differs: ${path}`);
+	}
+	if (!isDeepStrictEqual(oldFiles, rustFiles.filter(path => !profileFiles.includes(path))))
 		throw new Error(`Output paths differ: ${JSON.stringify({ oldFiles, rustFiles })}`);
 	for (const path of oldFiles) {
 		const [a, b] = await Promise.all([readFile(`${oldRoot}/${path}`), readFile(`${rustRoot}/${path}`)]);
 		if (path.endsWith('.json')) {
-			if (!isDeepStrictEqual(JSON.parse(a), JSON.parse(b)))
+			const actual = JSON.parse(b);
+			if (actual.skins) for (const skin of actual.skins) skin.profileIcons = [];
+			if (!isDeepStrictEqual(JSON.parse(a), actual))
 				throw new Error(`JSON differs: ${path}`);
 		}
 		else if (!a.equals(b))

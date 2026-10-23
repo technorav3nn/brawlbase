@@ -1,7 +1,14 @@
 export default defineAppConfig({
 	ui: {
+		container: {
+			base: "max-w-[90rem]",
+		},
 		button: {
 			compoundVariants: [
+				{
+					variant: ["ghost", "link"],
+					class: "brawl-button-quiet",
+				},
 				{
 					color: "primary",
 					variant: "gradient",
@@ -19,7 +26,7 @@ export default defineAppConfig({
 				},
 			],
 			slots: {
-				base: "font-semibold",
+				base: "brawl-button",
 			},
 			variants: {
 				size: {
@@ -41,7 +48,77 @@ export default defineAppConfig({
 				},
 			},
 		},
+		card: {
+			slots: {
+				root: "brawl-panel",
+				header: "brawl-panel-header",
+			},
+		},
+		pageCard: {
+			slots: {
+				root: "brawl-panel",
+			},
+		},
+		pageCTA: {
+			compoundVariants: [
+				{
+					variant: ["solid", "outline", "soft", "subtle"],
+					class: { root: "brawl-panel" },
+				},
+			],
+		},
+		header: {
+			slots: {
+				root: "",
+				container: "gap-2",
+				right: "gap-1",
+				center: "lg:hidden xl:flex",
+				toggle: "lg:inline-flex xl:hidden",
+				content: "brawl-drawer lg:flex xl:hidden",
+				overlay: "lg:block xl:hidden",
+			},
+		},
+		navigationMenu: {
+			slots: {
+				link: "brawl-nav-link",
+				viewport: "brawl-menu",
+				childLink: "brawl-menu-item",
+			},
+		},
+		input: {
+			slots: { base: "brawl-field" },
+		},
+		textarea: {
+			slots: { base: "brawl-field" },
+		},
+		badge: {},
+		tabs: {
+			slots: {
+				list: "brawl-tab-list",
+				trigger: "brawl-tab",
+				indicator: "brawl-tab-indicator",
+			},
+		},
+		modal: {
+			slots: {
+				content: "brawl-panel",
+				header: "brawl-panel-header",
+			},
+		},
+		popover: {
+			slots: { content: "brawl-menu" },
+		},
+		dropdownMenu: {
+			slots: { content: "brawl-menu", item: "brawl-menu-item" },
+		},
+		alert: {
+			slots: { root: "brawl-panel" },
+		},
 		slideover: {
+			slots: {
+				content: "brawl-drawer",
+				header: "brawl-panel-header",
+			},
 			compoundVariants: [
 				{
 					transition: true,
@@ -55,12 +132,16 @@ export default defineAppConfig({
 		},
 		select: {
 			slots: {
-				content: "animate-none!",
+				base: "brawl-field brawl-select",
+				content: "brawl-menu animate-none!",
+				item: "brawl-menu-item",
 			},
 		},
 		selectMenu: {
 			slots: {
-				content: "animate-none!",
+				base: "brawl-field brawl-select",
+				content: "brawl-menu animate-none!",
+				item: "brawl-menu-item",
 			},
 		},
 	},

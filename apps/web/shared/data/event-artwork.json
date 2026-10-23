@@ -1,0 +1,469 @@
+{
+	"environments": {
+		"event_pocostand_banner": {
+			"banner": "/images/events/environments/bandstand.png",
+			"source": "https://raw.githubusercontent.com/Statscell/brawl-assets/d3f88993093046d8cafb511e441b0358d30ac061/environments/bandstand.png"
+		},
+		"event_arcade_banner": {
+			"banner": "/images/events/environments/arcade.png",
+			"source": "https://raw.githubusercontent.com/Statscell/brawl-assets/d3f88993093046d8cafb511e441b0358d30ac061/environments/arcade.png"
+		},
+		"event_brawlball_arena_banner": {
+			"banner": "/images/events/environments/brawl-ball-arena.png",
+			"source": "https://raw.githubusercontent.com/Statscell/brawl-assets/d3f88993093046d8cafb511e441b0358d30ac061/environments/brawl-ball-arena.png"
+		},
+		"event_gemmine_banner": {
+			"banner": "/images/events/environments/gem-grab.png",
+			"source": "https://raw.githubusercontent.com/Statscell/brawl-assets/d3f88993093046d8cafb511e441b0358d30ac061/environments/gem-grab.png"
+		},
+		"event_brawlball_banner": {
+			"banner": "/images/events/environments/brawl-ball.png",
+			"source": "https://raw.githubusercontent.com/Statscell/brawl-assets/d3f88993093046d8cafb511e441b0358d30ac061/environments/brawl-ball.png"
+		},
+		"event_mortuary_showdown_banner": {
+			"banner": "/images/events/environments/mortuary-showdown.png",
+			"source": "https://raw.githubusercontent.com/Statscell/brawl-assets/d3f88993093046d8cafb511e441b0358d30ac061/environments/mortuary-showdown.png"
+		},
+		"event_canyon_banner": {
+			"banner": "/images/events/environments/heist.png",
+			"source": "https://raw.githubusercontent.com/Statscell/brawl-assets/d3f88993093046d8cafb511e441b0358d30ac061/environments/heist.png"
+		},
+		"event_mortuary_banner": {
+			"banner": "/images/events/environments/mortuary.png",
+			"source": "https://raw.githubusercontent.com/Statscell/brawl-assets/d3f88993093046d8cafb511e441b0358d30ac061/environments/mortuary.png"
+		},
+		"event_stormvalley_banner": {
+			"banner": "/images/events/environments/showdown.png",
+			"source": "https://raw.githubusercontent.com/Statscell/brawl-assets/d3f88993093046d8cafb511e441b0358d30ac061/environments/showdown.png"
+		},
+		"event_airhockey_banner": {
+			"banner": "/images/events/environments/brawl-hockey.png",
+			"source": "https://raw.githubusercontent.com/tailsjs/brawl-stars-assets/cc307ffd36678ac463cc2ca9373a08b0a2d2b0b7/69.230/sc/events.sc",
+			"export": "event_airhockey_banner",
+			"width": 1600,
+			"height": 512
+		},
+		"event_basketball_banner": {
+			"banner": "/images/events/environments/basket-brawl.png",
+			"source": "https://raw.githubusercontent.com/tailsjs/brawl-stars-assets/cc307ffd36678ac463cc2ca9373a08b0a2d2b0b7/69.230/sc/events.sc",
+			"export": "event_basketball_banner",
+			"width": 1600,
+			"height": 512
+		},
+		"event_windstock_banner": {
+			"banner": "/images/events/environments/windstock.png",
+			"source": "https://raw.githubusercontent.com/tailsjs/brawl-stars-assets/cc307ffd36678ac463cc2ca9373a08b0a2d2b0b7/69.230/sc/events.sc",
+			"export": "event_windstock_banner",
+			"width": 1600,
+			"height": 512
+		},
+		"event_hub_banner": {
+			"banner": "/images/events/environments/hub.png",
+			"source": "https://raw.githubusercontent.com/tailsjs/brawl-stars-assets/cc307ffd36678ac463cc2ca9373a08b0a2d2b0b7/69.230/sc/events.sc",
+			"export": "event_hub_banner",
+			"width": 1600,
+			"height": 512
+		},
+		"event_ghosttrain_banner": {
+			"banner": "/images/events/environments/ghost-train.png",
+			"source": "https://raw.githubusercontent.com/tailsjs/brawl-stars-assets/cc307ffd36678ac463cc2ca9373a08b0a2d2b0b7/69.230/sc/events.sc",
+			"export": "event_ghosttrain_banner",
+			"width": 1600,
+			"height": 512
+		}
+	},
+	"modes": {
+		"48000000": {
+			"name": "Gem Grab",
+			"icon": "/images/events/modes/48000000.png",
+			"banner": "/images/events/environments/gem-grab.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000000.png"
+		},
+		"48000002": {
+			"name": "Heist",
+			"icon": "/images/events/modes/48000002.png",
+			"banner": "/images/events/environments/heist.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000002.png"
+		},
+		"48000003": {
+			"name": "Bounty",
+			"icon": "/images/events/modes/48000003.png",
+			"banner": "/images/events/environments/heist.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000003.png"
+		},
+		"48000005": {
+			"name": "Brawl Ball",
+			"icon": "/images/events/modes/48000005.png",
+			"banner": "/images/events/environments/brawl-ball.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000005.png"
+		},
+		"48000006": {
+			"name": "Solo Showdown",
+			"icon": "/images/events/modes/48000006.png",
+			"banner": "/images/events/environments/showdown.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000006.png"
+		},
+		"48000007": {
+			"name": "Big Game",
+			"icon": "/images/events/modes/48000007.png",
+			"banner": "/images/events/environments/big-game.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000007.png"
+		},
+		"48000008": {
+			"name": "Robo Rumble",
+			"icon": "/images/events/modes/48000008.png",
+			"banner": "/images/events/environments/robo-rumble.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000008.png"
+		},
+		"48000009": {
+			"name": "Duo Showdown",
+			"icon": "/images/events/modes/48000009.png",
+			"banner": "/images/events/environments/showdown.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000009.png"
+		},
+		"48000010": {
+			"name": "Boss Fight",
+			"icon": "/images/events/modes/48000010.png",
+			"banner": "/images/events/environments/boss-fight.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000010.png"
+		},
+		"48000011": {
+			"name": "Spirit Wars",
+			"icon": "/images/events/modes/48000011.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000011.png"
+		},
+		"48000014": {
+			"name": "Takedown",
+			"icon": "/images/events/modes/48000014.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000014.png"
+		},
+		"48000015": {
+			"name": "Lone Star",
+			"icon": "/images/events/modes/48000015.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000015.png"
+		},
+		"48000016": {
+			"name": "Present Plunder",
+			"icon": "/images/events/modes/48000016.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000016.png"
+		},
+		"48000017": {
+			"name": "Hot Zone",
+			"icon": "/images/events/modes/48000017.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000017.png",
+			"banner": "/images/events/environments/hub.png"
+		},
+		"48000018": {
+			"name": "Super City Rampage",
+			"icon": "/images/events/modes/48000018.png",
+			"banner": "/images/events/environments/super-city-rampage.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000018.png"
+		},
+		"48000020": {
+			"name": "Knockout",
+			"icon": "/images/events/modes/48000020.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000020.png"
+		},
+		"48000021": {
+			"name": "Carry The Gift",
+			"icon": "/images/events/modes/48000021.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000021.png"
+		},
+		"48000022": {
+			"name": "Basket Brawl",
+			"icon": "/images/events/modes/48000022.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000022.png",
+			"banner": "/images/events/environments/basket-brawl.png"
+		},
+		"48000023": {
+			"name": "Volley Brawl",
+			"icon": "/images/events/modes/48000023.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000023.png"
+		},
+		"48000024": {
+			"name": "Duels",
+			"icon": "/images/events/modes/48000024.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000024.png"
+		},
+		"48000025": {
+			"name": "Wipeout",
+			"icon": "/images/events/modes/48000025.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000025.png"
+		},
+		"48000026": {
+			"name": "Payload",
+			"icon": "/images/events/modes/48000026.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000026.png"
+		},
+		"48000027": {
+			"name": "Bot Drop",
+			"icon": "/images/events/modes/48000027.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000027.png"
+		},
+		"48000028": {
+			"name": "Hunters",
+			"icon": "/images/events/modes/48000028.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000028.png"
+		},
+		"48000029": {
+			"name": "Last Stand",
+			"icon": "/images/events/modes/48000029.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000029.png"
+		},
+		"48000030": {
+			"name": "Last Stand",
+			"icon": "/images/events/modes/48000030.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000030.png"
+		},
+		"48000031": {
+			"name": "Wipeout 5v5",
+			"icon": "/images/events/modes/48000031.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000031.png"
+		},
+		"48000032": {
+			"name": "Brawl Ball 5v5",
+			"icon": "/images/events/modes/48000032.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000032.png"
+		},
+		"48000033": {
+			"name": "Gem Grab 5v5",
+			"icon": "/images/events/modes/48000033.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000033.png"
+		},
+		"48000034": {
+			"name": "Trophy Escape",
+			"icon": "/images/events/modes/48000034.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000034.png"
+		},
+		"48000035": {
+			"name": "Knockout 5v5",
+			"icon": "/images/events/modes/48000035.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000035.png",
+			"banner": "/images/events/environments/windstock.png"
+		},
+		"48000036": {
+			"name": "Godzilla City Smash",
+			"icon": "/images/events/modes/48000036.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000036.png"
+		},
+		"48000037": {
+			"name": "Paint Brawl",
+			"icon": "/images/events/modes/48000037.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000037.png"
+		},
+		"48000038": {
+			"name": "Trio Showdown",
+			"icon": "/images/events/modes/48000038.png",
+			"banner": "/images/events/environments/showdown.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000038.png"
+		},
+		"48000039": {
+			"name": "Drum Roll",
+			"icon": "/images/events/modes/48000039.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000039.png"
+		},
+		"48000040": {
+			"name": "Soul Collector",
+			"icon": "/images/events/modes/48000040.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000040.png"
+		},
+		"48000041": {
+			"name": "Cleaning Duty",
+			"icon": "/images/events/modes/48000041.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000041.png"
+		},
+		"48000042": {
+			"name": "Solo Showdown Limbo",
+			"icon": "/images/events/modes/48000042.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000042.png"
+		},
+		"48000043": {
+			"name": "Knockout Limbo",
+			"icon": "/images/events/modes/48000043.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000043.png"
+		},
+		"48000045": {
+			"name": "Brawl Hockey",
+			"icon": "/images/events/modes/48000045.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000045.png",
+			"banner": "/images/events/environments/brawl-hockey.png"
+		},
+		"48000046": {
+			"name": "Gem Grab 2v2",
+			"icon": "/images/events/modes/48000046.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000046.png"
+		},
+		"48000047": {
+			"name": "Special Delivery",
+			"icon": "/images/events/modes/48000047.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000047.png"
+		},
+		"48000048": {
+			"name": "Brawl Arena",
+			"icon": "/images/events/modes/48000048.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000048.png",
+			"banner": "/images/events/environments/windstock.png"
+		},
+		"48000049": {
+			"name": "Brawl Ball 2v2",
+			"icon": "/images/events/modes/48000049.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000049.png"
+		},
+		"48000050": {
+			"name": "Knockout 2v2",
+			"icon": "/images/events/modes/48000050.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000050.png"
+		},
+		"48000051": {
+			"name": "Hot Zone 2v2",
+			"icon": "/images/events/modes/48000051.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000051.png",
+			"banner": "/images/events/environments/hub.png"
+		},
+		"48000052": {
+			"name": "Basket Brawl 2v2",
+			"icon": "/images/events/modes/48000052.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000052.png",
+			"banner": "/images/events/environments/basket-brawl.png"
+		},
+		"48000053": {
+			"name": "Brawl Hockey 2v2",
+			"icon": "/images/events/modes/48000053.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000053.png",
+			"banner": "/images/events/environments/brawl-hockey.png"
+		},
+		"48000054": {
+			"name": "Special Delivery 2v2",
+			"icon": "/images/events/modes/48000054.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000054.png"
+		},
+		"48000055": {
+			"name": "Token Run",
+			"icon": "/images/events/modes/48000055.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000055.png"
+		},
+		"48000056": {
+			"name": "Treasure Hunt",
+			"icon": "/images/events/modes/48000056.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000056.png"
+		},
+		"48000057": {
+			"name": "Brawl Hockey",
+			"icon": "/images/events/modes/48000057.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000057.png",
+			"banner": "/images/events/environments/brawl-hockey.png"
+		},
+		"48000060": {
+			"name": "Samurai Smash",
+			"icon": "/images/events/modes/48000060.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000060.png"
+		},
+		"48000061": {
+			"name": "Boss Fight",
+			"icon": "/images/events/modes/48000061.png",
+			"banner": "/images/events/environments/boss-fight.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000061.png"
+		},
+		"48000062": {
+			"name": "Samurai Smash",
+			"icon": "/images/events/modes/48000062.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000062.png"
+		},
+		"48000063": {
+			"name": "Dodgebrawl",
+			"icon": "/images/events/modes/48000063.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000063.png"
+		},
+		"48000064": {
+			"name": "Subway Run",
+			"icon": "/images/events/modes/48000064.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000064.png"
+		},
+		"48000065": {
+			"name": "Trio Gem Grab",
+			"icon": "/images/events/modes/48000065.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000065.png"
+		},
+		"48000066": {
+			"name": "Trio Wipeout",
+			"icon": "/images/events/modes/48000066.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000066.png"
+		},
+		"48000067": {
+			"name": "Upside Showdown",
+			"icon": "/images/events/modes/48000067.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000067.png"
+		},
+		"48000068": {
+			"name": "Love Bombing",
+			"icon": "/images/events/modes/48000068.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000068.png"
+		},
+		"48000069": {
+			"name": "Duo Mega Boss",
+			"icon": "/images/events/modes/48000069.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000069.png"
+		},
+		"48000070": {
+			"name": "Safe Blast",
+			"icon": "/images/events/modes/48000070.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000070.png"
+		},
+		"48000072": {
+			"name": "Loaded Showdown",
+			"icon": "/images/events/modes/48000072.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000072.png"
+		},
+		"48000073": {
+			"name": "Shadow Smash",
+			"icon": "/images/events/modes/48000073.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000073.png"
+		},
+		"48000074": {
+			"name": "Shadow Smash",
+			"icon": "/images/events/modes/48000074.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000074.png"
+		},
+		"48000076": {
+			"name": "Super Ball",
+			"icon": "/images/events/modes/48000076.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000076.png"
+		},
+		"48000077": {
+			"name": "5 Player Void Boss",
+			"icon": "/images/events/modes/48000077.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000077.png"
+		},
+		"48000078": {
+			"name": "Loaded Duo Showdown",
+			"icon": "/images/events/modes/48000078.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000078.png"
+		},
+		"48000080": {
+			"name": "Food Fight",
+			"icon": "/images/events/modes/48000080.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000080.png"
+		},
+		"48000081": {
+			"name": "Mecha Guard",
+			"icon": "/images/events/modes/48000081.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000081.png"
+		},
+		"48000082": {
+			"name": "Combat Cooking",
+			"icon": "/images/events/modes/48000082.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000082.png"
+		},
+		"48000083": {
+			"name": "Hide & Seek",
+			"icon": "/images/events/modes/48000083.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000083.png"
+		},
+		"48000084": {
+			"name": "Mega Boss Duo (20 Player)",
+			"icon": "/images/events/modes/48000084.png",
+			"iconSource": "https://cdn.brawlify.com/game-modes/regular/48000084.png"
+		}
+	},
+	"source": "https://github.com/Statscell/brawl-assets/tree/d3f88993093046d8cafb511e441b0358d30ac061/environments"
+}

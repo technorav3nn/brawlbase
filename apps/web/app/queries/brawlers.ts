@@ -6,7 +6,7 @@ export const useBrawlers = defineQuery({
 
 export const useBrawlifyBrawlers = defineQuery({
 	key: ["brawlers"],
-	query: async () => (await $fetch("/api/brawlers/brawlify")).list,
+	query: async () => (await $fetch("/api/brawlers/brawlify")).list.filter((b) => b.name !== "Buzz Lightyear"),
 	staleTime: 60 * 60,
 });
 

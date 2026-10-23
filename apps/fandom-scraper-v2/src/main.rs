@@ -71,7 +71,7 @@ async fn main() -> Result<()> {
             }
             "-h" | "--help" => {
                 println!(
-                    "fandom-scraper-v2 [--out DIR] [--concurrency N] [--asset-concurrency N]\n                  [--brawler NAME]... [--skip-gears] [--strict]\n\nDefault: scrape every brawler and gear into ./out, matching the old scraper.\n\nType generation:\n  generate-types [--check]\n\nOffline tools:\n  parse-brawler INPUT.json\n  parse-mode INPUT.json\n  bench-parse INPUT.json ROUNDS\n  convert-image INPUT OUTPUT [--remove-white | --gear]\n\nHTTP endpoints can be overridden for testing:\n  --fandom-api URL --catalog-url URL --game-api URL --curated-api URL (legacy alias: --raw-api URL)"
+                    "fandom-scraper-v2 [--out DIR] [--concurrency N] [--asset-concurrency N]\n                  [--brawler NAME]... [--skip-gears] [--profile-icons-only] [--strict]\n\nDefault: scrape every brawler and gear into ./out.\n--profile-icons-only refreshes icon metadata and images in existing output; other data is preserved.\n\nType generation:\n  generate-types [--check]\n\nOffline tools:\n  parse-brawler INPUT.json\n  parse-mode INPUT.json\n  bench-parse INPUT.json ROUNDS\n  convert-image INPUT OUTPUT [--remove-white | --gear | --profile-icon]\n\nHTTP endpoints can be overridden for testing:\n  --fandom-api URL --catalog-url URL --game-api URL --curated-api URL (legacy alias: --raw-api URL)"
                 );
                 return Ok(());
             }
@@ -104,6 +104,7 @@ async fn main() -> Result<()> {
                 let option = args.next();
                 let encoded = match option.as_deref() {
                     Some("--gear") => Vips::global()?.gear(&input)?,
+                    Some("--profile-icon") => Vips::global()?.profile_icon(&input)?,
                     None => Vips::global()?.asset(&input, false)?,
                     Some("--remove-white") => Vips::global()?.asset(&input, true)?,
                     _ => bail!("unknown image option"),
@@ -112,6 +113,7 @@ async fn main() -> Result<()> {
                 return Ok(());
             }
             "--skip-gears" => config.skip_gears = true,
+            "--profile-icons-only" => config.profile_icons_only = true,
             "--strict" => strict = true,
             "--out" => config.out = PathBuf::from(args.next().context("--out requires a path")?),
             "--concurrency" => {

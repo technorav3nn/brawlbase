@@ -1,9 +1,9 @@
 use crate::{
-    downloader::{AssetJob, Downloader, write_data},
+    downloader::{AssetJob, AssetTransform, Downloader, write_data},
     fuzzy_dict::get_id_from_name,
     http::Http,
     scrape_gears,
-    scraper::{CatalogItem, FandomScraper},
+    scraper::{CatalogItem, FandomScraper, is_base_profile_icon},
 };
 use anyhow::{Context, Result, ensure};
 use futures::{StreamExt, stream};
@@ -18,6 +18,7 @@ pub struct Config {
     pub asset_concurrency: usize,
     pub brawlers: Vec<String>,
     pub skip_gears: bool,
+    pub profile_icons_only: bool,
     pub fandom_api: String,
     pub catalog_url: String,
     pub game_api: String,
@@ -32,6 +33,7 @@ impl Default for Config {
             asset_concurrency: 12,
             brawlers: Vec::new(),
             skip_gears: false,
+            profile_icons_only: false,
             fandom_api: "https://brawlstars.fandom.com/api.php".into(),
             catalog_url: "https://api.brawlapi.com/v1/brawlers".into(),
             game_api: "https://api.brawlapi.com/game".into(),
@@ -61,14 +63,14 @@ pub async fn catalog(http: &Http, url: &str) -> Result<Vec<Brawler>> {
         .context("invalid brawler catalog")
 }
 
-fn asset_job(asset: &Value, path: PathBuf, remove_white: bool) -> Result<AssetJob> {
+fn asset_job(asset: &Value, path: PathBuf, transform: AssetTransform) -> Result<AssetJob> {
     Ok(AssetJob {
         url: asset["sourceUrl"]
             .as_str()
             .context("asset missing sourceUrl")?
             .into(),
         path,
-        remove_white,
+        transform,
     })
 }
 
@@ -80,7 +82,11 @@ pub fn plan_assets(
     gadgets: &[CatalogItem],
 ) -> Result<Vec<AssetJob>> {
     let dir = out.join("brawlers").join(brawler.id.to_string());
-    let mut jobs = vec![asset_job(&data["model"], dir.join("model.webp"), false)?];
+    let mut jobs = vec![asset_job(
+        &data["model"],
+        dir.join("model.webp"),
+        AssetTransform::Standard,
+    )?];
     for (key, catalog, directory) in [
         ("gadgets", gadgets, "gadgets"),
         ("starpowers", starpowers, "star-powers"),
@@ -97,7 +103,7 @@ pub fn plan_assets(
             jobs.push(asset_job(
                 &item["asset"],
                 out.join(directory).join(format!("{id}.webp")),
-                true,
+                AssetTransform::RemoveWhite,
             )?);
         }
     }
@@ -106,7 +112,7 @@ pub fn plan_assets(
             &hypercharge["asset"],
             out.join("hypercharges")
                 .join(format!("{}.webp", brawler.id)),
-            false,
+            AssetTransform::Standard,
         )?);
     }
     for skin in data["skins"].as_array().context("missing skins array")? {
@@ -116,19 +122,119 @@ pub fn plan_assets(
         jobs.push(asset_job(
             &skin["asset"],
             skin_dir.join("model.webp"),
-            false,
+            AssetTransform::Standard,
         )?);
+    }
+    for (key, directory, transform) in [
+        ("pins", "pins", AssetTransform::Standard),
+        ("buffies", "buffies", AssetTransform::Standard),
+        ("sprays", "sprays", AssetTransform::Standard),
+        ("buffieSkins", "buffie-skins", AssetTransform::Standard),
+        ("voicelines", "voicelines", AssetTransform::Raw),
+    ] {
+        for item in data[key].as_array().into_iter().flatten() {
+            let Some(asset) = item.get("asset") else {
+                continue;
+            };
+            let filename = asset["filename"]
+                .as_str()
+                .context("missing asset filename")?;
+            ensure!(
+                !filename.contains(['/', '\\']) && filename != "..",
+                "unsafe asset filename"
+            );
+            let filename = if transform == AssetTransform::Raw {
+                filename.to_owned()
+            } else {
+                format!(
+                    "{}.webp",
+                    filename.rsplit_once('.').map_or(filename, |(stem, _)| stem)
+                )
+            };
+            jobs.push(asset_job(
+                asset,
+                dir.join(directory).join(filename),
+                transform,
+            )?);
+        }
+    }
+    jobs.extend(plan_profile_assets(brawler, data, out)?);
+    if let Some(avatar) = data.get("avatar") {
+        jobs.push(asset_job(
+            avatar,
+            dir.join("portrait.webp"),
+            AssetTransform::Standard,
+        )?);
+    }
+    Ok(jobs)
+}
+
+/// Select by file identity so rank and Hypercharge variants cannot replace icon.webp.
+pub fn plan_profile_icon(brawler: &Brawler, data: &Value, out: &Path) -> Result<AssetJob> {
+    let icon = data["skins"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter(|skin| skin["name"] == "Default")
+        .filter_map(|skin| skin["profileIcons"].as_array())
+        .flatten()
+        .find(|asset| {
+            asset["filename"]
+                .as_str()
+                .is_some_and(|filename| is_base_profile_icon(filename, &brawler.name))
+        })
+        .with_context(|| format!("missing default profile icon for {}", brawler.name))?;
+    asset_job(
+        icon,
+        out.join("brawlers")
+            .join(brawler.id.to_string())
+            .join("icon.webp"),
+        AssetTransform::ProfileIcon,
+    )
+}
+
+pub fn plan_profile_assets(brawler: &Brawler, data: &Value, out: &Path) -> Result<Vec<AssetJob>> {
+    let mut jobs = vec![plan_profile_icon(brawler, data, out)?];
+    let dir = out.join("brawlers").join(brawler.id.to_string());
+    for skin in data["skins"].as_array().context("missing skins array")? {
+        let name = skin["name"].as_str().context("missing skin name")?;
         for icon in skin["profileIcons"]
             .as_array()
             .context("missing profile icons")?
         {
-            jobs.push(asset_job(icon, skin_dir.join("profile-icon.webp"), false)?);
+            // Keep the default skin's image consistent with the brawler icon.
+            if name == "Default"
+                && !icon["filename"]
+                    .as_str()
+                    .is_some_and(|file| is_base_profile_icon(file, &brawler.name))
+            {
+                continue;
+            }
+            jobs.push(asset_job(
+                icon,
+                dir.join("skins").join(name).join("profile-icon.webp"),
+                AssetTransform::ProfileIcon,
+            )?);
         }
     }
-    if let Some(avatar) = data.get("avatar") {
-        jobs.push(asset_job(avatar, dir.join("portrait.webp"), false)?);
-    }
     Ok(jobs)
+}
+
+/// Refresh only icon metadata; keep existing stats, gear enrichment, and skins.
+pub fn refresh_profile_icons(existing: &mut Value, fresh: &Value) -> Result<()> {
+    let fresh_skins = fresh["skins"].as_array().context("missing fresh skins")?;
+    for skin in existing["skins"]
+        .as_array_mut()
+        .context("missing existing skins")?
+    {
+        if let Some(updated) = fresh_skins.iter().find(|updated| {
+            updated["name"] == skin["name"]
+                && updated["asset"]["filename"] == skin["asset"]["filename"]
+        }) {
+            skin["profileIcons"] = updated["profileIcons"].clone();
+        }
+    }
+    Ok(())
 }
 
 /// Returns the count of asset failures. Data/API failures abort with context; asset failures continue.
@@ -170,29 +276,36 @@ pub async fn run(config: Config) -> Result<usize> {
     let mut jobs = Vec::new();
     while let Some(result) = results.next().await {
         let (brawler, data) = result?;
-        let Some(data) = data else {
+        let Some(mut data) = data else {
             eprintln!("Brawler page not found for {}, skipping...", brawler.name);
             continue;
         };
-        jobs.extend(plan_assets(
-            brawler,
-            &data,
-            &config.out,
-            &starpowers,
-            &gadgets,
-        )?);
-        write_data(
-            &data,
-            &config
-                .out
-                .join("brawlers")
-                .join(brawler.id.to_string())
-                .join("data.json"),
-        )
-        .await?;
+        let path = config
+            .out
+            .join("brawlers")
+            .join(brawler.id.to_string())
+            .join("data.json");
+        if config.profile_icons_only {
+            let mut existing =
+                serde_json::from_slice(&tokio::fs::read(&path).await.with_context(|| {
+                    format!("reading {}; run a full scrape first", path.display())
+                })?)?;
+            refresh_profile_icons(&mut existing, &data)?;
+            data = existing;
+            jobs.extend(plan_profile_assets(brawler, &data, &config.out)?);
+        } else {
+            jobs.extend(plan_assets(
+                brawler,
+                &data,
+                &config.out,
+                &starpowers,
+                &gadgets,
+            )?);
+        }
+        write_data(&data, &path).await?;
     }
     let failures = downloader.download_all(jobs).await;
-    if !config.skip_gears {
+    if !config.skip_gears && !config.profile_icons_only {
         scrape_gears::scrape_gears(&http, &downloader, &config).await?;
     }
     Ok(failures)

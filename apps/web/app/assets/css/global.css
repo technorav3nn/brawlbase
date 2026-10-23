@@ -1,7 +1,3 @@
-body {
-	overflow: unset !important;
-}
-
 :root {
 	--color-border: rgb(var(--color-gray-200));
 }

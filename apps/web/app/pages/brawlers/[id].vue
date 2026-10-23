@@ -3,7 +3,6 @@ import type { CdnBrawler } from "@brawlbase/cdn";
 import type { NavigationMenuItem } from "@nuxt/ui";
 import { breakpointsTailwind } from "@vueuse/core";
 import { RARITY_COLOR_CLASSES } from "#shared/utils/brawl-stars/colors";
-import { normalCaseToKebabCase } from "#shared/utils/common";
 import { useBrawlerStore } from "~/components/features/brawlers/brawler-store";
 
 definePageMeta({
@@ -55,39 +54,39 @@ const guidesActive = computed(() => route.path.includes("guides"));
 const links = computed<NavigationMenuItem[]>(() => [
 	{
 		label: "Info",
-		icon: "i-heroicons-information-circle",
+		icon: "i-lucide-info",
 		to: createTabLink("info"),
 	},
 	{
 		label: "Stats",
-		icon: "i-heroicons-chart-bar-square",
+		icon: "i-lucide-chart-no-axes-combined",
 		to: createTabLink("stats"),
 	},
 	{
 		label: "Cosmetics",
-		icon: "i-heroicons-swatch",
+		icon: "i-lucide-palette",
 		to: createTabLink("cosmetics"),
 	},
 	{
 		label: "Guides",
-		icon: "i-heroicons-book-open",
+		icon: "i-lucide-book-open",
 		to: createTabLink("guides"),
 		active: guidesActive.value,
 	},
 	{
 		label: "Tips",
-		icon: "i-heroicons-list-bullet-20-solid",
+		icon: "i-lucide-lightbulb",
 		to: createTabLink("tips"),
 	},
 	{
 		label: "Changes",
-		icon: "i-heroicons-scale",
+		icon: "i-lucide-scale",
 		to: createTabLink("changes"),
 	},
 ]);
 
 const breadcrumbLinks = [
-	{ label: "Brawlers", to: "/brawlers", icon: "i-heroicons-star" },
+	{ label: "Brawlers", to: "/brawlers", icon: "i-lucide-star" },
 	{ label: brawler.value?.name || "Brawl" },
 ];
 
@@ -147,7 +146,7 @@ const rarityToNormalColor = {
 					<UBreadcrumb :items="breadcrumbLinks" class="mb-6" />
 					<div class="flex flex-row gap-3">
 						<div
-							:class="`p-2  rounded-md ${rarityToNormalColor[brawler.rarity.name as keyof typeof rarityToNormalColor]}`"
+							:class="`p-2 rounded-md ${rarityToNormalColor[brawler.rarity.name as keyof typeof rarityToNormalColor]}`"
 						>
 							<NuxtImg
 								:src="brawler.imageUrl2"
@@ -165,30 +164,22 @@ const rarityToNormalColor = {
 							<div class="flex flex-col">
 								<div class="flex items-center gap-1 font-medium">
 									<UIcon
-										name="i-heroicons-sparkles-20-solid"
-										class="inline-block h-5 w-5"
+										name="i-lucide-sparkles"
+										class="inline-block h-5 w-5 [--__ul__direction:reverse] [animation-duration:25s]!"
 										:class="[
 											RARITY_COLOR_CLASSES[brawler.rarity.name as keyof typeof RARITY_COLOR_CLASSES],
 											brawler.rarity.name === 'Ultra Legendary' && ' bg-clip-border!',
 										]"
-										:style="{ '--__ul__direction': 'reverse', animationDuration: '25s !important' }"
 									/>
 									<p
-										:style="{ '--__ul__direction': 'reverse', animationDuration: '25s !important' }"
+										class="[--__ul__direction:reverse] [animation-duration:25s]!"
 										:class="[RARITY_COLOR_CLASSES[brawler.rarity.name as keyof typeof RARITY_COLOR_CLASSES]]"
 									>
 										{{ brawler.rarity.name }}
 									</p>
 								</div>
 								<div class="flex items-center gap-1 font-medium">
-									<NuxtImg
-										:src="`/icons/brawler-classes/${normalCaseToKebabCase(
-											(brawlerClass ?? '')?.toLowerCase()
-										)}.png`"
-										width="16"
-										height="16"
-										class="size-5"
-									/>
+									<UIcon name="i-lucide-shield" class="size-5" aria-hidden="true" />
 									<p>{{ brawlerClass }}</p>
 								</div>
 							</div>

@@ -127,20 +127,133 @@ fn find_asset(doc: &Html, value: &str, attr: &str) -> Option<Asset> {
         .and_then(asset_from_img)
 }
 
-fn first_table<'a>(doc: &'a Html, title: &str) -> Option<ElementRef<'a>> {
+/// Ignore MediaWiki edit controls and support both direct and wrapped headings.
+fn section_tables<'a>(doc: &'a Html, title: &str) -> Vec<ElementRef<'a>> {
+    let mut tables = Vec::new();
     for heading in doc.select(&sel("h2,h3")) {
-        if text(heading) != title {
+        let label = heading
+            .select(&sel(".mw-headline"))
+            .next()
+            .map(text)
+            .unwrap_or_else(|| text(heading));
+        if label.trim() != title
+            && heading.value().attr("id") != Some(title.replace(' ', "_").as_str())
+        {
             continue;
         }
-        for sibling in heading.next_siblings() {
-            if let Some(element) = ElementRef::wrap(sibling)
-                && element.value().name() == "table"
+        let container = heading
+            .parent()
+            .and_then(ElementRef::wrap)
+            .filter(|parent| parent.value().classes().any(|class| class == "mw-heading"))
+            .unwrap_or(heading);
+        for sibling in container.next_siblings().filter_map(ElementRef::wrap) {
+            if matches!(
+                sibling.value().name(),
+                "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+            ) || sibling.value().classes().any(|class| class == "mw-heading")
             {
-                return Some(element);
+                break;
+            }
+            if sibling.value().name() == "table" {
+                tables.push(sibling);
+            } else {
+                tables.extend(sibling.select(&sel("table")));
             }
         }
     }
-    None
+    tables
+}
+
+fn profile_icons_table(doc: &Html) -> Option<ElementRef<'_>> {
+    section_tables(doc, "Profile Icons").into_iter().next()
+}
+
+fn profile_name_key(value: &str) -> String {
+    value
+        .chars()
+        .filter(|c| c.is_alphanumeric())
+        .flat_map(char::to_lowercase)
+        .collect()
+}
+
+pub(crate) fn is_base_profile_icon(filename: &str, brawler: &str) -> bool {
+    profile_name_key(filename) == profile_name_key(&format!("{brawler}1-pfp.png"))
+}
+
+fn original_profile_url(src: &str) -> Option<String> {
+    let mut url = reqwest::Url::parse(src).ok()?;
+    let path = url.path().to_owned();
+    let original_path = if let Some((file, revision)) = path.split_once("/revision/") {
+        // Everything following the revision ID is a CDN image transformation.
+        format!("{file}/revision/{}", revision.split('/').next()?)
+    } else {
+        path.split("/smart")
+            .next()?
+            .split("/scale")
+            .next()?
+            .to_owned()
+    };
+    let cache_buster = url
+        .query_pairs()
+        .find(|(key, _)| key == "cb")
+        .map(|(_, value)| value.into_owned());
+    url.set_path(&original_path);
+    url.set_query(None);
+    {
+        let mut query = url.query_pairs_mut();
+        if let Some(value) = cache_buster {
+            query.append_pair("cb", &value);
+        }
+        // Removing resize suffixes alone still allows Fandom to return lossy WebP.
+        query.append_pair("format", "original");
+    }
+    Some(url.into())
+}
+
+fn profile_icons(doc: &Html, brawler: &str) -> Vec<AttachedAsset> {
+    let Some(table) = profile_icons_table(doc) else {
+        return Vec::new();
+    };
+    table
+        .select(&sel("td"))
+        .filter_map(|cell| {
+            let img = cell.select(&sel("img")).next()?;
+            let src = img
+                .value()
+                .attr("data-src")
+                .or_else(|| img.value().attr("src"))?;
+            let asset = Asset {
+                filename: img.value().attr("data-image-name")?.to_owned(),
+                source_url: original_profile_url(src)?,
+            };
+            let label = text(cell).split_whitespace().collect::<Vec<_>>().join(" ");
+            let filename = profile_name_key(&asset.filename);
+            let brawler_key = profile_name_key(brawler);
+            let is_brawler_icon = [
+                "1pfppng",
+                "2pfppng",
+                "hyperchargepfppng",
+                "prestigepfppng",
+                "masterypfppng",
+            ]
+            .iter()
+            .any(|suffix| filename == format!("{brawler_key}{suffix}"));
+            Some(AttachedAsset {
+                skin_name: if is_brawler_icon || label.eq_ignore_ascii_case(brawler) {
+                    "Default".into()
+                } else {
+                    label
+                },
+                value: json!(asset),
+            })
+        })
+        .collect()
+}
+
+fn match_profile_skin_name(expected: &str, actual: &str, brawler: &str) -> bool {
+    match_skin_name(expected, actual, brawler)
+        || profile_name_key(expected) == profile_name_key(actual)
+        || profile_name_key(expected) == profile_name_key(&actual.replacen(brawler, "", 1))
 }
 
 fn parse_int(text: &str) -> Value {
@@ -311,12 +424,14 @@ fn match_skin_name(expected: &str, actual: &str, brawler: &str) -> bool {
 }
 
 fn table_assets(doc: &Html, title: &str, brawler: &str) -> Vec<AttachedAsset> {
-    let Some(table) = first_table(doc, title) else {
-        return Vec::new();
-    };
+    let tables = section_tables(doc, title);
     let mut results = Vec::new();
-    let mut current_skin: Option<Asset> = None;
-    for cell in table.select(&sel("td")) {
+    let mut current_skin: Option<Asset> = Some(Asset {
+        filename: format!("{brawler} Skin-Default.png"),
+        source_url: String::new(),
+    });
+    let cell_selector = sel("td");
+    for cell in tables.iter().flat_map(|table| table.select(&cell_selector)) {
         if !cell
             .children()
             .any(|child| ElementRef::wrap(child).is_some())
@@ -336,7 +451,7 @@ fn table_assets(doc: &Html, title: &str, brawler: &str) -> Vec<AttachedAsset> {
             let Some(skin_asset) = &current_skin else {
                 continue;
             };
-            if asset.filename.contains("Pin") {
+            if asset.filename.contains("Pin-") {
                 let rarity = cell.select(&sel("i")).next().map(text).unwrap_or_default();
                 let emote = cell.select(&sel("p")).next().map(text).unwrap_or_default();
                 results.push(AttachedAsset {
@@ -358,8 +473,154 @@ fn table_assets(doc: &Html, title: &str, brawler: &str) -> Vec<AttachedAsset> {
             });
         }
     }
-    let _ = brawler;
+    let mut seen = std::collections::BTreeSet::new();
+    results.retain(|item| {
+        seen.insert(
+            item.value["asset"]["filename"]
+                .as_str()
+                .unwrap_or_default()
+                .to_owned(),
+        )
+    });
     results
+}
+
+// Audio is read from rendered HTML so expanded templates and translations survive.
+fn voicelines(doc: &Html) -> Vec<Value> {
+    section_tables(doc, "Voice Lines")
+        .into_iter()
+        .flat_map(table_voicelines)
+        .collect()
+}
+
+fn table_voicelines(table: ElementRef<'_>) -> Vec<Value> {
+    let header_selector = sel("th");
+    let headers: Vec<_> = table
+        .select(&sel("tr"))
+        .next()
+        .into_iter()
+        .flat_map(|row| row.select(&header_selector))
+        .map(|cell| text(cell).trim().to_owned())
+        .collect();
+    let mut lines = Vec::new();
+    for row in table.select(&sel("tr")).skip(1) {
+        for (column, cell) in row.select(&sel("td")).enumerate() {
+            for audio in cell.select(&sel("audio")) {
+                let Some(url) = audio.value().attr("src").or_else(|| {
+                    audio
+                        .select(&sel("source"))
+                        .next()
+                        .and_then(|source| source.value().attr("src"))
+                }) else {
+                    continue;
+                };
+                let Some(filename) = url
+                    .split("/revision")
+                    .next()
+                    .and_then(|path| path.rsplit('/').next())
+                else {
+                    continue;
+                };
+                let description = audio
+                    .ancestors()
+                    .filter_map(ElementRef::wrap)
+                    .find_map(|parent| parent.select(&sel("i")).next().map(text))
+                    .unwrap_or_default();
+                let variant = audio
+                    .ancestors()
+                    .filter_map(ElementRef::wrap)
+                    .find(|element| element.value().name() == "div")
+                    .and_then(|container| {
+                        container
+                            .prev_siblings()
+                            .filter_map(ElementRef::wrap)
+                            .find(|element| element.value().name() == "b")
+                    })
+                    .map(text);
+                let mut line = json!({ "trigger": headers.get(column).cloned().unwrap_or_default(),
+                    "description": description.trim(), "asset": { "filename": filename, "sourceUrl": url } });
+                if let Some(variant) = variant {
+                    line["variant"] = json!(variant.trim().trim_end_matches(':'));
+                }
+                lines.push(line);
+            }
+        }
+    }
+    lines
+}
+
+fn buffies(page: &Page, doc: &Html, brawler: &str) -> Vec<Value> {
+    fn collect(section: &Section, result: &mut Vec<Value>) {
+        for quote in re!(r"(?i)\{\{\s*Quote\s*\|").find_iter(&section.body) {
+            // Parse balanced templates so a base ability's Quote cannot consume the
+            // following explanation and Buffie Quote (including nested markup).
+            let Some((content, end)) = wiki::template_at(&section.body, quote.start()) else {
+                continue;
+            };
+            let following = section.body[end..].trim_start();
+            if !following.starts_with("{{") {
+                continue;
+            }
+            let Some((marker, _)) = wiki::template_at(following, 0) else {
+                continue;
+            };
+            let marker = wiki::split_template(&marker);
+            if !marker
+                .first()
+                .is_some_and(|name| name.eq_ignore_ascii_case("Buffie"))
+            {
+                continue;
+            }
+            let quote = wiki::split_template(&content);
+            let (Some(description), Some(kind)) = (quote.get(1), marker.get(1)) else {
+                continue;
+            };
+            result.push(json!({ "name": section.title, "kind": kind,
+                "description": wiki::section_text(description) }));
+        }
+        for child in &section.children {
+            collect(child, result);
+        }
+    }
+    let mut result = Vec::new();
+    for section in &page.sections {
+        collect(section, &mut result);
+    }
+    for buffie in &mut result {
+        if let Some(kind) = buffie["kind"].as_str()
+            && let Some(asset) = doc
+                .select(&sel("img"))
+                .filter_map(asset_from_img)
+                .find(|asset| asset.filename == format!("{brawler} Buffie-{kind}.png"))
+        {
+            buffie["asset"] = json!(asset);
+        }
+    }
+    result
+}
+
+fn buffie_skins(doc: &Html, brawler: &str) -> Vec<Value> {
+    let mut result = Vec::new();
+    for img in doc.select(&sel("img")) {
+        let Some(asset) = asset_from_img(img) else {
+            continue;
+        };
+        let prefix = format!("{brawler} Buffie Skin-");
+        let Some(name) = asset
+            .filename
+            .strip_prefix(&prefix)
+            .and_then(|name| name.strip_suffix(".png"))
+        else {
+            continue;
+        };
+        if !result
+            .iter()
+            .any(|item: &Value| item["asset"]["filename"] == asset.filename)
+        {
+            result.push(json!({ "name": name, "asset": asset }));
+        }
+    }
+    result
 }
 
 fn skin_property(
@@ -437,7 +698,22 @@ fn skin_data(
                 .collect::<Vec<_>>()
         ),
     );
-    skin.insert("voicelines".into(), json!([])); // The previous implementation leaves its voice line loop commented out.
+    skin.insert(
+        "voicelines".into(),
+        if name == "Default" {
+            json!(
+                voicelines(doc)
+                    .into_iter()
+                    .filter(|line| line
+                        .get("variant")
+                        .and_then(Value::as_str)
+                        .is_none_or(|variant| variant == "Normal"))
+                    .collect::<Vec<_>>()
+            )
+        } else {
+            json!([])
+        },
+    );
     skin.insert(
         "sprays".into(),
         json!(
@@ -454,7 +730,7 @@ fn skin_data(
     skin.insert(
         "profileIcons".into(),
         json!(
-            pop_matching(icons, |item| match_skin_name(
+            pop_matching(icons, |item| match_profile_skin_name(
                 name,
                 &item.skin_name,
                 brawler
@@ -470,7 +746,7 @@ fn skin_data(
 fn skins(source: &str, doc: &Html, brawler: &str) -> Vec<Value> {
     let mut pins = table_assets(doc, "Pins", brawler);
     let mut sprays = table_assets(doc, "Sprays", brawler);
-    let mut icons = table_assets(doc, "Profile Icons", brawler);
+    let mut icons = profile_icons(doc, brawler);
     let mut skins = Vec::new();
     for template in wiki::templates(source, "Skin Gallery") {
         let fields = wiki::fields_from_template(&template);
@@ -749,6 +1025,21 @@ pub fn parse_brawler(
         data.insert("avatar".into(), json!(avatar));
     }
     data.insert("skins".into(), json!(skins(source, &doc, name)));
+    for (key, title) in [("pins", "Pins"), ("sprays", "Sprays")] {
+        data.insert(
+            key.into(),
+            json!(
+                table_assets(&doc, title, name)
+                    .into_iter()
+                    .map(|item| item.value)
+                    .collect::<Vec<_>>()
+            ),
+        );
+    }
+    data.insert("voicelines".into(), json!(voicelines(&doc)));
+    data.insert("buffies".into(), json!(buffies(&page, &doc, name)));
+    data.insert("buffieSkins".into(), json!(buffie_skins(&doc, name)));
+
     data.insert("history".into(), json!(history(&page)));
     data.insert(
         "gadgets".into(),
@@ -801,4 +1092,106 @@ pub fn parse_mode(name: &str, title: &str, source: &str) -> Value {
         "brawlerTips": brawler_tips,
         "history": mode_history,
     })
+}
+
+#[cfg(test)]
+mod buffie_tests {
+    use super::*;
+
+    #[test]
+    fn extracts_only_the_quote_immediately_before_each_buffie() {
+        let page = Page::parse(
+            "== Gadgets ==\n=== Rocket Laces ===\n\
+             {{Quote|Base ability. Cooldown: 16 seconds.}}\n\
+             Detailed base ability jargon, including {{nowrap|extra stats}}.\n\
+             {{Quote|Hitting an enemy Brawler gives +2 sec movement speed.}}\n\
+             {{Buffie|Gadget}}\n\
+             Further Buffie explanation should not appear.\n\
+             === Second Gadget ===\n\
+             {{Quote|Base ability.}}\n\
+             {{Quote|Deal {{color|400}} damage to [[Brawler|enemies]].}} {{Buffie|Gadget|extra}}\n\
+             == Hypercharge: Test ==\n\
+             {{ quote | A stronger Super. }}\n{{ buffie | Hyper }}",
+        );
+        let result = buffies(&page, &Html::parse_fragment(""), "Brock");
+        assert_eq!(
+            result,
+            vec![
+                json!({"name": "Rocket Laces", "kind": "Gadget", "description": "Hitting an enemy Brawler gives +2 sec movement speed."}),
+                json!({"name": "Second Gadget", "kind": "Gadget", "description": "Deal 400 damage to enemies."}),
+                json!({"name": "Hypercharge: Test", "kind": "Hyper", "description": "A stronger Super."}),
+            ]
+        );
+    }
+
+    #[test]
+    fn does_not_reuse_an_unrelated_or_unclosed_quote() {
+        let page = Page::parse(
+            "== Gadgets ==\n=== No Buffie Quote ===\n\
+             {{Quote|Base ability.}}\nExplanation.\n{{Buffie|Gadget}}\n\
+             === Missing Quote End ===\n{{Quote|Unclosed.\n{{Buffie|Star}}\n\
+             === Different Marker ===\n{{Quote|Normal ability.}}{{NotBuffie|Gadget}}",
+        );
+        assert!(buffies(&page, &Html::parse_fragment(""), "Brock").is_empty());
+    }
+}
+
+#[cfg(test)]
+mod profile_icon_tests {
+    use super::*;
+
+    const CELL: &str = r#"<table><tr><td><img data-image-name="Shelly1-pfp.png" data-src="https://example.test/Shelly1-pfp.png/revision/latest/scale-to-width-down/65?cb=123"><p>Shelly</p></td></tr></table>"#;
+
+    #[test]
+    fn ignores_edit_controls_and_supports_wrapped_headings() {
+        for heading in [
+            r#"<h3><span class="mw-headline" id="Profile_Icons">Profile Icons</span><span class="mw-editsection">[edit]</span></h3>"#,
+            r#"<div class="mw-heading mw-heading3"><h3 id="Profile_Icons">Profile Icons</h3><span class="mw-editsection">[edit]</span></div>"#,
+        ] {
+            let doc = Html::parse_document(&format!("{heading}<div>{CELL}</div>"));
+            let icons = profile_icons(&doc, "Shelly");
+            assert_eq!(icons.len(), 1);
+            assert_eq!(icons[0].skin_name, "Default");
+            assert_eq!(
+                icons[0].value["sourceUrl"],
+                "https://example.test/Shelly1-pfp.png/revision/latest?cb=123&format=original"
+            );
+        }
+    }
+
+    #[test]
+    fn stops_at_the_next_section_and_keeps_unscaled_urls_intact() {
+        let doc = Html::parse_document(&format!("<h3>Profile Icons</h3><h3>Other</h3>{CELL}"));
+        assert!(profile_icons(&doc, "Shelly").is_empty());
+        let doc = Html::parse_document(&format!(
+            "<h3>Profile Icons</h3>{}",
+            CELL.replace("/scale-to-width-down/65", "")
+        ));
+        let icons = profile_icons(&doc, "Shelly");
+        assert_eq!(
+            icons[0].value["sourceUrl"],
+            "https://example.test/Shelly1-pfp.png/revision/latest?cb=123&format=original"
+        );
+    }
+
+    #[test]
+    fn requests_original_files_without_cdn_transformations() {
+        let base = "https://static.wikia.nocookie.net/brawlstars/images/d/d0/Larry_%26_Lawrie1-pfp.png/revision/latest";
+        for suffix in [
+            "?cb=123",
+            "/scale-to-width-down/65?cb=123",
+            "/smart/width/65/height/65?cb=123",
+            "/thumbnail/width/65/height/65?cb=123&format=webp&quality=10",
+            "/zoom-crop/width/65/height/65?width=65&height=65&cb=123&format=png",
+        ] {
+            assert_eq!(
+                original_profile_url(&format!("{base}{suffix}")).unwrap(),
+                format!("{base}?cb=123&format=original")
+            );
+        }
+        assert_eq!(
+            original_profile_url(&format!("{base}/scale-to-width-down/65")).unwrap(),
+            format!("{base}?format=original")
+        );
+    }
 }

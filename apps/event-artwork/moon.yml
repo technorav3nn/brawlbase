@@ -1,0 +1,24 @@
+layer: "tool"
+language: "rust"
+
+tasks:
+    build:
+        command: "cargo build --release --locked"
+        inputs:
+            - "src/**/*"
+            - "Cargo.toml"
+            - "Cargo.lock"
+        outputs:
+            - "target/release/event-artwork"
+    start:
+        command: "cargo run --release --locked --"
+        options:
+            cache: false
+            runInCI: false
+    test:
+        command: "cargo test --locked"
+        inputs:
+            - "src/**/*"
+            - "tests/**/*"
+            - "Cargo.toml"
+            - "Cargo.lock"

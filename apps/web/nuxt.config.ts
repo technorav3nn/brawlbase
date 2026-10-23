@@ -25,7 +25,9 @@ export default defineNuxtConfig({
 		cache: true,
 	},
 	compatibilityDate: "2025-01-15",
-	ui: {},
+	ui: {
+		content: true,
+	},
 	i18n: {
 		strategy: "no_prefix",
 		defaultLocale: "en",

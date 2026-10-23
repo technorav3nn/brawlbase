@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { BrawlApiBrawler } from "@brawlbase/brawl-api";
+import { routes } from "@brawlbase/cdn";
 
 const props = defineProps<{ brawler: BrawlApiBrawler; showRarity?: boolean }>();
 
@@ -52,19 +53,22 @@ const ringColor = computed(() => {
 
 <template>
 	<UPageCard
-		:class="`w-full overflow-hidden ${normalColor} ${ringColor}`"
+		:class="`brawl-roster-card w-full overflow-hidden ${normalColor} ${ringColor}`"
 		:ui="{
 			container: 'p-0!',
-			header: 'mb-0 p-1.5',
+			header: 'mb-0 mb-1 !  w-full! overflow-hidden rounded-t-md',
+			wrapper: 'min-w-0 w-full',
+			body: 'min-w-0 w-full',
+			title: 'min-w-0 w-full',
 		}"
 		:to="`/brawlers/${props.brawler.id}`"
 		variant="subtle"
 	>
 		<template #header>
 			<NuxtImg
-				:src="props.brawler.imageUrl2"
+				:src="routes.brawlers(props.brawler.id).icon"
 				loading="lazy"
-				class="rounded-md!"
+				class="rounded-sm! w-full! h-full! object-cover"
 				:alt="brawler.name"
 				width="150"
 				height="150"
@@ -72,30 +76,31 @@ const ringColor = computed(() => {
 		</template>
 
 		<template #title>
-			<div class="flex flex-col justify-start px-2 pb-2">
+			<div class="flex min-w-0 w-full flex-col justify-start px-2 pb-2">
 				<p class="overflow-hidden text-sm font-semibold text-ellipsis whitespace-nowrap">
 					{{ props.brawler.name }}
 				</p>
 				<div>
+					<p class="text-xs font-medium text-ellipsis line-clamp-1 text-dimmed">
+						{{ props.brawler.class.name }}
+					</p>
 					<UBadge
 						v-if="props.brawler.rarity.name !== 'Ultra Legendary'"
 						:class="color"
-						class="mt-1 h-5 w-max rounded-full px-1.5 text-[0.7rem]"
+						class="mt-1 h-5 w-max px-1.5 text-[0.7rem]"
 					>
 						{{ props.brawler.rarity.name }}
 					</UBadge>
-					<div v-else class="mt-1 flex h-5 w-full! flex-row items-center rounded-full">
+					<div v-else class="mt-1 flex min-h-5 w-full! flex-row items-center rounded-sm">
 						<div
 							style="animation-duration: 15s !important"
-							class="relative inline-block p-px rounded-full ultra-legendary-gradient-bg"
+							class="relative inline-block p-px rounded-sm ultra-legendary-gradient-bg"
 						>
 							<div
 								style="animation-duration: 15s !important"
-								class="ultra-legendary-gradient-bg absolute inset-0 w-full scale-x-[0.99] scale-y-[0.90] rounded-full opacity-20"
+								class="ultra-legendary-gradient-bg absolute inset-0 w-full scale-x-[0.99] scale-y-[0.90] rounded-sm opacity-20"
 							/>
-							<span
-								class="flex items-center justify-center rounded-full bg-default px-1.5 font-semibold text-white"
-							>
+							<span class="flex items-center justify-center rounded-sm bg-default px-1.5 font-semibold text-white">
 								<span
 									style="animation-duration: 15s !important"
 									class="ultra-legendary-gradient-text text-[0.7rem]!"

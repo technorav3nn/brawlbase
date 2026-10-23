@@ -19,7 +19,7 @@ export type Pin = { asset: Asset, rarity: string, emote: string, };
 
 export type Spray = { asset: Asset, rarity: string, };
 
-export type Voiceline = { trigger: string, description: string, asset?: Asset, };
+export type Voiceline = { variant?: string, trigger: string, description: string, asset?: Asset, };
 
 export type Skin = { name: string, rarity?: string, campaign?: string, cost?: string, exclusive: boolean, seasonal: boolean, asset: Asset, petSkins: Array<PetSkin>, pins: Array<Pin>, voicelines: Array<Voiceline>, sprays: Array<Spray>, profileIcons: Array<Asset>, };
 
@@ -41,7 +41,11 @@ export type Gear = { name: string, description: string, rarity?: GearRarity, mod
 
 export type GearCollection = { [key in string]: Gear };
 
-export type CdnBrawler = { attribution: string, shortDescription: string, fullDescription: string, trait?: string, attack?: Attack, altAttack?: Attack, super?: Attack, altSuper?: Attack, hypercharge?: Hypercharge, healthByLevel: Array<number | null>, stats: Stats, tips: Array<string>, model?: Asset, avatar?: Asset, skins: Array<Skin>, history: Array<History>, gadgets: Array<Accessory>, starpowers: Array<Accessory>, gears?: Array<Gear>, };
+export type Buffie = { asset?: Asset, name: string, kind: string, description: string, };
+
+export type BuffieSkin = { name: string, asset: Asset, };
+
+export type CdnBrawler = { attribution: string, shortDescription: string, fullDescription: string, trait?: string, attack?: Attack, altAttack?: Attack, super?: Attack, altSuper?: Attack, hypercharge?: Hypercharge, healthByLevel: Array<number | null>, stats: Stats, tips: Array<string>, model?: Asset, avatar?: Asset, pins: Array<Pin>, sprays: Array<Spray>, voicelines: Array<Voiceline>, buffies: Array<Buffie>, buffieSkins: Array<BuffieSkin>, skins: Array<Skin>, history: Array<History>, gadgets: Array<Accessory>, starpowers: Array<Accessory>, gears?: Array<Gear>, };
 
 export type BrawlerTip = { brawlerId: string, description: string, };
 

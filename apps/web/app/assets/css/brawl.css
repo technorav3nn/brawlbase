@@ -1,0 +1,163 @@
+/* Shared game-like geometry; colors continue to come from the existing palette. */
+:root {
+	--brawl-outline: var(--ui-border-accented);
+	--brawl-edge: color-mix(in srgb, var(--ui-text) 18%, transparent);
+	--brawl-highlight: color-mix(in srgb, var(--ui-text-highlighted) 12%, transparent);
+}
+
+.dark {
+	--brawl-outline: #0a0a0a;
+	--brawl-edge: rgb(0 0 0 / 0.3);
+	--brawl-highlight: rgb(255 255 255 / 0.05);
+}
+
+/* Keep decorative shadows unchanged until Nuxt UI's focus rings are needed. */
+.brawl-button,
+.brawl-panel,
+.brawl-menu,
+.brawl-field,
+.brawl-header,
+.brawl-drawer,
+.brawl-tab-list,
+.brawl-roster-card {
+	box-shadow: var(--brawl-shadow);
+
+	&:focus-visible,
+	&:has(> a:focus-visible) {
+		@apply shadow-(--brawl-shadow);
+	}
+}
+
+.brawl-button {
+	border: 2px solid var(--brawl-outline);
+	border-radius: 6px 3px 6px 3px;
+	font-weight: 600;
+	white-space: nowrap;
+	flex-shrink: 0;
+	--brawl-shadow: 0 4px 0 var(--brawl-outline), inset 0 2px 0 var(--brawl-highlight);
+	transition: translate 100ms ease, box-shadow 100ms ease, background-color 150ms ease;
+}
+
+.brawl-button:not(:disabled, [aria-disabled="true"]):hover {
+	translate: 0 -1px;
+	--brawl-shadow: 0 5px 0 var(--brawl-outline), inset 0 2px 0 var(--brawl-highlight);
+}
+
+.brawl-button:not(:disabled, [aria-disabled="true"]):active {
+	translate: 0 3px;
+	--brawl-shadow: 0 1px 0 var(--brawl-outline);
+}
+
+.brawl-button-quiet,
+.brawl-button-quiet:not(:disabled, [aria-disabled="true"]):is(:hover, :active) {
+	border-color: transparent;
+	--brawl-shadow: 0 0 #0000;
+	translate: none;
+}
+
+.brawl-panel,
+.brawl-menu {
+	border: 2px solid var(--brawl-outline);
+	border-radius: 8px 4px 8px 4px;
+	--brawl-shadow: 0 5px 0 var(--brawl-edge), inset 0 2px 0 var(--brawl-highlight);
+}
+
+.brawl-panel-header {
+	border-bottom: 2px solid var(--brawl-outline);
+	background-image: linear-gradient(var(--brawl-highlight), transparent);
+}
+
+.brawl-field {
+	min-height: 2.5rem;
+	border: 2px solid var(--brawl-outline);
+	border-radius: 4px;
+	/* Keep hover backgrounds smooth, but apply focus borders and halos instantly. */
+	transition-property: background-color;
+	--brawl-shadow: inset 0 2px 0 var(--brawl-edge), 0 2px 0 var(--brawl-highlight);
+}
+
+.brawl-field:focus-visible:not([role="combobox"]) {
+	/* Color the existing border instead of drawing a second ring inside it. */
+	border-color: var(--tw-ring-color, var(--ui-primary));
+	box-shadow: var(--brawl-shadow);
+}
+
+.brawl-field[aria-invalid="true"] {
+	border-color: var(--ui-error);
+}
+
+.brawl-select {
+	--brawl-shadow: 0 3px 0 var(--brawl-edge), inset 0 2px 0 var(--brawl-highlight);
+}
+
+.brawl-menu {
+	border-radius: 5px;
+}
+
+.brawl-menu-item {
+	border-radius: 3px;
+}
+
+.brawl-header {
+	border-bottom: 3px solid var(--brawl-outline);
+	background-color: var(--ui-bg);
+	--brawl-shadow: 0 3px 0 var(--brawl-highlight);
+	backdrop-filter: none;
+}
+
+.brawl-drawer {
+	border: 3px solid var(--brawl-outline);
+	--brawl-shadow: -1px 6px 4px 6px var(--brawl-edge);
+}
+
+.brawl-nav-link {
+	font-size: 0.9375rem;
+}
+
+.brawl-nav-link::before {
+	border-radius: 3px;
+}
+
+.brawl-tab-list {
+	border: 2px solid var(--brawl-outline);
+	border-radius: 5px;
+	--brawl-shadow: 0 3px 0 var(--brawl-edge);
+}
+
+.brawl-tab,
+.brawl-tab-indicator {
+	border-radius: 3px;
+}
+
+.brawl-roster-card {
+	border-width: 3px;
+	border-radius: 6px 10px 6px 10px;
+	--brawl-shadow: 0 5px 0 var(--brawl-outline);
+	transition: translate 120ms ease, box-shadow 120ms ease;
+}
+
+.brawl-roster-card:hover {
+	translate: 0 -3px;
+	--brawl-shadow: 0 8px 0 var(--brawl-outline);
+}
+
+.brawl-roster-card:active {
+	translate: 0 2px;
+	--brawl-shadow: 0 3px 0 var(--brawl-outline);
+}
+
+.brawl-roster-card [data-slot="header"] {
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), 0 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.brawl-button,
+	.brawl-roster-card {
+		transition: none;
+	}
+
+	.brawl-button:not(:disabled, [aria-disabled="true"]):is(:hover, :active),
+	.brawl-roster-card:is(:hover, :active) {
+		translate: none;
+	}
+}

@@ -253,6 +253,10 @@ impl Vips {
     }
 
     fn webp(&self, image: &Image<'_>, quality: i32) -> Result<Vec<u8>> {
+        self.encode_webp(image, quality, false)
+    }
+
+    fn encode_webp(&self, image: &Image<'_>, quality: i32, lossless: bool) -> Result<Vec<u8>> {
         let mut out = ptr::null_mut();
         let mut size = 0;
         self.check(unsafe {
@@ -262,6 +266,8 @@ impl Vips {
                 &mut size,
                 c"Q".as_ptr(),
                 quality,
+                c"lossless".as_ptr(),
+                i32::from(lossless),
                 c"effort".as_ptr(),
                 4_i32,
                 c"keep".as_ptr(),
@@ -291,6 +297,16 @@ impl Vips {
                 Ok(first)
             }
         }
+    }
+
+    /// Crop the near-black frame, including its compression noise. Keep the
+    /// original black pixels inside the crop: pupils and outlines are artwork.
+    pub fn profile_icon(&self, buffer: &[u8]) -> Result<Vec<u8>> {
+        let decoded = self.decode(buffer)?;
+        let srgb = self.srgb(&decoded)?;
+        let trimmed = self.trim(&srgb, 50.0)?;
+        self.encode_webp(&trimmed, 100, true)
+            .context("encoding borderless profile icon")
     }
 
     fn remove_colors(&self, first: &[u8]) -> Result<Vec<u8>> {

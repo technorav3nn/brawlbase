@@ -1,0 +1,9 @@
+{
+	"$schema": "../../node_modules/wrangler/config-schema.json",
+	"account_id": "3ce1cba6da896fec28c9a8292ffd129d",
+	"name": "brawlbase-cdn",
+	"assets": {
+		"directory": "./out"
+	},
+	"compatibility_date": "2026-10-19"
+}
