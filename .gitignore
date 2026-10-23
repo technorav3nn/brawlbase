@@ -40,3 +40,7 @@ apps/web/.data
 .testing-ground
 
 apps/tracker/.worker-dist/
+
+#
+.dev.vars
+.worker-dist
