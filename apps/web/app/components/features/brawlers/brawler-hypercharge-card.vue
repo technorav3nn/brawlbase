@@ -109,7 +109,7 @@ watch(
 				<dt
 					class="flex min-h-14 flex-col items-start justify-between gap-2 text-xs text-muted @lg:min-h-8 @lg:flex-row @lg:items-center @lg:justify-start"
 				>
-					<img :src="boost.icon" alt="" width="32" height="32" class="size-8 object-contain" >
+					<img :src="boost.icon" alt="" width="32" height="32" class="size-8 object-contain" />
 					{{ t(boost.translation) }}
 				</dt>
 				<dd class="mt-2 font-brawlstars text-2xl tabular-nums text-highlighted">{{ boost.value }}</dd>

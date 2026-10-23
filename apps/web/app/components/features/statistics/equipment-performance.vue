@@ -58,7 +58,7 @@ await refresh();
 						height="40"
 						class="size-10 object-contain"
 						@error="failed.add(item.equipmentId)"
-					><UIcon v-else name="i-lucide-settings-2" class="size-8 text-muted" />
+					/><UIcon v-else name="i-lucide-settings-2" class="size-8 text-muted" />
 					<div class="min-w-0">
 						<p class="text-xs text-muted">{{ t(`page.performance.equipment_${item.kind}`) }}</p>
 						<h4 class="font-semibold text-highlighted">{{ item.name }}</h4>

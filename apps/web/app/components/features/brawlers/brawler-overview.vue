@@ -40,7 +40,7 @@ watch(
 				height="320"
 				class="h-44 w-full object-contain sm:h-48 lg:h-72 xl:h-80"
 				@error="modelAttempt++"
-			>
+			/>
 			<UEmpty v-else icon="i-lucide-image-off" title="Model unavailable" variant="naked" class="h-44 px-0 lg:h-72" />
 		</figure>
 

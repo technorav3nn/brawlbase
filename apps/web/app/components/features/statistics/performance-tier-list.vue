@@ -104,7 +104,7 @@ const unrated = computed(() => sorted.value.filter((row) => row.tier === null));
 						loading="lazy"
 						class="size-10 rounded object-contain"
 						@error="failedIcons.add(brawler.id)"
-					>
+					/>
 					<UIcon v-else name="i-lucide-user-round" class="size-10 text-muted" aria-hidden="true" />
 					<span class="w-full truncate text-[11px] font-semibold">{{ brawler.name }}</span
 					><span class="text-xs font-semibold tabular-nums text-highlighted">{{

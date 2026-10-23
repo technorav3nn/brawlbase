@@ -54,7 +54,7 @@ const palette = computed(() => palettes[tier.value ?? "unrated"]);
 					loading="lazy"
 					class="size-11 object-contain transition-transform group-hover:scale-105"
 					@error="failed = true"
-				>
+				/>
 				<UIcon v-else name="i-lucide-user-round" class="size-8 text-muted" />
 			</div>
 			<div class="min-w-0 flex-1">

@@ -128,7 +128,7 @@ useSeoMeta({
 						@click="toggleAbility(ability.name)"
 					>
 						<template #leading>
-							<img :src="ability.icon" alt="" width="28" height="28" class="size-7 shrink-0 object-contain" >
+							<img :src="ability.icon" alt="" width="28" height="28" class="size-7 shrink-0 object-contain" />
 						</template>
 					</UButton>
 				</div>
@@ -163,7 +163,7 @@ useSeoMeta({
 								height="32"
 								loading="lazy"
 								class="size-8 shrink-0 object-contain"
-							>
+							/>
 							{{ accessory.name }}
 						</span>
 					</div>

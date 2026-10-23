@@ -55,7 +55,7 @@ watch(
 					width="32"
 					height="32"
 					class="size-8 object-contain"
-				>
+				/>
 				<h2 class="font-brawlstars text-2xl text-highlighted">{{ title }}</h2>
 			</div>
 			<BrawlerBuffieToggle
