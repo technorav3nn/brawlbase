@@ -13,11 +13,12 @@ const duration = ref(0);
 const sources = computed(() => [
 	...new Set([props.line.url, props.line.fallbackUrl].filter((url): url is string => Boolean(url))),
 ]);
-const playbackLabel = computed(() => t(
-	playing.value ? "page.brawler_cosmetics.pause_voice" : "page.brawler_cosmetics.play_voice",
-	{ quote: props.line.description || props.line.trigger }
-));
-const progress = computed(() => duration.value > 0 ? (currentTime.value / duration.value) * 100 : 0);
+const playbackLabel = computed(() =>
+	t(playing.value ? "page.brawler_cosmetics.pause_voice" : "page.brawler_cosmetics.play_voice", {
+		quote: props.line.description || props.line.trigger,
+	})
+);
+const progress = computed(() => (duration.value > 0 ? (currentTime.value / duration.value) * 100 : 0));
 
 function updateTime() {
 	currentTime.value = audio.value?.currentTime ?? 0;
@@ -87,7 +88,9 @@ onBeforeUnmount(() => audio.value?.pause());
 			:class="playing ? 'border-primary! bg-primary/5' : 'bg-elevated/50 hover:bg-elevated'"
 			:ui="{ body: 'flex h-full flex-col p-4 sm:p-4' }"
 		>
-			<p v-if="showVariant" class="mb-2 text-xs text-muted">{{ line.variant === "Normal" ? t("page.brawler_info.normal") : line.variant }}</p>
+			<p v-if="showVariant" class="mb-2 text-xs text-muted">
+				{{ line.variant === "Normal" ? t("page.brawler_info.normal") : line.variant }}
+			</p>
 			<blockquote v-if="line.description" class="flex-1 text-sm leading-6 text-highlighted">
 				{{ line.description }}
 			</blockquote>
@@ -105,11 +108,21 @@ onBeforeUnmount(() => audio.value?.pause());
 					data-testid="voice-play"
 					@click="togglePlayback"
 				/>
-				<span v-if="duration" class="text-xs tabular-nums text-muted">{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
+				<span v-if="duration" class="text-xs tabular-nums text-muted"
+					>{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span
+				>
 				<UIcon v-else name="i-lucide-audio-lines" class="size-5 text-dimmed" aria-hidden="true" />
 			</div>
-			<UProgress v-if="duration" :model-value="progress" :aria-label="t('page.brawler_cosmetics.audio_progress')" size="2xs" class="mt-3" />
-			<p v-if="failed || !sources.length" class="mt-2 text-xs text-muted" role="status">{{ t("page.brawler_cosmetics.audio_unavailable") }}</p>
+			<UProgress
+				v-if="duration"
+				:model-value="progress"
+				:aria-label="t('page.brawler_cosmetics.audio_progress')"
+				size="2xs"
+				class="mt-3"
+			/>
+			<p v-if="failed || !sources.length" class="mt-2 text-xs text-muted" role="status">
+				{{ t("page.brawler_cosmetics.audio_unavailable") }}
+			</p>
 		</UCard>
 		<template v-else>
 			<UButton
@@ -128,7 +141,9 @@ onBeforeUnmount(() => audio.value?.pause());
 				<p class="text-sm leading-6 wrap-anywhere" :class="playing ? 'text-primary' : 'text-default'">
 					{{ line.description || t("page.brawler_cosmetics.no_transcript") }}
 				</p>
-				<p v-if="showVariant" class="mt-0.5 text-xs text-muted">{{ line.variant === "Normal" ? t("page.brawler_info.normal") : line.variant }}</p>
+				<p v-if="showVariant" class="mt-0.5 text-xs text-muted">
+					{{ line.variant === "Normal" ? t("page.brawler_info.normal") : line.variant }}
+				</p>
 				<p v-if="failed || !sources.length" class="mt-1 text-xs text-muted" role="status">
 					{{ t("page.brawler_cosmetics.audio_unavailable") }}
 				</p>

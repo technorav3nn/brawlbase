@@ -170,7 +170,9 @@ async function logout() {
 .tabs-leave-active {
 	width: 100%;
 	position: absolute;
-	transition: transform 0.212s cubic-bezier(0.5, 0.7, 0.1, 1), opacity 0.1s cubic-bezier(0.5, 0.7, 0.1, 1);
+	transition:
+		transform 0.212s cubic-bezier(0.5, 0.7, 0.1, 1),
+		opacity 0.1s cubic-bezier(0.5, 0.7, 0.1, 1);
 }
 .tabs-enter-from,
 .tabs-leave-to {

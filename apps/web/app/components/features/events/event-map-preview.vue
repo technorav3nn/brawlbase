@@ -5,8 +5,15 @@ const props = defineProps<{ event?: RotationEvent }>();
 const open = defineModel<boolean>("open", { default: false });
 const { t } = useI18n();
 const imageFailed = ref(false);
-const mapLink = computed(() => props.event && props.event.mapId > 0 ? `https://brawlify.com/maps/${props.event.mapId}` : undefined);
-watch(() => [props.event?.id, open.value], () => { imageFailed.value = false; });
+const mapLink = computed(() =>
+	props.event && props.event.mapId > 0 ? `https://brawlify.com/maps/${props.event.mapId}` : undefined
+);
+watch(
+	() => [props.event?.id, open.value],
+	() => {
+		imageFailed.value = false;
+	}
+);
 </script>
 
 <template>
@@ -27,10 +34,18 @@ watch(() => [props.event?.id, open.value], () => { imageFailed.value = false; })
 				height="512"
 				class="h-[60vh] w-full rounded-lg bg-muted/50 object-contain p-3"
 				@error="imageFailed = true"
-			>
+			/>
 			<UEmpty v-else icon="i-lucide-map" :title="t('page.events.map_unavailable')" />
 		</template>
 		<template #footer>
+			<UButton
+				v-if="event && event.mapId > 0"
+				:to="`/maps/${event.mapId}`"
+				:label="t('page.map_stats.view_map')"
+				icon="i-lucide-chart-no-axes-combined"
+				color="neutral"
+				variant="subtle"
+			/>
 			<UButton
 				v-if="mapLink"
 				:to="mapLink"

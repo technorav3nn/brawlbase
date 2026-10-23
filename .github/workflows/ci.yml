@@ -1,34 +1,27 @@
-name: ci
+name: CI
 
-on: push
+on:
+    push:
+    pull_request:
+
+permissions:
+    contents: read
 
 jobs:
-  ci:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node: [22]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v5
-
-      - name: Install node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ matrix.node }}
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Lint
-        run: pnpm run lint
-
-      - name: Typecheck
-        run: pnpm run typecheck
+    quality:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: ./.github/actions/setup
+            - name: Lint TypeScript and JavaScript
+              run: yarn lint
+            - name: Check TypeScript, JavaScript, JSON, YAML, and Markdown formatting
+              run: yarn format:check
+            - name: Check Rust formatting
+              run: moon run fandom-scraper-v2:format
+            - name: Lint Rust
+              run: moon run fandom-scraper-v2:lint
+            - name: Typecheck web app
+              run: moon run web:typecheck
+            - name: Test Rust scraper
+              run: moon run fandom-scraper-v2:test

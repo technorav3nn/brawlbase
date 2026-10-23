@@ -1,6 +1,7 @@
 layer: "application"
 dependsOn:
     - "brawl-stars-api"
+    - "tracker"
 
 workspace:
     inheritedTasks:
@@ -8,22 +9,15 @@ workspace:
 
 fileGroups:
     app:
-        - ".nuxtignore"
-        - "app.config.*"
         - "nuxt.config.*"
+        - "wrangler.jsonc"
         - "i18n/**/*"
     sources:
-        - "app/assets/**/*"
-        - "app/components/**/*"
-        - "app/composables/**/*"
-        - "app/utils/**/*"
+        - "app/**/*"
         - "content/**/*"
-        - "app/layouts/**/*"
-        - "middleware/**/*"
-        - "app/pages/**/*"
-        - "plugins/**/*"
         - "server/**/*"
-        - "app/app.vue"
+        - "shared/**/*"
+        - "public/**/*"
 
 tasks:
     nuxt:
@@ -58,13 +52,9 @@ tasks:
         preset: "server"
 
     typecheck:
-        command:
-            - "vue-tsc"
-            - "--noEmit"
-            # - '--project'
-            # - 'tsconfig.vitest.json'
-            # - '--composite'
-            # - 'false'
+        command: "nuxt typecheck"
+        deps:
+            - "^:build"
         inputs:
             - "@group(app)"
             - "@group(sources)"

@@ -57,10 +57,11 @@ const kinds = computed(() => [
 	})),
 ]);
 const filteredChanges = computed(() =>
-	changes.value.filter((change) =>
-		(selectedKind.value === "all" || change.kind === selectedKind.value)
-		&& (selectedYear.value === "all" || change.year === selectedYear.value)
-		&& change.description.toLowerCase().includes(query.value.toLowerCase())
+	changes.value.filter(
+		(change) =>
+			(selectedKind.value === "all" || change.kind === selectedKind.value) &&
+			(selectedYear.value === "all" || change.year === selectedYear.value) &&
+			change.description.toLowerCase().includes(query.value.toLowerCase())
 	)
 );
 const groups = computed(() => groupBrawlerHistory(filteredChanges.value));
@@ -80,7 +81,9 @@ function resetFilters() {
 	visibleDates.value = 8;
 }
 
-watch([search, selectedKind, selectedYear], () => { visibleDates.value = 8; });
+watch([search, selectedKind, selectedYear], () => {
+	visibleDates.value = 8;
+});
 watch(() => brawler.value?.id, resetFilters);
 useSeoMeta({
 	title: () => `${brawlerName.value} ${t("page.brawler_changes.title")} | BrawlBase`,
@@ -116,7 +119,9 @@ useSeoMeta({
 								:ui="{ label: 'whitespace-normal wrap-anywhere', leadingIcon: 'hidden sm:block' }"
 							/>
 						</dt>
-						<dd class="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-brawlstars text-4xl tabular-nums text-highlighted">
+						<dd
+							class="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-brawlstars text-4xl tabular-nums text-highlighted"
+						>
 							{{ counts[kind] }}
 							<span class="hidden font-sans text-xs leading-5 text-muted sm:inline">
 								{{ t("page.brawler_changes.recorded_changes") }}
@@ -202,12 +207,25 @@ useSeoMeta({
 						class="relative grid grid-cols-1 gap-3.5 pb-6 pl-5 md:grid-cols-[10rem_minmax(0,1fr)] md:gap-8 md:pl-0"
 						:aria-label="t('page.brawler_changes.changes_on', { date: group.label })"
 					>
-						<div class="absolute top-3.5 -bottom-3.5 left-1 w-px bg-accented md:top-7 md:left-43" aria-hidden="true" />
-						<div class="absolute top-3.5 left-1 size-2.5 -translate-x-1/2 rounded-full border-2 border-primary bg-default md:top-7 md:left-43" aria-hidden="true" />
+						<div
+							class="absolute top-3.5 -bottom-3.5 left-1 w-px bg-accented md:top-7 md:left-43"
+							aria-hidden="true"
+						/>
+						<div
+							class="absolute top-3.5 left-1 size-2.5 -translate-x-1/2 rounded-full border-2 border-primary bg-default md:top-7 md:left-43"
+							aria-hidden="true"
+						/>
 						<header class="flex flex-wrap items-baseline justify-between gap-1.5 pt-2 md:block md:pt-5">
-							<time v-if="group.key !== 'undated'" :datetime="group.key" class="text-sm font-bold text-highlighted">{{ group.label }}</time>
+							<time
+								v-if="group.key !== 'undated'"
+								:datetime="group.key"
+								class="text-sm font-bold text-highlighted"
+								>{{ group.label }}</time
+							>
 							<span v-else class="text-sm font-bold text-highlighted">{{ t("page.brawler_changes.undated") }}</span>
-							<p class="text-xs text-muted md:mt-1.5">{{ t("page.brawler_changes.change_count", group.changes.length) }}</p>
+							<p class="text-xs text-muted md:mt-1.5">
+								{{ t("page.brawler_changes.change_count", group.changes.length) }}
+							</p>
 						</header>
 						<UCard variant="subtle" class="min-w-0" :ui="{ body: 'divide-y divide-default p-0 sm:p-0' }">
 							<article
@@ -242,7 +260,12 @@ useSeoMeta({
 					:ui="{ title: 'font-brawlstars text-2xl' }"
 				>
 					<template #actions>
-						<UButton :label="t('page.brawler_changes.show_all')" color="neutral" variant="outline" @click="resetFilters" />
+						<UButton
+							:label="t('page.brawler_changes.show_all')"
+							color="neutral"
+							variant="outline"
+							@click="resetFilters"
+						/>
 					</template>
 				</UEmpty>
 				<div v-if="shownGroups.length < groups.length" class="mt-3 flex flex-col items-center gap-3">
@@ -255,7 +278,9 @@ useSeoMeta({
 						data-testid="load-older"
 						@click="visibleDates += 8"
 					/>
-					<p class="text-xs text-muted">{{ t("page.brawler_changes.more_changes", filteredChanges.length - shownCount) }}</p>
+					<p class="text-xs text-muted">
+						{{ t("page.brawler_changes.more_changes", filteredChanges.length - shownCount) }}
+					</p>
 				</div>
 			</template>
 			<UEmpty

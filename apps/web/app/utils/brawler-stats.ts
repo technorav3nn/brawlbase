@@ -34,7 +34,7 @@ export function brawlerStatText(value: string): string {
 		.replace(/&(amp|quot|apos|lt|gt|nbsp|times|deg);/g, (_, name: string) => entities[name] ?? "")
 		.replace(/&#(x[\da-f]+|\d+);/gi, (match, code: string) => {
 			const point = code.toLowerCase().startsWith("x") ? Number.parseInt(code.slice(1), 16) : Number(code);
-			return point >= 0 && point <= 0x10ffff ? String.fromCodePoint(point) : match;
+			return point >= 0 && point <= 1_114_111 ? String.fromCodePoint(point) : match;
 		})
 		.trim();
 }

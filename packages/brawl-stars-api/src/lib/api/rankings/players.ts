@@ -7,7 +7,10 @@ export class PlayerRankingsEndpoint {
 		this.$fetch = $fetch;
 	}
 
-	public async getPlayersRanking(countryCode: CountryCodes) {
-		return this.$fetch<RankingsPlayer[]>(`/rankings/${countryCode}/players`);
+	public async getPlayersRanking(countryCode: CountryCodes, limit = 200) {
+		const { items } = await this.$fetch<{ items: RankingsPlayer[] }>(`/rankings/${countryCode}/players`, {
+			query: { limit },
+		});
+		return items;
 	}
 }

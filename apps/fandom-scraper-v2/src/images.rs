@@ -28,6 +28,7 @@ macro_rules! api {
 }
 api! {
     vips_init: unsafe extern "C" fn(*const c_char) -> c_int,
+    vips_cache_set_max: unsafe extern "C" fn(c_int),
     vips_concurrency_set: unsafe extern "C" fn(c_int),
     vips_error_buffer: unsafe extern "C" fn() -> *const c_char,
     vips_error_clear: unsafe extern "C" fn(),
@@ -106,6 +107,10 @@ impl Vips {
             match loaded {
                 Ok(api) => {
                     api.check(unsafe { (api.vips_init)(c"fandom-scraper-v2".as_ptr()) })?;
+                    // Each asset has its own pipeline; caching operations retains unrelated image buffers.
+                    unsafe {
+                        (api.vips_cache_set_max)(0);
+                    }
                     // Parallelism is bounded at the application layer to avoid CPU oversubscription.
                     unsafe {
                         (api.vips_concurrency_set)(1);

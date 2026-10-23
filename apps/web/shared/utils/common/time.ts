@@ -1,6 +1,5 @@
 import { TimeTypes, type DurationFormatAssetsTime, DurationFormatter } from "@sapphire/duration";
 
- 
 export const wait = async (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const FORMATTER_UNITS: DurationFormatAssetsTime = {

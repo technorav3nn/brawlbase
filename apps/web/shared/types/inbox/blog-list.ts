@@ -51,7 +51,6 @@ export interface LinkItem {
 	url: string;
 }
 
- 
 export interface Query {}
 
 export interface ScriptLoader {

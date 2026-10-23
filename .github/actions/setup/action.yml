@@ -1,0 +1,57 @@
+name: Set up workspace
+description: Install the pinned Proto tools and immutable Yarn dependencies
+runs:
+    using: composite
+    steps:
+        - name: Read pinned versions
+          id: versions
+          shell: bash
+          run: |
+              sed -n 's/^moon = "\(.*\)"/moon=\1/p' .prototools >> "$GITHUB_OUTPUT"
+              sed -n 's/^rust = "\(.*\)"/rust=\1/p' .prototools >> "$GITHUB_OUTPUT"
+              echo "rustup-home=${RUSTUP_HOME:-$HOME/.rustup}" >> "$GITHUB_OUTPUT"
+              echo "cargo-home=${CARGO_HOME:-$HOME/.cargo}" >> "$GITHUB_OUTPUT"
+        - name: Cache Rust toolchain
+          uses: actions/cache@v4
+          with:
+              path: |
+                  ${{ steps.versions.outputs.rustup-home }}
+                  ${{ steps.versions.outputs.cargo-home }}/bin
+                  ${{ steps.versions.outputs.cargo-home }}/registry
+                  ${{ steps.versions.outputs.cargo-home }}/git
+              key: rust-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.prototools', 'rust-toolchain.toml', 'apps/fandom-scraper-v2/Cargo.lock') }}
+        - uses: moonrepo/setup-toolchain@v0
+          with:
+              moon-version: ${{ steps.versions.outputs.moon }}
+              auto-install: false
+        - name: Install pinned tools
+          shell: bash
+          run: |
+              for tool in node yarn moon rust; do
+                install_args=("$tool")
+                # Rustup lives outside Proto's cache; repair it even if its install record was restored.
+                if [[ "$tool" == "rust" ]]; then
+                  install_args+=(--force)
+                fi
+                for attempt in 1 2 3; do
+                  if proto install "${install_args[@]}"; then
+                    break
+                  fi
+                  if [[ "$attempt" == "3" ]]; then
+                    exit 1
+                  fi
+                  sleep 5
+                done
+              done
+        - name: Ensure complete Rust toolchain
+          shell: bash
+          env:
+              RUST_VERSION: ${{ steps.versions.outputs.rust }}
+          run: |
+              cargo_bin="${CARGO_HOME:-$HOME/.cargo}/bin"
+              echo "$cargo_bin" >> "$GITHUB_PATH"
+              export PATH="$cargo_bin:$PATH"
+              rustup toolchain install "$RUST_VERSION" --profile minimal --component cargo,rustc,rust-std,clippy,rustfmt
+        - name: Install dependencies
+          shell: bash
+          run: yarn install --immutable

@@ -7,7 +7,10 @@ export class BrawlerRankingsEndpoint {
 		this.$fetch = $fetch;
 	}
 
-	public async getBrawlersRanking(countryCode: CountryCodes, brawlerId: string) {
-		return this.$fetch<RankingsPlayer[]>(`/rankings/${countryCode}/brawlers/${brawlerId}`);
+	public async getBrawlersRanking(countryCode: CountryCodes, brawlerId: string, limit = 200) {
+		const { items } = await this.$fetch<{ items: RankingsPlayer[] }>(`/rankings/${countryCode}/brawlers/${brawlerId}`, {
+			query: { limit },
+		});
+		return items;
 	}
 }

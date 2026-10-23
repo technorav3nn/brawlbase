@@ -1,0 +1,81 @@
+--- a/apps/web/nuxt.config.ts
++++ b/apps/web/nuxt.config.ts
+@@ -113,6 +113,10 @@
+ 		dirs: ["queries", "routers"],
+ 	},
+ 	runtimeConfig: {
++		clickhouseUrl: "",
++		clickhouseUsername: "",
++		clickhousePassword: "",
++		clickhouseDatabase: "brawlbase_stats",
+ 		betterAuthSecret: "",
+ 		// eslint-disable-next-line n/prefer-global/process
+ 		betterAuthUrl: process.env.NODE_ENV === "production" ? "https://brawlbase.deathblows.dev" : "http://localhost:3000",
+--- a/apps/web/wrangler.jsonc
++++ b/apps/web/wrangler.jsonc
+@@ -19,13 +19,6 @@
+ 			"binding": "brawl_base",
+ 			"database_name": "brawl-base",
+ 			"database_id": "87cd567c-0318-473f-933e-e2c0eb3159e0"
+-		},
+-		{
+-			"binding": "STATS_DB",
+-			"database_name": "brawlbase-stats",
+-			"database_id": "be62c185-6a7f-47b6-8430-77572dd895a7",
+-			// Show the deployed collector's live statistics during local web development.
+-			"remote": true
+ 		}
+ 	],
+ 	"kv_namespaces": [
+--- a/apps/tracker/wrangler.jsonc
++++ b/apps/tracker/wrangler.jsonc
+@@ -9,30 +9,14 @@
+ 	"triggers": { "crons": ["*/15 * * * *"] },
+ 	"vars": {
+ 		"COLLECTION_ENABLED": "true",
++		"POLLS_PER_RUN": "2",
++		"MAX_TRACKED_PLAYERS": "100000",
+ 		"BRAWL_STARS_API_BASE_URL": "https://bsproxy.royaleapi.dev/v1",
+-		"POLLS_PER_RUN": "2",
+-		"MONTHLY_WRITE_BUDGET": "500000",
+-		"DAILY_WRITE_BUDGET": "20000"
++		"CLICKHOUSE_URL": "https://ikwvo7zmnv.us-east-2.aws.clickhouse.cloud:8443",
++		"CLICKHOUSE_DATABASE": "brawlbase_stats"
+ 	},
+-	"d1_databases": [
+-		{
+-			"binding": "STATS_DB",
+-			"database_name": "brawlbase-stats",
+-			"database_id": "be62c185-6a7f-47b6-8430-77572dd895a7",
+-			"migrations_dir": "./migrations"
+-		}
+-	],
+-	"r2_buckets": [{ "binding": "STATS_ARCHIVE", "bucket_name": "brawlbase" }],
+-	"queues": {
+-		"consumers": [
+-			{
+-				"queue": "brawlbase-brawler-polls",
+-				"max_batch_size": 100,
+-				"max_batch_timeout": 1,
+-				"max_concurrency": 1,
+-				"max_retries": 3,
+-				"dead_letter_queue": "brawlbase-brawler-polls-dlq"
+-			}
+-		]
+-	}
++	"durable_objects": {
++		"bindings": [{ "name": "COLLECTION_COORDINATOR", "class_name": "CollectionCoordinator" }]
++	},
++	"migrations": [{ "tag": "clickhouse-coordinator-v1", "new_sqlite_classes": ["CollectionCoordinator"] }]
+ }
+--- a/apps/tracker/package.json
++++ b/apps/tracker/package.json
+@@ -8,7 +8,7 @@
+ 		"build": "tsc --noEmit && tsdown --config-loader unrun",
+ 		"deploy": "wrangler deploy",
+ 		"bundle": "wrangler deploy --dry-run --outdir .worker-dist",
+-		"test": "node --test test/*.test.mjs"
++		"test:legacy-d1": "node --test legacy-d1/test/*.test.mjs"
+ 	},
+ 	"dependencies": {
+ 		"@brawlbase/brawl-stars-api": "workspace:*",

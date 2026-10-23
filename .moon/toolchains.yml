@@ -1,3 +1,6 @@
+proto:
+    version: "0.63.2"
+
 javascript:
     packageManager: "yarn"
 
@@ -6,4 +9,4 @@ node: {}
 yarn: {}
 
 rust:
-    components: ["clippy", "rustfmt"]
+    components: ["cargo", "rustc", "rust-std", "clippy", "rustfmt"]

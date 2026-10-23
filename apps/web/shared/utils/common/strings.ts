@@ -40,10 +40,8 @@ export function validEmail(email: string) {
 }
 
 export function getCountryFlagEmoji(countryCode: string) {
-	return (
-		[...countryCode.toUpperCase()]
-			 
-			.map((char) => String.fromCodePoint(127_397 + char.charCodeAt(0)))
-			.reduce((a, b) => `${a}${b}`)
-	);
+	return [...countryCode.toUpperCase()]
+
+		.map((char) => String.fromCodePoint(127_397 + char.charCodeAt(0)))
+		.reduce((a, b) => `${a}${b}`);
 }

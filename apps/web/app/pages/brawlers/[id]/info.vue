@@ -72,7 +72,9 @@ useSeoMeta({
 			v-if="brawler && data"
 			class="grid items-start gap-6 lg:grid-cols-[15rem_minmax(0,1fr)_9rem] xl:grid-cols-[18rem_minmax(0,1fr)_10rem] 2xl:grid-cols-[19rem_minmax(0,1fr)_11rem]"
 		>
-			<aside class="min-w-0 lg:sticky lg:top-36 lg:col-start-1 lg:row-start-1 lg:max-h-[calc(100dvh-10rem)] lg:overflow-y-auto lg:pr-1 lg:pb-2">
+			<aside
+				class="min-w-0 lg:sticky lg:top-36 lg:col-start-1 lg:row-start-1 lg:max-h-[calc(100dvh-10rem)] lg:overflow-y-auto lg:pr-1 lg:pb-2"
+			>
 				<BrawlerOverview :brawler="brawler" :data="data" />
 			</aside>
 			<aside class="min-w-0 lg:sticky lg:top-36 lg:col-start-3 lg:row-start-1" data-testid="info-toc-rail">
@@ -93,10 +95,17 @@ useSeoMeta({
 			</aside>
 
 			<div class="min-w-0 space-y-9 lg:col-start-2 lg:row-start-1">
-				<section id="important-stats" class="scroll-mt-36" :aria-label="t('page.brawler_info.important_stats')" data-testid="combat-stats">
+				<section
+					id="important-stats"
+					class="scroll-mt-36"
+					:aria-label="t('page.brawler_info.important_stats')"
+					data-testid="combat-stats"
+				>
 					<UCard variant="subtle" class="bg-linear-to-br from-primary/5 to-transparent" :ui="{ body: 'p-5 sm:p-6' }">
 						<header class="mb-6 flex flex-wrap items-center justify-between gap-3">
-							<h2 class="font-brawlstars text-2xl text-highlighted">{{ t("page.brawler_info.important_stats") }}</h2>
+							<h2 class="font-brawlstars text-2xl text-highlighted">
+								{{ t("page.brawler_info.important_stats") }}
+							</h2>
 							<UFormField
 								:label="t('page.brawler_info.power_level')"
 								data-testid="power-control"
@@ -117,7 +126,13 @@ useSeoMeta({
 						<dl class="grid grid-cols-2 gap-x-5 gap-y-4">
 							<div class="min-w-0">
 								<dt class="flex min-h-8 items-center gap-2 text-xs text-muted">
-									<img src="/icons/shield-icon.png" alt="" width="28" height="28" class="size-7 shrink-0 object-contain">
+									<img
+										src="/icons/shield-icon.png"
+										alt=""
+										width="28"
+										height="28"
+										class="size-7 shrink-0 object-contain"
+									/>
 									{{ t("page.brawler_info.health") }}
 								</dt>
 								<dd
@@ -139,10 +154,18 @@ useSeoMeta({
 							</div>
 							<div class="min-w-0 border-l border-default pl-5">
 								<dt class="flex min-h-8 items-center gap-2 text-xs text-muted">
-									<img src="/icons/damage-icon.png" alt="" width="28" height="28" class="size-7 shrink-0 object-contain">
+									<img
+										src="/icons/damage-icon.png"
+										alt=""
+										width="28"
+										height="28"
+										class="size-7 shrink-0 object-contain"
+									/>
 									{{ damageStat?.label || t("page.brawler_info.attack_damage") }}
 								</dt>
-								<dd class="mt-1 font-brawlstars text-3xl tabular-nums wrap-anywhere whitespace-pre-line text-highlighted sm:text-4xl">
+								<dd
+									class="mt-1 font-brawlstars text-3xl tabular-nums wrap-anywhere whitespace-pre-line text-highlighted sm:text-4xl"
+								>
 									<UTooltip
 										v-if="damageChangesWithLevel"
 										:text="t('page.brawler_info.level_hint')"
@@ -163,11 +186,19 @@ useSeoMeta({
 						<dl class="mt-5 grid grid-cols-2 gap-x-5 gap-y-3 border-t border-default pt-4">
 							<div class="min-w-0">
 								<dt class="text-xs text-muted">{{ t("page.brawler_info.attack_range") }}</dt>
-								<dd class="mt-1 text-sm font-semibold leading-6 wrap-anywhere whitespace-pre-line text-highlighted">{{ attackRange }}</dd>
+								<dd
+									class="mt-1 text-sm font-semibold leading-6 wrap-anywhere whitespace-pre-line text-highlighted"
+								>
+									{{ attackRange }}
+								</dd>
 							</div>
 							<div class="min-w-0 border-l border-default pl-5">
 								<dt class="text-xs text-muted">{{ t("page.brawler_info.reload") }}</dt>
-								<dd class="mt-1 text-sm font-semibold leading-6 wrap-anywhere whitespace-pre-line text-highlighted">{{ reloadSpeed }}</dd>
+								<dd
+									class="mt-1 text-sm font-semibold leading-6 wrap-anywhere whitespace-pre-line text-highlighted"
+								>
+									{{ reloadSpeed }}
+								</dd>
 							</div>
 						</dl>
 
@@ -177,7 +208,7 @@ useSeoMeta({
 							data-testid="movement-speeds"
 						>
 							<h3 class="flex items-center gap-2 text-sm font-semibold text-highlighted">
-								<img src="/icons/speed-icon.png" alt="" width="28" height="28" class="size-7 object-contain">
+								<img src="/icons/speed-icon.png" alt="" width="28" height="28" class="size-7 object-contain" />
 								{{ t("page.brawler_info.movement_speed") }}
 							</h3>
 							<dl class="mt-2 divide-y divide-default">
@@ -187,7 +218,11 @@ useSeoMeta({
 									class="flex items-baseline justify-between gap-4 py-2"
 								>
 									<dt class="min-w-0 text-xs leading-5 wrap-anywhere text-muted">{{ profile.condition }}</dt>
-									<dd class="max-w-[45%] shrink-0 text-right font-brawlstars text-xl tabular-nums wrap-anywhere text-highlighted">{{ profile.value }}</dd>
+									<dd
+										class="max-w-[45%] shrink-0 text-right font-brawlstars text-xl tabular-nums wrap-anywhere text-highlighted"
+									>
+										{{ profile.value }}
+									</dd>
 								</div>
 							</dl>
 						</section>
@@ -209,14 +244,36 @@ useSeoMeta({
 						<BrawlerAbilityCard id="super" class="scroll-mt-36" :ability="superAbility" kind="super" :level="level" />
 					</div>
 					<div class="mt-4">
-						<BrawlerHyperchargeCard id="hypercharge" class="scroll-mt-36" :hypercharge="data.hypercharge" :brawler-id="brawler.id" :buffies="data.buffies" />
+						<BrawlerHyperchargeCard
+							id="hypercharge"
+							class="scroll-mt-36"
+							:hypercharge="data.hypercharge"
+							:brawler-id="brawler.id"
+							:buffies="data.buffies"
+						/>
 					</div>
 				</section>
 
 				<section v-if="data.gadgets.length || data.starpowers.length" aria-label="Gadgets and Star Powers">
 					<div class="grid items-start gap-x-6 gap-y-8 md:grid-cols-2">
-						<BrawlerAccessoryList id="gadgets" class="scroll-mt-36" :items="data.gadgets" kind="gadget" :level="level" :brawler-id="brawler.id" :buffies="data.buffies" />
-						<BrawlerAccessoryList id="star-powers" class="scroll-mt-36" :items="data.starpowers" kind="starpower" :level="level" :brawler-id="brawler.id" :buffies="data.buffies" />
+						<BrawlerAccessoryList
+							id="gadgets"
+							class="scroll-mt-36"
+							:items="data.gadgets"
+							kind="gadget"
+							:level="level"
+							:brawler-id="brawler.id"
+							:buffies="data.buffies"
+						/>
+						<BrawlerAccessoryList
+							id="star-powers"
+							class="scroll-mt-36"
+							:items="data.starpowers"
+							kind="starpower"
+							:level="level"
+							:brawler-id="brawler.id"
+							:buffies="data.buffies"
+						/>
 					</div>
 				</section>
 			</div>

@@ -16,11 +16,12 @@ definePageMeta({
 });
 
 const route = useRoute("brawlers-id");
-const brawlerId = Number(route.params.id);
+const { t } = useI18n();
+const brawlerId = computed(() => Number(route.params.id));
 
 const brawlerStore = useBrawlerStore();
 
-const { data: brawler, error: apiError, refresh: refreshBrawler } = useQuery(useBrawlerByIdQuery(brawlerId));
+const { data: brawler, error: apiError, refresh: refreshBrawler } = useQuery(() => useBrawlerByIdQuery(brawlerId.value));
 await refreshBrawler();
 
 if (apiError.value) {
@@ -31,7 +32,11 @@ if (apiError.value) {
 	});
 }
 
-const { data: brawlerCdnData, error: cdnError, refresh: refreshCdnData } = useQuery(useBrawlerCdnByIdQuery(brawlerId));
+const {
+	data: brawlerCdnData,
+	error: cdnError,
+	refresh: refreshCdnData,
+} = useQuery(() => useBrawlerCdnByIdQuery(brawlerId.value));
 await refreshCdnData();
 
 if (cdnError.value) {
@@ -58,7 +63,7 @@ const links = computed<NavigationMenuItem[]>(() => [
 		to: createTabLink("info"),
 	},
 	{
-		label: "Stats",
+		label: t("page.brawler_stats.tab"),
 		icon: "i-lucide-chart-no-axes-combined",
 		to: createTabLink("stats"),
 	},

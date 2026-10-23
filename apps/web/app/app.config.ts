@@ -1,7 +1,7 @@
 export default defineAppConfig({
 	ui: {
 		container: {
-			base: "max-w-[90rem]",
+			base: "max-w-[90rem] xl:max-w-[80rem]",
 		},
 		button: {
 			compoundVariants: [
@@ -93,10 +93,14 @@ export default defineAppConfig({
 		},
 		badge: {},
 		tabs: {
-			slots: {
-				list: "brawl-tab-list",
-				trigger: "brawl-tab",
-				indicator: "brawl-tab-indicator",
+			variants: {
+				variant: {
+					pill: {
+						list: "brawl-tab-list",
+						trigger: "brawl-tab",
+						indicator: "brawl-tab-indicator",
+					},
+				},
 			},
 		},
 		modal: {

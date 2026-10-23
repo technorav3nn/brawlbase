@@ -36,7 +36,7 @@ export const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => 
 			previous[group].push(currentItem);
 			return previous;
 		},
-		 
+
 		{} as Record<K, T[]>
 	);
 };

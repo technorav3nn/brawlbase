@@ -1,0 +1,31 @@
+{
+	"name": "@brawlbase/tracker",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "wrangler dev --test-scheduled --persist-to ../web/.wrangler/state",
+		"typecheck": "tsc --noEmit",
+		"build": "tsc --noEmit && tsdown --config-loader unrun",
+		"deploy": "wrangler deploy",
+		"bundle": "wrangler deploy --dry-run --outdir .worker-dist",
+		"test:legacy-d1": "node --test legacy-d1/test/*.test.mjs"
+	},
+	"dependencies": {
+		"@brawlbase/brawl-stars-api": "workspace:*",
+		"@brawlbase/supercell-api-utils": "workspace:*",
+		"drizzle-orm": "^0.45.4"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20260214.0",
+		"tsdown": "^0.21.10",
+		"typescript": "~6.0.3",
+		"unrun": "^0.3.1",
+		"wrangler": "^4.151.3"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.mts",
+			"import": "./dist/index.mjs"
+		}
+	}
+}

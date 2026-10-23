@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { DEFAULT_STATS_TROPHY_RANGE } from "@brawlbase/tracker";
 import { useBrawlerListStore } from "~/components/features/brawler-list/brawler-list-store";
+import { usePerformanceSummary } from "~/queries/performance-summary";
 const { t } = useI18n();
 const groupingOptions = computed(() => [
 	{ label: t("page.brawlers.group_none"), value: "None" },
@@ -8,7 +10,9 @@ const groupingOptions = computed(() => [
 ]);
 const { data: brawlers, status, refresh } = useBrawlifyBrawlers();
 
-await refresh();
+const { data: performanceSummary, refresh: refreshPerformance } = usePerformanceSummary();
+const performanceById = computed(() => new Map(performanceSummary.value?.brawlers.map((row) => [row.brawlerId, row])));
+await Promise.all([refresh(), refreshPerformance()]);
 
 const brawlerList = useBrawlerListStore();
 const { groupingMode, groupedBrawlers, search } = storeToRefs(brawlerList);
@@ -46,6 +50,7 @@ const rarityColorClasses = {
 				{{ t("page.brawlers.description") }}
 			</template>
 		</UPageHero>
+		<p class="mt-5 text-xs text-muted">{{ t("page.performance.directory_note", { range: DEFAULT_STATS_TROPHY_RANGE }) }}</p>
 		<UPage>
 			<UPageBody class="space-y-0">
 				<div class="flex justify-between gap-1.5">
@@ -84,6 +89,7 @@ const rarityColorClasses = {
 						v-for="brawler in groupedBrawlers"
 						:key="brawler.id"
 						:brawler="brawler"
+						:performance="performanceById.get(brawler.id)"
 						show-rarity
 					/>
 				</UPageGrid>
@@ -101,6 +107,7 @@ const rarityColorClasses = {
 								v-for="brawler in group"
 								:key="brawler.id"
 								:brawler="brawler"
+								:performance="performanceById.get(brawler.id)"
 								:show-rarity="groupingMode === 'Class'"
 							/>
 						</UPageGrid>

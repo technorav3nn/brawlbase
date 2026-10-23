@@ -1,0 +1,23 @@
+{
+	"$schema": "../../../node_modules/wrangler/config-schema.json",
+	"name": "brawlbase-tracker",
+	"account_id": "3ce1cba6da896fec28c9a8292ffd129d",
+	"main": "../src/worker.ts",
+	"compatibility_date": "2026-10-23",
+	"workers_dev": false,
+	"observability": { "enabled": true },
+	"triggers": { "crons": ["* * * * *"] },
+	"vars": {
+		"COLLECTION_ENABLED": "true",
+		"POLLS_PER_RUN": "20",
+		"POLL_CONCURRENCY": "4",
+		"MAX_TRACKED_PLAYERS": "100000",
+		"BRAWL_STARS_API_BASE_URL": "https://bsproxy.royaleapi.dev/v1",
+		"CLICKHOUSE_URL": "https://ikwvo7zmnv.us-east-2.aws.clickhouse.cloud:8443",
+		"CLICKHOUSE_DATABASE": "brawlbase_stats",
+	},
+	"durable_objects": {
+		"bindings": [{ "name": "COLLECTION_COORDINATOR", "class_name": "CollectionCoordinator" }],
+	},
+	"migrations": [{ "tag": "clickhouse-coordinator-v1", "new_sqlite_classes": ["CollectionCoordinator"] }],
+}

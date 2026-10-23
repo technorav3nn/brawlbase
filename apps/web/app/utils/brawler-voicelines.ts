@@ -9,15 +9,16 @@ export interface BrawlerVoiceline extends Voiceline {
 
 export function brawlerVoicelines(brawlerId: number, data: Pick<CdnBrawler, "voicelines" | "skins">): BrawlerVoiceline[] {
 	const entries = new Map<string, BrawlerVoiceline>();
-	const downloaded = new Set(data.voicelines.flatMap((line) => line.asset ? [line.asset.filename] : []));
+	const downloaded = new Set(data.voicelines.flatMap((line) => (line.asset ? [line.asset.filename] : [])));
 	function add(line: Voiceline, variant = "Normal") {
 		const voiceVariant = line.variant || variant;
 		const id = line.asset?.filename ?? JSON.stringify([voiceVariant, line.trigger, line.description]);
 		if (entries.has(id)) return;
 		const source = line.asset ? brawlerCosmeticSource(line.asset) : undefined;
-		const url = line.asset && downloaded.has(line.asset.filename)
-			? routes.brawlers(brawlerId).voiceline(line.asset.filename)
-			: source;
+		const url =
+			line.asset && downloaded.has(line.asset.filename)
+				? routes.brawlers(brawlerId).voiceline(line.asset.filename)
+				: source;
 		entries.set(id, { ...line, id, variant: voiceVariant, url, fallbackUrl: url !== source ? source : undefined });
 	}
 	for (const line of data.voicelines) add(line);

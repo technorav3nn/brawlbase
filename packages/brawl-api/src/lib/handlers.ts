@@ -16,9 +16,7 @@ export * as csv from "./handlers/csv";
 
 export const brawlers = {
 	getAllBrawlers: createApiHandler<BrawlApiGetAllBrawlersResponse>("/brawlers"),
-	getBrawlerById: createApiHandler<BrawlApiBrawler, [id: number | string]>(
-		(id: number | string) => `/brawlers/${id}`
-	),
+	getBrawlerById: createApiHandler<BrawlApiBrawler, [id: number | string]>((id: number | string) => `/brawlers/${id}`),
 };
 
 export const league = {
@@ -36,9 +34,7 @@ export const maps = {
 
 export const gamemodes = {
 	getAllGamemodes: createApiHandler<BrawlApiGameModes>("/gamemodes"),
-	getGamemodeById: createApiHandler<BrawlApiGameMode, [id: number | string]>(
-		(id: number | string) => `/gamemodes/${id}`
-	),
+	getGamemodeById: createApiHandler<BrawlApiGameMode, [id: number | string]>((id: number | string) => `/gamemodes/${id}`),
 };
 
 export const icons = {
