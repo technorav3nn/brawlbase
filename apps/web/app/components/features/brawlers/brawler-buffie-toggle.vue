@@ -2,6 +2,7 @@
 import { routes, type Buffie } from "@brawlbase/cdn";
 import BrawlerCosmeticImage from "~/components/features/brawlers/brawler-cosmetic-image.vue";
 import { brawlerCosmeticSource } from "~/utils/brawler-cosmetics";
+import { cdnUrl } from "~/utils/cdn-url";
 
 const props = defineProps<{
 	label: string;
@@ -52,7 +53,7 @@ const selectorUi = computed(() => ({
 			<template v-if="item.value === 'buffied'">
 				<BrawlerCosmeticImage
 					v-if="buffie?.asset"
-					:src="routes.brawlers(brawlerId).buffie(buffie.asset.filename)"
+					:src="cdnUrl(routes.brawlers(brawlerId).buffie(buffie.asset.filename))"
 					:fallback-src="brawlerCosmeticSource(buffie.asset)"
 					alt=""
 					class="size-4 shrink-0"

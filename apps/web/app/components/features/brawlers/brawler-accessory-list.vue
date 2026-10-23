@@ -7,6 +7,7 @@ import BrawlerBuffieToggle from "~/components/features/brawlers/brawler-buffie-t
 import BrawlerUpgradeIcon from "~/components/features/brawlers/brawler-upgrade-icon.vue";
 import { brawlerAbilityBuffie } from "~/utils/brawler-buffies";
 import { brawlerLevelStats } from "~/utils/brawler-stats";
+import { cdnUrl } from "~/utils/cdn-url";
 
 const props = withDefaults(
 	defineProps<{
@@ -29,7 +30,7 @@ const sectionBuffie = computed(() => entries.value.find((item) => item.buffie)?.
 const hasBuffies = computed(() => Boolean(sectionBuffie.value));
 const icon = computed(() => (props.kind === "gadget" ? "i-lucide-wrench" : "i-lucide-star"));
 function imageUrl(id: string) {
-	return props.kind === "gadget" ? routes.gadgetIcon(Number(id)) : routes.starPowerIcon(Number(id));
+	return cdnUrl(props.kind === "gadget" ? routes.gadgetIcon(Number(id)) : routes.starPowerIcon(Number(id)));
 }
 watch(
 	() => [props.brawlerId, props.kind],
@@ -54,7 +55,7 @@ watch(
 					width="32"
 					height="32"
 					class="size-8 object-contain"
-				/>
+				>
 				<h2 class="font-brawlstars text-2xl text-highlighted">{{ title }}</h2>
 			</div>
 			<BrawlerBuffieToggle

@@ -1,4 +1,5 @@
 import { routes, type Asset, type CdnBrawler, type Skin } from "@brawlbase/cdn";
+import { cdnUrl } from "./cdn-url";
 
 export type BrawlerCosmeticKind = "skin" | "profileIcon" | "pet" | "pin" | "spray" | "buffieSkin";
 
@@ -71,13 +72,13 @@ export function brawlerCosmetics(
 		const source = brawlerCosmeticSource(asset);
 		const imageUrl =
 			kind === "skin" && skin
-				? urls.skins(skin.name).model
+				? cdnUrl(urls.skins(skin.name).model)
 				: kind === "pin" && pins.has(asset.filename)
-					? urls.pin(asset.filename)
+					? cdnUrl(urls.pin(asset.filename))
 					: kind === "spray" && sprays.has(asset.filename)
-						? urls.spray(asset.filename)
+						? cdnUrl(urls.spray(asset.filename))
 						: kind === "buffieSkin"
-							? urls.buffieSkin(asset.filename)
+							? cdnUrl(urls.buffieSkin(asset.filename))
 							: source;
 		const entry: BrawlerCosmetic = {
 			id,

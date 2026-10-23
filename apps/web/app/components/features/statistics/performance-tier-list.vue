@@ -11,6 +11,7 @@ import {
 	type WinRateTier,
 } from "@brawlbase/tracker";
 import type { PerformanceBrawler } from "#shared/types/performance";
+import { cdnUrl } from "~/utils/cdn-url";
 import { brawlerPerformanceLink } from "~/utils/performance";
 const props = defineProps<{ brawlers: PerformanceBrawler[]; filters: StatsFilters }>();
 defineEmits<{ selectTrophyRange: [range: TrophyRange] }>();
@@ -96,14 +97,14 @@ const unrated = computed(() => sorted.value.filter((row) => row.tier === null));
 				>
 					<img
 						v-if="!failedIcons.has(brawler.id)"
-						:src="routes.brawlers(brawler.id).icon"
+						:src="cdnUrl(routes.brawlers(brawler.id).icon)"
 						alt=""
 						width="40"
 						height="40"
 						loading="lazy"
 						class="size-10 rounded object-contain"
 						@error="failedIcons.add(brawler.id)"
-					/>
+					>
 					<UIcon v-else name="i-lucide-user-round" class="size-10 text-muted" aria-hidden="true" />
 					<span class="w-full truncate text-[11px] font-semibold">{{ brawler.name }}</span
 					><span class="text-xs font-semibold tabular-nums text-highlighted">{{

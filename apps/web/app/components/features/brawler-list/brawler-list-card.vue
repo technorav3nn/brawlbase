@@ -2,6 +2,7 @@
 import type { BrawlApiBrawler } from "@brawlbase/brawl-api";
 import { routes } from "@brawlbase/cdn";
 import type { BrawlerPerformance } from "@brawlbase/tracker";
+import { cdnUrl } from "~/utils/cdn-url";
 
 const props = defineProps<{ brawler: BrawlApiBrawler; showRarity?: boolean; performance?: BrawlerPerformance }>();
 
@@ -70,7 +71,7 @@ const ringColor = computed(() => {
 	>
 		<template #header>
 			<NuxtImg
-				:src="routes.brawlers(props.brawler.id).icon"
+				:src="cdnUrl(routes.brawlers(props.brawler.id).icon)"
 				loading="lazy"
 				class="rounded-sm! w-full! h-full! object-cover"
 				:alt="brawler.name"

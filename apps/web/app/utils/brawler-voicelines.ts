@@ -1,5 +1,6 @@
 import { routes, type CdnBrawler, type Voiceline } from "@brawlbase/cdn";
 import { brawlerCosmeticSource } from "./brawler-cosmetics";
+import { cdnUrl } from "./cdn-url";
 
 export interface BrawlerVoiceline extends Voiceline {
 	id: string;
@@ -17,7 +18,7 @@ export function brawlerVoicelines(brawlerId: number, data: Pick<CdnBrawler, "voi
 		const source = line.asset ? brawlerCosmeticSource(line.asset) : undefined;
 		const url =
 			line.asset && downloaded.has(line.asset.filename)
-				? routes.brawlers(brawlerId).voiceline(line.asset.filename)
+				? cdnUrl(routes.brawlers(brawlerId).voiceline(line.asset.filename))
 				: source;
 		entries.set(id, { ...line, id, variant: voiceVariant, url, fallbackUrl: url !== source ? source : undefined });
 	}

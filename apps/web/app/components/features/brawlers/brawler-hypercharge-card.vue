@@ -7,6 +7,7 @@ import BrawlerBuffieToggle from "~/components/features/brawlers/brawler-buffie-t
 import BrawlerUpgradeIcon from "~/components/features/brawlers/brawler-upgrade-icon.vue";
 import { brawlerAbilityBuffie } from "~/utils/brawler-buffies";
 import { brawlerStatText } from "~/utils/brawler-stats";
+import { cdnUrl } from "~/utils/cdn-url";
 
 const BOOSTS = [
 	{ label: "Speed", translation: "page.brawler_info.speed", icon: "/icons/speed-icon.png" },
@@ -61,7 +62,7 @@ watch(
 						<BrawlerUpgradeIcon
 							v-if="hypercharge"
 							v-model:failed="imageFailed"
-							:src="routes.hyperchargeIcon(brawlerId)"
+							:src="cdnUrl(routes.hyperchargeIcon(brawlerId))"
 							:upgraded="buffied && Boolean(buffie)"
 							:size="56"
 						>
@@ -108,7 +109,7 @@ watch(
 				<dt
 					class="flex min-h-14 flex-col items-start justify-between gap-2 text-xs text-muted @lg:min-h-8 @lg:flex-row @lg:items-center @lg:justify-start"
 				>
-					<img :src="boost.icon" alt="" width="32" height="32" class="size-8 object-contain" />
+					<img :src="boost.icon" alt="" width="32" height="32" class="size-8 object-contain" >
 					{{ t(boost.translation) }}
 				</dt>
 				<dd class="mt-2 font-brawlstars text-2xl tabular-nums text-highlighted">{{ boost.value }}</dd>

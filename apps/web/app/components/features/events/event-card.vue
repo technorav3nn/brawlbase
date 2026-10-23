@@ -3,6 +3,7 @@ import { routes } from "@brawlbase/cdn";
 import { DEFAULT_STATS_TROPHY_RANGE, type StatsFilters } from "@brawlbase/tracker";
 import type { RotationEvent } from "#shared/types/events";
 import type { PerformanceBrawler } from "#shared/types/performance";
+import { cdnUrl } from "~/utils/cdn-url";
 import { eventArtwork } from "~/utils/event-artwork";
 import { brawlerPerformanceLink } from "~/utils/performance";
 
@@ -64,7 +65,7 @@ watch(
 				loading="lazy"
 				class="absolute inset-0 size-full scale-[1.04] object-cover"
 				@error="imageFailed = true"
-			/>
+			>
 			<div v-else class="grid size-full place-items-center" aria-hidden="true">
 				<img
 					v-if="artwork.icon"
@@ -73,14 +74,14 @@ watch(
 					width="64"
 					height="64"
 					class="size-16 object-contain opacity-35"
-				/>
+				>
 				<UIcon v-else name="i-lucide-swords" class="size-12 text-muted" />
 			</div>
 		</NuxtLink>
 		<div class="p-3">
 			<header class="flex items-center gap-2.5">
 				<div class="grid size-9 shrink-0 place-items-center" data-testid="event-mode-icon">
-					<img v-if="artwork.icon" :src="artwork.icon" alt="" width="36" height="36" class="size-9 object-contain" />
+					<img v-if="artwork.icon" :src="artwork.icon" alt="" width="36" height="36" class="size-9 object-contain" >
 					<UIcon v-else name="i-lucide-swords" class="size-7 text-muted" aria-hidden="true" />
 				</div>
 				<div class="min-w-0">
@@ -110,14 +111,14 @@ watch(
 						>
 							<img
 								v-if="!failedIcons.has(brawler.id)"
-								:src="routes.brawlers(brawler.id).icon"
+								:src="cdnUrl(routes.brawlers(brawler.id).icon)"
 								alt=""
 								width="40"
 								height="40"
 								loading="lazy"
 								class="size-8 rounded object-contain"
 								@error="failedIcons.add(brawler.id)"
-							/>
+							>
 							<UIcon v-else name="i-lucide-user-round" class="size-8 text-muted" />
 							<span class="text-xs font-semibold tabular-nums text-primary">{{
 								brawler.performance?.winRate == null ? "—" : rate.format(brawler.performance.winRate)

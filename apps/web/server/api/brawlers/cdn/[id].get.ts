@@ -1,9 +1,19 @@
-import { routes, type CdnBrawler } from "@brawlbase/cdn";
+interface CdnServiceBinding {
+	fetch(request: Request | string): Promise<Response>;
+}
 
 export default defineCachedEventHandler(
-	(event) => {
+	async (event) => {
 		const id = Number(getRouterParam(event, "id"));
-		return $fetch<CdnBrawler>(routes.brawlers(id).data);
+		const cdn = event.context.cloudflare.env.CDN as CdnServiceBinding | undefined;
+		if (!cdn) {
+			throw createError({ statusCode: 503, statusMessage: "CDN service binding is unavailable" });
+		}
+		const response = await cdn.fetch(`https://brawlbase-cdn.internal/brawlers/${id}/data.json`);
+		if (!response.ok) {
+			throw createError({ statusCode: response.status, statusMessage: "Failed to fetch brawler CDN data" });
+		}
+		return response.json();
 	},
 	{
 		name: "brawler-cdn-v2",

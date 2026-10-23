@@ -3,6 +3,7 @@ import type { BrawlApiBrawler } from "@brawlbase/brawl-api";
 import { routes } from "@brawlbase/cdn";
 import type { StatsFilters } from "@brawlbase/tracker";
 import { useEquipmentPerformanceQuery } from "~/queries/equipment-performance";
+import { cdnUrl } from "~/utils/cdn-url";
 const props = defineProps<{ brawlerId: number; brawler: BrawlApiBrawler | null; filters: StatsFilters }>();
 const { t, locale } = useI18n();
 const { data, error, refresh } = useQuery(() =>
@@ -24,9 +25,9 @@ const items = computed(() =>
 			t("page.performance.equipment_id", { kind: t(`page.performance.equipment_${row.kind}`), id: row.equipmentId }),
 		image:
 			row.kind === "gadget"
-				? routes.gadgetIcon(row.equipmentId)
+				? cdnUrl(routes.gadgetIcon(row.equipmentId))
 				: row.kind === "starPower"
-					? routes.starPowerIcon(row.equipmentId)
+					? cdnUrl(routes.starPowerIcon(row.equipmentId))
 					: undefined,
 	}))
 );
@@ -57,7 +58,7 @@ await refresh();
 						height="40"
 						class="size-10 object-contain"
 						@error="failed.add(item.equipmentId)"
-					/><UIcon v-else name="i-lucide-settings-2" class="size-8 text-muted" />
+					><UIcon v-else name="i-lucide-settings-2" class="size-8 text-muted" />
 					<div class="min-w-0">
 						<p class="text-xs text-muted">{{ t(`page.performance.equipment_${item.kind}`) }}</p>
 						<h4 class="font-semibold text-highlighted">{{ item.name }}</h4>

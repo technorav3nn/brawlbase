@@ -3,6 +3,7 @@ import { routes } from "@brawlbase/cdn";
 import BrawlerHighlightedText from "~/components/features/brawlers/brawler-highlighted-text.vue";
 import { useBrawlerStore } from "~/components/features/brawlers/brawler-store";
 import { brawlerStatText } from "~/utils/brawler-stats";
+import { cdnUrl } from "~/utils/cdn-url";
 
 const { brawler, brawlerCdnData: data } = storeToRefs(useBrawlerStore());
 const { t } = useI18n();
@@ -13,12 +14,12 @@ const accessories = computed(() => [
 	...(data.value?.gadgets ?? []).map((gadget) => ({
 		id: `gadget-${gadget.id}`,
 		name: gadget.name,
-		icon: routes.gadgetIcon(Number(gadget.id)),
+		icon: cdnUrl(routes.gadgetIcon(Number(gadget.id))),
 	})),
 	...(data.value?.starpowers ?? []).map((starPower) => ({
 		id: `starpower-${starPower.id}`,
 		name: starPower.name,
-		icon: routes.starPowerIcon(Number(starPower.id)),
+		icon: cdnUrl(routes.starPowerIcon(Number(starPower.id))),
 	})),
 ]);
 const tips = computed(() =>
@@ -110,8 +111,8 @@ useSeoMeta({
 						:variant="!query ? 'solid' : 'soft'"
 						:aria-pressed="!query"
 						size="sm"
-						@click="search = ''"
 						class="h-11"
+						@click="search = ''"
 					/>
 					<UButton
 						v-for="ability in abilityFilters"
@@ -127,7 +128,7 @@ useSeoMeta({
 						@click="toggleAbility(ability.name)"
 					>
 						<template #leading>
-							<img :src="ability.icon" alt="" width="28" height="28" class="size-7 shrink-0 object-contain" />
+							<img :src="ability.icon" alt="" width="28" height="28" class="size-7 shrink-0 object-contain" >
 						</template>
 					</UButton>
 				</div>
@@ -162,7 +163,7 @@ useSeoMeta({
 								height="32"
 								loading="lazy"
 								class="size-8 shrink-0 object-contain"
-							/>
+							>
 							{{ accessory.name }}
 						</span>
 					</div>

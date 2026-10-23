@@ -37,4 +37,10 @@
 			"bucket_name": "brawlbase",
 		},
 	],
+	"services": [
+		{
+			"binding": "CDN",
+			"service": "brawlbase-cdn",
+		},
+	],
 }

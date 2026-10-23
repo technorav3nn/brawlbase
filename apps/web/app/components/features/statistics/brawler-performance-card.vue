@@ -4,6 +4,7 @@ import { MIN_TIER_RESULTS, winRateScore, winRateTier, type StatsFilters } from "
 import PerformanceDetails from "./performance-details.vue";
 import PerformanceRate from "./performance-rate.vue";
 import type { PerformanceBrawler } from "#shared/types/performance";
+import { cdnUrl } from "~/utils/cdn-url";
 import { brawlerPerformanceLink } from "~/utils/performance";
 const props = defineProps<{ brawler: PerformanceBrawler; rank: number; filters: StatsFilters }>();
 const { t, locale } = useI18n();
@@ -46,14 +47,14 @@ const palette = computed(() => palettes[tier.value ?? "unrated"]);
 			<div class="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-lg" :class="palette.portrait">
 				<img
 					v-if="!failed"
-					:src="routes.brawlers(brawler.id).icon"
+					:src="cdnUrl(routes.brawlers(brawler.id).icon)"
 					alt=""
 					width="44"
 					height="44"
 					loading="lazy"
 					class="size-11 object-contain transition-transform group-hover:scale-105"
 					@error="failed = true"
-				/>
+				>
 				<UIcon v-else name="i-lucide-user-round" class="size-8 text-muted" />
 			</div>
 			<div class="min-w-0 flex-1">
