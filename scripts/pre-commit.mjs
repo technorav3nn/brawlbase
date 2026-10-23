@@ -8,7 +8,7 @@ const stagedFiles = execFileSync("git", ["diff", "--cached", "--name-only", "--d
 	.filter(Boolean)
 	.filter(existsSync);
 
-if (stagedFiles.length === 0) process.exit(0);
+if (stagedFiles.length === 0) throw new Error("No staged files found.");
 
 const formatExtensions = new Set([".css", ".html", ".js", ".json", ".jsonc", ".md", ".scss", ".ts", ".vue", ".yaml", ".yml"]);
 const lintExtensions = new Set([".js", ".mjs", ".ts", ".vue"]);
