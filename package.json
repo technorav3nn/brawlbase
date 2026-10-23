@@ -3,6 +3,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
+		"prepare": "git config core.hooksPath .githooks",
 		"lint": "eslint .",
 		"format": "prettier --write .",
 		"format:check": "prettier --check .",
